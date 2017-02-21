@@ -1,0 +1,8 @@
+package logic;
+
+public class Piece {
+
+	public Piece(){
+		
+	}
+}

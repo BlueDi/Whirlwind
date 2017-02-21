@@ -1,0 +1,11 @@
+package logic;
+
+public class Board {
+	private Piece[][]board;
+
+	public Board(int i){
+		board=new Piece[i][i];
+
+
+	}
+}

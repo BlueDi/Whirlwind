@@ -6,28 +6,28 @@ public class Piece {
 
 	public Piece(){
 		color =null;
-		fill=false;
+		fillPiece(false);
 
 	}
 	public Piece(String color){
 		if(!color.equals("white") && !color.equals("black")){
 			color =null;
-			fill=false;
+			fillPiece(false);
 			System.out.println("invalid color");
 			return;
 		}
 		this.color=color;
-		fill=true;
+		fillPiece(true);
 
 	}
 	public void fillPiece(String color){
 		this.color=color;
 		this.fill=true;
 	}
-	public boolean getStatus(){
-		return this.fill;
+	public boolean isFill() {
+		return fill;
 	}
-	public String getColor(){
-		return this.color;
+	public void fillPiece(boolean fill) {
+		this.fill = fill;
 	}
 }

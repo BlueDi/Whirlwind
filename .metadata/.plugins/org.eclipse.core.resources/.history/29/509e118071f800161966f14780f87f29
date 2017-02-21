@@ -27,7 +27,4 @@ public class Piece {
 	public boolean getStatus(){
 		return this.fill;
 	}
-	public String getColor(){
-		return this.color;
-	}
 }

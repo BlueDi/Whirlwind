@@ -1,33 +1,55 @@
 package logic;
 
 public class Piece {
-	private String color;
-	private boolean fill;
+	private int player;
 
+	/**
+	 * Construtor de uma peça vazia.
+	 * Serve para inicializar o tabuleiro.
+	 */
 	public Piece(){
-		color =null;
-		fill=false;
-
+		player = -1;
 	}
-	public Piece(String color){
-		if(!color.equals("white") && !color.equals("black")){
-			color =null;
-			fill=false;
-			System.out.println("invalid color");
-			return;
+
+	/**
+	 * Construtor definindo o jogador
+	 * @param player pode ser 0 ou 1
+	 */
+	public Piece(int player){
+		this.player = player;
+		if(this.player != 0 & this.player != 1)
+			player = -1;
+	}
+
+	/**
+	 * Modifica o jogador atribuido à peça. 
+	 * @param player pode ser 0 ou 1
+	 */
+	public void setPlayer(int player) {
+		if(player == 0 || player == 1)
+			this.player = player;
+	}
+
+	/**
+	 * Serve para saber de quem é a peça.
+	 * @return Jogador a quem a peça pertence
+	 */
+	public int getPlayer(){
+		return this.player;
+	}
+
+	/**
+	 * Traduz o jogador para um simbolo. 
+	 * @return
+	 */
+	public String getSymbol(){
+		switch(player){
+		case 0:
+			return "O";
+		case 1:
+			return "X";
+		default:
+			return " ";
 		}
-		this.color=color;
-		fill=true;
-
-	}
-	public void fillPiece(String color){
-		this.color=color;
-		this.fill=true;
-	}
-	public boolean getStatus(){
-		return this.fill;
-	}
-	public String getColor(){
-		return this.color;
 	}
 }

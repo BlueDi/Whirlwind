@@ -1,40 +1,75 @@
 package logic;
 
 public class Board {
-	private Piece[][]board;
+	private Piece[][] board;
 
+	/**O board está construido da seguinte maneira:	
+	 * Coloca a primeira peça.
+	 * Nessa linha coloca a cada 5 espaços uma nova peça, alternando o jogador, até não ter 5 espaços entre a peça e o fim do tabuleiro.
+	 * Depois para a próxima linha coloca a primeira peça duas posições à direita da primeira peça, preenchendo antecipadamente as posições antes dessa peça. 
+	 * 
+	 * @param n tamanho do lado do tabuleiro
+	 */
 	public Board(int n){
-		if(n<12)
-		{System.out.println("incorrect option of cases");
+		if(n<12) {
+			System.out.println("incorrect option of cases");
 			return;
-			}
-		board=new Piece[n][n];
-		int l=0;
-		//preciso arranjar uma maneira de mapear mais certa mas umas vezes a distancia entre pontos é de 5 outras vezes 6 outras vezes 1... 
-		//aquilo do movimento do cavalo eu n sei como mapear em sequencia
-		for(int i=0; i<board.length;i++){
-			for(int k=0;k<board[i].length;k++){
-				board[i][k]=new Piece();
-				if(l==1||l==11||l==22||l==33||l==44||l==54||l==65||l==76||l==87||l==97||l==98||l==108||l==119||l==130||l==141||l==151||l==162||l==173||l==184||l==194){
-					board[i][k]=new Piece("white");
-					
-				}
-				if(l==6||l==17||l==27||l==28||l==38||l==49||l==60||l==71||l==81||l==92||l==103||l==114||l==124||l==135||l==146||l==157||l==167||l==168||l==178||l==189){
-					board[i][k]=new Piece("black");
-				}
-				l++;
-			}
 		}
 
+		int row, col;
+		board = new Piece[n][n];
+		for(col = 0; col < board.length; col++)
+			for(row = 0; row < board.length; row++)
+			board[col][row]=new Piece();	
 
+		int line_start_position = 1; //posição da primeira peça da linha
+		int player = 0;
+		int row_position_checker = line_start_position, aux_pc;
+		int row_color_picker = player, aux_cp=0;
+
+		for(col = 0; col < board.length; col++){
+			row_color_picker = player;
+			row_position_checker = line_start_position;	
+			
+			//preencher o inicio da linha
+			aux_pc = row_position_checker - 5;	
+			aux_cp = row_color_picker;			
+			while(aux_pc >= 0){
+				aux_cp ^= 1;
+				board[col][aux_pc].setPlayer(aux_cp);
+				aux_pc -= 5;	
+			}
+			
+			//preenchimento normal
+			for(row = 0; row < board.length; row++){	
+				if(row == row_position_checker){
+					board[col][row].setPlayer(row_color_picker);
+					row_position_checker += 5;
+
+					row_color_picker ^= 1;
+				}
+			}
+
+			//preparar a próxima linha
+			player ^= 1;
+			line_start_position += 2;
+			if(line_start_position > 13){
+				line_start_position = 0;
+				player ^= 1;
+			}
+		}
 	}
+
+	/**
+	 * Desenha o board na consola
+	 */
 	public void display(){
-		for(int i=0; i<board.length;i++){
-			for(int k=0;k<board[i].length;k++){
-				System.out.print(board[i][k].getColor()+" ");
-				
+		for(int col = 0; col < board.length; col++){
+			for(int row = 0; row < board.length; row++){
+				System.out.print(board[col][row].getSymbol() + " ");
 			}
 			System.out.println();
-			}
+		}
 	}
+
 }

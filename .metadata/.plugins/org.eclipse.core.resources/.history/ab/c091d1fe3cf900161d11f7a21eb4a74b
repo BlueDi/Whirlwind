@@ -1,0 +1,28 @@
+package logic;
+
+public class Board {
+	private Piece[][]board;
+
+	public Board(int n){
+		if(n<12)
+		{System.out.println("incorrect option of cases");
+			return;
+			}
+		board=new Piece[n][n];
+		int l=1;
+		for(int i=0; i<board.length;i++){
+			for(int k=0;k<board[i].length;k++){
+				board[i][k]=new Piece();
+				if( ){
+					
+				}
+				if(){
+					
+				}
+				
+			}
+		}
+
+
+	}
+}

@@ -1,10 +1,9 @@
 package cli;
-import logic.*;
+
 public class Main {
 
 	public static void main(String[] args) {
-		Board b=new Board(14);
-		b.display();
+		// TODO Auto-generated method stub
 
 	}
 

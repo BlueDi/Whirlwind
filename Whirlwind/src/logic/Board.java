@@ -106,7 +106,27 @@ public class Board {
 	 * Desenha o tabuleiro com as peças na consola.
 	 */
 	public void display(){
+		System.out.print("   ");
+		char j;
+		for (int i = 0; i < board.length; i++){
+			j = (char) (65+i);
+			System.out.print(j + " ");
+		}
+		System.out.println();	
+		System.out.print("  ");	
+		for (int i = 0; i < board.length; i++){
+			j = (char) (65+i);
+			System.out.print("--");
+		}
+		System.out.println("-");
+
 		for(int row = 0; row < board.length; row++){
+			if(row<10)
+				System.out.print(row+1 +"  ");
+			else{
+				System.out.print(row+1 +" ");
+			}
+
 			for(int col = 0; col < board.length; col++){
 				System.out.print(board[row][col].getSymbol() + " ");
 			}

@@ -1,16 +1,40 @@
 package logic;
 
 public class Board {
-	private Piece[][] board;
+	private Piece[][] board = null;
 
 	/**
-	 * O board está construido da seguinte maneira:	
-	 * rowoca a primeira peça.
-	 * Nessa linha rowoca a cada 5 espaços uma nova peça, alternando o jogador, até não ter 5 espaços entre a peça e o fim do tabuleiro.
-	 * Depois para a próxima linha rowoca a primeira peça duas posições à direita da primeira peça, preenchendo antecipadamente as posições antes dessa peça. 
-	 * 
+	 * @return the board
+	 */
+	public Piece[][] getBoard() {
+		return board;
+	}
+
+	/**
+	 * @param board the board to set
+	 */
+	public void setBoard(Piece[][] board) {
+		this.board = board;
+	}
+
+	/**
+	 * Construtor vazio.
+	 * Apenas cria um board [n]x[n] sem peças.
+	 */
+	public Board(){
+		int n = 14;
+		int col, row;
+		board = new Piece[n][n];
+		for(row = 0; row < board.length; row++)
+			for(col = 0; col < board.length; col++)
+				board[row][col]=new Piece();	
+	}
+
+	/**
+	 * Construtor de um board quadrado.
+	 * O board é preenchido pela função auxiliar FillWithPieces().
 	 * @param n tamanho do lado do tabuleiro
-	 * @throws Exception se o board tiver uma dimensão muito pequena
+	 * @throws Exception se o board tiver uma dimensão muito pequena ou muito grande
 	 */
 	public Board(int n) throws Exception{
 		if(n<12)
@@ -22,8 +46,24 @@ public class Board {
 		board = new Piece[n][n];
 		for(row = 0; row < board.length; row++)
 			for(col = 0; col < board.length; col++)
-				board[row][col]=new Piece();	
+				board[row][col]=new Piece();
 
+		FillWithPieces();
+	}
+
+	/**
+	 * Preenche o tabuleiro com peças. 
+	 * O board é preenchido da seguinte maneira:	
+	 * Coloca a primeira peça.
+	 * Nessa linha coloca a cada 5 espaços uma nova peça, alternando o jogador, até não ter 5 espaços entre a peça e o fim do tabuleiro.
+	 * Depois para a próxima linha coloca a primeira peça duas posições à direita da primeira peça, preenchendo antecipadamente as posições antes dessa peça. 
+	 *
+	 */
+	private void FillWithPieces(){
+		if(board == null)
+			throw new NullPointerException("Board não inicializado.");
+
+		int col, row;
 		int line_start_position = 1; //posição da primeira peça da linha
 		int player = 0;
 		int col_position_checker = line_start_position, aux_pc;
@@ -76,22 +116,6 @@ public class Board {
 	}
 
 	/**
-	 * Dá o tamanho das linhas.
-	 * @return int que representa o número de colunas
-	 */
-	public int getRowSize(){
-		return board[0].length;
-	}
-
-	/**
-	 * Dá o tamanho das colunas.
-	 * @return int que representa o número de linhas
-	 */
-	public int getColSize(){
-		return board.length;
-	}
-
-	/**
 	 * Calcula quantas peças de ambos os jogadores estão no tabuleiro.
 	 * @return número de peças no tabuleiro
 	 */
@@ -123,10 +147,26 @@ public class Board {
 	}
 
 	/**
-	 * rowoca uma peça do player na posição [row][col].
+	 * Retorna a peça na posição [row]x[col].
+	 * @param row linha desejada
+	 * @param col coluna desejada
+	 * @return Piece na posição
+	 */
+	public Piece getPiece(int row, int col){
+		try{
+			return board[row][col];
+		}
+		catch(IndexOutOfBoundsException e){
+			System.out.println("Bad coords in getPiece().");
+		}
+		return null;
+	}
+
+	/**
+	 * Coloca uma peça do player na posição [row]x[col].
 	 * @param row
 	 * @param col
-	 * @param player
+	 * @param player a quem a peça pertence
 	 * @return true se conseguiu rowocar, false se não conseguiu
 	 */
 	public Boolean setPiece(int row, int col, int player){

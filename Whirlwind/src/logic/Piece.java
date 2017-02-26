@@ -40,16 +40,16 @@ public class Piece {
 
 	/**
 	 * Traduz o jogador para um simbolo. 
-	 * @return
+	 * @return Simbolo do jogador
 	 */
-	public String getSymbol(){
+	public char getSymbol(){
 		switch(player){
 		case 0:
-			return "O";
+			return 'O';
 		case 1:
-			return "X";
+			return 'X';
 		default:
-			return " ";
+			return '+';
 		}
 	}
 }

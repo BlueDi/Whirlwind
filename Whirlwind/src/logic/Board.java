@@ -1,28 +1,16 @@
 package logic;
 
+import util.Utility;
+
 public class Board {
 	private Piece[][] board = null;
-
-	/**
-	 * @return the board
-	 */
-	public Piece[][] getBoard() {
-		return board;
-	}
-
-	/**
-	 * @param board the board to set
-	 */
-	public void setBoard(Piece[][] board) {
-		this.board = board;
-	}
 
 	/**
 	 * Construtor vazio.
 	 * Apenas cria um board [n]x[n] sem peças.
 	 */
 	public Board(){
-		int n = 14;
+		int n = 12;
 		int col, row;
 		board = new Piece[n][n];
 		for(row = 0; row < board.length; row++)
@@ -49,6 +37,20 @@ public class Board {
 				board[row][col]=new Piece();
 
 		FillWithPieces();
+	}
+
+	/**
+	 * @return the board
+	 */
+	public Piece[][] getBoard() {
+		return board;
+	}
+
+	/**
+	 * @param board the board to set
+	 */
+	public void setBoard(Piece[][] board) {
+		this.board = board;
 	}
 
 	/**
@@ -106,32 +108,38 @@ public class Board {
 	 * Desenha o tabuleiro com as peças na consola.
 	 */
 	public void display(){
-		System.out.print("   ");
+		System.out.print("    ");
 		char j;
 		for (int i = 0; i < board.length; i++){
-			j = (char) (65+i);
+			j = Utility.itoc(i);
 			System.out.print(j + " ");
 		}
 		System.out.println();	
-		System.out.print("  ");	
+		System.out.print("   ");	
 		for (int i = 0; i < board.length; i++){
-			j = (char) (65+i);
+			j = Utility.itoc(i);
 			System.out.print("--");
 		}
 		System.out.println("-");
 
 		for(int row = 0; row < board.length; row++){
-			if(row<10)
-				System.out.print(row+1 +"  ");
+			if(row<9)
+				System.out.print(row+1 +"  |");
 			else{
-				System.out.print(row+1 +" ");
+				System.out.print(row+1 +" |");
 			}
 
 			for(int col = 0; col < board.length; col++){
 				System.out.print(board[row][col].getSymbol() + " ");
 			}
-			System.out.println();
+			System.out.println("|");
+		}		
+		System.out.print("   ");	
+		for (int i = 0; i < board.length; i++){
+			j = Utility.itoc(i);
+			System.out.print("--");
 		}
+		System.out.println("-");
 		System.out.println();
 	}
 
@@ -194,22 +202,32 @@ public class Board {
 	 * @return true se for válido, false se não for válido
 	 */
 	public Boolean checkValidMove(int row, int col, int player){
-		System.out.println("Trying to put a player " + player + " piece in (" + (row+1) + "," + (col+1) + ").");
-		
+		System.out.println("Trying to put a player " + player + " piece in (" + (row+1) + "," + Utility.itoc(col) + ").");
+
 		if(!checkFreePosition(row, col)){
 			System.out.println("Not valid. There is another piece in that position.");
 			return false;
 		}
 
 		try{
-			if(checkOwner(row+1, col, player) || checkOwner(row-1, col, player) || checkOwner(row, col+1, player) || checkOwner(row, col-1, player)){
-				System.out.println("Valid move.");
-				return true;
-			}
+			if((row+1) < board.length)
+				if (checkOwner(row+1, col, player))
+					return true;
+			if((row-1) >= 0)
+				if (checkOwner(row-1, col, player))
+					return true;
+			if((col+1) < board.length)
+				if (checkOwner(row, col+1, player))
+					return true;
+			if((col-1) >= 0)
+				if (checkOwner(row, col-1, player))
+					return true;
 		}
-		catch(IndexOutOfBoundsException e){}
+		catch(IndexOutOfBoundsException e){
 
-		System.out.println("Not valid. There isn't a player " + player + " piece next to (" + (row+1) + "," + (col+1) + ").");
+		}
+
+		System.out.println("Not valid. There isn't a player " + player + " piece next to (" + (row+1) + "," + Utility.itoc(col) + ").");
 		return false;
 	}
 
@@ -228,7 +246,7 @@ public class Board {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Coloca uma peça do player na posição (row,col).
 	 * Não depende das regras do jogo, apenas tem que estar dentro do tabuleiro.
@@ -270,7 +288,7 @@ public class Board {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Verifica se o player ganhou o jogo.
 	 * @param player

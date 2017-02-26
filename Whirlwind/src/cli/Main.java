@@ -9,6 +9,8 @@ public class Main {
 		b.display();
 		b.setPiece(0, 2, 1);
 		b.display();
+		b.setPiece(0, 3, 1);
+		b.display();
 	}
 
 }

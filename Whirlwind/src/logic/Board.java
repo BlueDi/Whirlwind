@@ -167,7 +167,54 @@ public class Board {
 	}
 
 	/**
-	 * Retorna a peça na posição [row]x[col].
+	 * Compara o player dos argumentos com o player da peça.
+	 * @param row
+	 * @param col
+	 * @param player
+	 * @return true se forem o mesmo player, false se não forem ou se a posição não tiver peça
+	 */
+	public Boolean checkOwner(int row, int col, int player){
+		System.out.println("(" + (row+1) + "," + (col+1) + ") player: " + board[row][col].getPlayer());
+		try{
+			if(board[row][col].getPlayer() == player)
+				return true;
+		}
+		catch(IndexOutOfBoundsException e){
+			System.out.println("Bad coords in checkOwner().");
+		}
+		return false;
+	}
+
+	/**
+	 * Verifica se o movimento é válido.
+	 * O movimento é válido quando há uma peça do jogador numa casa adjacente à desejada, quer na horizontal, quer na vertical.
+	 * @param row
+	 * @param col
+	 * @param player
+	 * @return true se for válido, false se não for válido
+	 */
+	public Boolean checkValidMove(int row, int col, int player){
+		System.out.println("Trying to put a player " + player + " piece in (" + (row+1) + "," + (col+1) + ").");
+		
+		if(!checkFreePosition(row, col)){
+			System.out.println("Not valid. There is another piece in that position.");
+			return false;
+		}
+
+		try{
+			if(checkOwner(row+1, col, player) || checkOwner(row-1, col, player) || checkOwner(row, col+1, player) || checkOwner(row, col-1, player)){
+				System.out.println("Valid move.");
+				return true;
+			}
+		}
+		catch(IndexOutOfBoundsException e){}
+
+		System.out.println("Not valid. There isn't a player " + player + " piece next to (" + (row+1) + "," + (col+1) + ").");
+		return false;
+	}
+
+	/**
+	 * Retorna a peça na posição (row,col).
 	 * @param row linha desejada
 	 * @param col coluna desejada
 	 * @return Piece na posição
@@ -181,9 +228,10 @@ public class Board {
 		}
 		return null;
 	}
-
+	
 	/**
-	 * Coloca uma peça do player na posição [row]x[col].
+	 * Coloca uma peça do player na posição (row,col).
+	 * Não depende das regras do jogo, apenas tem que estar dentro do tabuleiro.
 	 * @param row
 	 * @param col
 	 * @param player a quem a peça pertence
@@ -191,7 +239,7 @@ public class Board {
 	 */
 	public Boolean setPiece(int row, int col, int player){
 		try{
-			if(checkFreePosition(row, col)){
+			if(checkValidMove(row, col, player)){
 				board[row][col].setPlayer(player);
 				return true;
 			}
@@ -199,6 +247,39 @@ public class Board {
 		catch(IndexOutOfBoundsException e){
 			System.out.println("Bad coords in setPiece().");
 		}
+		return false;
+	}
+
+	/**
+	 * Coloca uma peça do player na posição (row,col).
+	 * Não depende das regras do jogo, apenas tem que ser uma posição livre.
+	 * @param row
+	 * @param col
+	 * @param player a quem a peça pertence
+	 * @return true se conseguiu rowocar, false se não conseguiu
+	 */
+	public Boolean setPieceAbs(int row, int col, int player){
+		try{
+			if(checkFreePosition(row, col)){
+				board[row][col].setPlayer(player);
+				return true;
+			}
+		}
+		catch(IndexOutOfBoundsException e){
+			System.out.println("Bad coords in setPieceAbs().");
+		}
+		return false;
+	}
+	
+	/**
+	 * Verifica se o player ganhou o jogo.
+	 * @param player
+	 * @return true se fez a linha, false se não
+	 * @throws Exception jogador não válido
+	 */
+	public Boolean winner(int player) throws Exception{
+		if(player != 0 && player != 1)
+			throw new Exception("Invalid player!");
 		return false;
 	}
 }

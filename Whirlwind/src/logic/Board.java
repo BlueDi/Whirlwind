@@ -1,5 +1,8 @@
 package logic;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 import util.Utility;
 
 public class Board {
@@ -15,7 +18,7 @@ public class Board {
 		board = new Piece[n][n];
 		for(row = 0; row < board.length; row++)
 			for(col = 0; col < board.length; col++)
-				board[row][col]=new Piece();	
+				board[row][col]=new Piece(row, col);	
 	}
 
 	/**
@@ -34,7 +37,7 @@ public class Board {
 		board = new Piece[n][n];
 		for(row = 0; row < board.length; row++)
 			for(col = 0; col < board.length; col++)
-				board[row][col]=new Piece();
+				board[row][col]=new Piece(row, col);
 
 		FillWithPieces();
 	}
@@ -169,7 +172,7 @@ public class Board {
 			}
 		}
 		catch(IndexOutOfBoundsException e){
-			System.out.println("Bad coords in checkFreePosition().");
+			//System.out.println("Bad coords in checkFreePosition().");
 		}
 		return false;
 	}
@@ -182,7 +185,7 @@ public class Board {
 	 * @return true se forem o mesmo player, false se não forem ou se a posição não tiver peça
 	 */
 	public Boolean checkOwner(int row, int col, int player){
-		System.out.println("(" + (row+1) + "," + (col+1) + ") player: " + board[row][col].getPlayer());
+		//System.out.println("(" + (row+1) + "," + (col+1) + ") player: " + board[row][col].getPlayer());
 		try{
 			if(board[row][col].getPlayer() == player)
 				return true;
@@ -194,21 +197,13 @@ public class Board {
 	}
 
 	/**
-	 * Verifica se o movimento é válido.
-	 * O movimento é válido quando há uma peça do jogador numa casa adjacente à desejada, quer na horizontal, quer na vertical.
+	 * Verifica se existem peças do player nas posições à volta de (row,col).
 	 * @param row
 	 * @param col
 	 * @param player
-	 * @return true se for válido, false se não for válido
+	 * @return true se exister pelo menos um movimento possível, false se não
 	 */
-	public Boolean checkValidMove(int row, int col, int player){
-		System.out.println("Trying to put a player " + player + " piece in (" + (row+1) + "," + Utility.itoc(col) + ").");
-
-		if(!checkFreePosition(row, col)){
-			System.out.println("Not valid. There is another piece in that position.");
-			return false;
-		}
-
+	public Boolean checkHasMoves(int row, int col, int player){
 		try{
 			if((row+1) < board.length)
 				if (checkOwner(row+1, col, player))
@@ -223,9 +218,29 @@ public class Board {
 				if (checkOwner(row, col-1, player))
 					return true;
 		}
-		catch(IndexOutOfBoundsException e){
+		catch(IndexOutOfBoundsException e){}
 
+		return false;
+	}
+
+	/**
+	 * Verifica se o movimento é válido.
+	 * O movimento é válido quando a posição não está já ocupada e há uma peça do jogador numa casa adjacente à desejada, quer na horizontal, quer na vertical.
+	 * @param row
+	 * @param col
+	 * @param player
+	 * @return true se for válido, false se não for válido
+	 */
+	public Boolean checkValidMove(int row, int col, int player){
+		//System.out.println("Trying to put a player " + player + " piece in (" + (row+1) + "," + Utility.itoc(col) + ").");
+
+		if(!checkFreePosition(row, col)){
+			//System.out.println("Not valid. There is another piece in that position.");
+			return false;
 		}
+
+		if(checkHasMoves(row, col, player))
+			return true;
 
 		System.out.println("Not valid. There isn't a player " + player + " piece next to (" + (row+1) + "," + Utility.itoc(col) + ").");
 		return false;
@@ -267,6 +282,10 @@ public class Board {
 		}
 		return false;
 	}
+	
+	public void removePiece(int row, int col){
+		board[row][col].resetPlayer();
+	}
 
 	/**
 	 * Coloca uma peça do player na posição (row,col).
@@ -287,6 +306,21 @@ public class Board {
 			System.out.println("Bad coords in setPieceAbs().");
 		}
 		return false;
+	}
+
+	/**
+	 * Devolve todas as peças do player presentes no board.
+	 * @param player
+	 * @return LinkedList<Piece> de todas as peças
+	 */
+	public Queue<Piece> getPlayerPieces(int player){ 
+		Queue<Piece> player_pieces = new LinkedList<Piece>();
+		for(Piece[] col: board)
+			for(Piece p: col)
+				if(p.getPlayer() == player)
+					player_pieces.add(p);
+		return player_pieces;
+
 	}
 
 	/**

@@ -1,7 +1,8 @@
 package logic;
 
 public class Piece {
-	private int player;
+	private int player = -1;
+	private int row = -1, col = -1;
 
 	/**
 	 * Construtor de uma peça vazia.
@@ -15,12 +16,30 @@ public class Piece {
 	 * Construtor definindo o jogador
 	 * @param player pode ser 0 ou 1
 	 */
-	public Piece(int player){
-		this.player = player;
-		if(this.player != 0 & this.player != 1)
-			player = -1;
+	public Piece(int row, int col){
+		this.row = row;
+		this.col = col;
+	}
+	
+	/**
+	 * Construtor definindo o jogador
+	 * @param player pode ser 0 ou 1
+	 */
+	public Piece(int row, int col, int player){
+		this.row = row;
+		this.col = col;
+		if(player == 0 || player == 1)
+			this.player = player;
 	}
 
+	/**
+	 * Modifica o jogador atribuido à peça. 
+	 * @param player pode ser 0 ou 1
+	 */
+	public void resetPlayer() {
+		this.player = -1;
+	}
+	
 	/**
 	 * Modifica o jogador atribuido à peça. 
 	 * @param player pode ser 0 ou 1
@@ -36,6 +55,22 @@ public class Piece {
 	 */
 	public int getPlayer(){
 		return this.player;
+	}
+	
+	/**
+	 * Serve para saber a linha da peça.
+	 * @return linha onde a peça está
+	 */
+	public int getRow(){
+		return this.row;
+	}
+	
+	/**
+	 * Serve para saber a coluna da peça.
+	 * @return coluna onde a peça está
+	 */
+	public int getCol(){
+		return this.col;
 	}
 
 	/**

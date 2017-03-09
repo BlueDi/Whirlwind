@@ -18,7 +18,7 @@ public final class Utility {
         return rng.nextInt((11 - 0) + 1) + 0;
 	}
 
-	public int random(int min, int max){
+	public static int random(int min, int max){
 		return rng.nextInt((max - min) + 1) + min;
 	}
 	

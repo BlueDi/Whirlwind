@@ -7,6 +7,7 @@ import util.Utility;
 
 public class Board {
 	private Piece[][] board = null;
+	private boolean win=false;
 
 	/**
 	 * Construtor vazio.
@@ -330,6 +331,7 @@ public class Board {
 	 * @throws Exception jogador não válido
 	 */
 	public Boolean winnerWhite() {
+		win=false;
 		boolean[][]visited=new boolean[board.length][board.length];
 		for(int k=0;k<visited.length;k++)
 			for(int j=0;j<visited[k].length;j++)
@@ -346,13 +348,23 @@ public class Board {
 	}
 	public Boolean auxwinnerWhite(int row, int col,boolean [][]a) {
 		
-		if( col == board[board.length-1].length-1 && board[row ][col].getPlayer()==1)
+		if(win)
 			return true;
+		
+		if( col == board[board.length-1].length-1 && board[row ][col].getPlayer()==1){
+			win=true;
+			return true;
+		}
+			
 		if(board[row][col].getPlayer()==1 && !a[row][col]){
 			a[row][col]=true;
+			if(row+1<board.length)
 			auxwinnerWhite(row+1,col,a);
+			if(col+1<board.length)
 			auxwinnerWhite(row,col+1,a);
+			if(row-1>=0)
 			auxwinnerWhite(row-1,col,a);
+			if(col-1>=0)
 			auxwinnerWhite(row,col-1,a);
 			
 			}

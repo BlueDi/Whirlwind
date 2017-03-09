@@ -329,9 +329,33 @@ public class Board {
 	 * @return true se fez a linha, false se não
 	 * @throws Exception jogador não válido
 	 */
-	public Boolean winner(int player) throws Exception{
-		if(player != 0 && player != 1)
-			throw new Exception("Invalid player!");
+	public Boolean winnerWhite() {
+		boolean[][]visited=new boolean[board.length][board.length];
+		for(int k=0;k<visited.length;k++)
+			for(int j=0;j<visited[k].length;j++)
+				visited[k][j]=false;
+		
+		for(int i=0;i<board.length;i++){
+			if(board[i][0].getPlayer()==1)
+				if(auxwinnerWhite(i,0,visited))
+					return true;
+				
+		}
 		return false;
+		
+	}
+	public Boolean auxwinnerWhite(int row, int col,boolean [][]a) {
+		
+		if( col == board[board.length-1].length-1 && board[row ][col].getPlayer()==1)
+			return true;
+		if(board[row][col].getPlayer()==1 && !a[row][col]){
+			a[row][col]=true;
+			auxwinnerWhite(row+1,col,a);
+			auxwinnerWhite(row,col+1,a);
+			auxwinnerWhite(row-1,col,a);
+			auxwinnerWhite(row,col-1,a);
+			
+			}
+	return false;
 	}
 }

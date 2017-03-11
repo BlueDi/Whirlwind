@@ -117,18 +117,11 @@ public class Board {
 	 */
 	public void display(){
 		System.out.print("    ");
-		char j;
-		for (int i = 0; i < board.length; i++){
-			j = Utility.itoc(i);
-			System.out.print(j + " ");
-		}
+		Utility.printLineOfChar(board.length);
 		System.out.println();	
 		System.out.print("   ");	
-		for (int i = 0; i < board.length; i++){
-			j = Utility.itoc(i);
-			System.out.print("--");
-		}
-		System.out.println("-");
+
+		Utility.printDashedLine(board.length);
 
 		for(int row = 0; row < board.length; row++){
 			if(row<9)
@@ -143,11 +136,9 @@ public class Board {
 			System.out.println("|");
 		}		
 		System.out.print("   ");	
-		for (int i = 0; i < board.length; i++){
-			j = Utility.itoc(i);
-			System.out.print("--");
-		}
-		System.out.println("-");
+
+		Utility.printDashedLine(board.length);
+		
 		System.out.println();
 	}
 

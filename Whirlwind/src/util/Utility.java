@@ -4,7 +4,7 @@ import java.util.Random;
 
 public final class Utility {
 	private static Random rng = new Random();
-	
+
 	/**
 	 * Transforms an Integer into a char.
 	 * @param i integer to transform
@@ -13,7 +13,33 @@ public final class Utility {
 	public static char itoc(int i){
 		return (char) (65 + i);
 	}
+
+	/**
+	 * Imprime uma linha de Letras.
+	 * @param size número de letras a imprimir
+	 */
+	public static void printLineOfChar(int size){
+		char letter;
+		for (int i = 0; i < size; i++){
+			letter = Utility.itoc(i);
+			System.out.print(letter + " ");
+		}
+	}
 	
+	/**
+	 * Imprime uma linha de traços.
+	 * ---------------------------
+	 * @param size número de traços a imprimir
+	 */
+	public static void printDashedLine(int size){
+		char j;
+		for (int i = 0; i < size; i++){
+			j = Utility.itoc(i);
+			System.out.print("--");
+		}
+		System.out.println("--");
+	}
+
 	/**
 	 * Transforms an Integer into an Arrow.
 	 * @param i integer to transform
@@ -30,7 +56,7 @@ public final class Utility {
 			return '<';
 		return 'f';
 	}
-	
+
 	/**
 	 * Transforms an Integer into a Player.
 	 * @param i integer to transform
@@ -45,7 +71,7 @@ public final class Utility {
 			return 'e';
 		return 'f';
 	}
-	
+
 	public static int random(){
 		return rng.nextInt((11 - 0) + 1) + 0;
 	}
@@ -53,5 +79,5 @@ public final class Utility {
 	public static int random(int min, int max){
 		return rng.nextInt((max - min) + 1) + min;
 	}
-	
+
 }

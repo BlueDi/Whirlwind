@@ -20,7 +20,7 @@ public class Piece {
 		this.row = row;
 		this.col = col;
 	}
-	
+
 	/**
 	 * Construtor definindo o jogador
 	 * @param player pode ser 0 ou 1
@@ -39,7 +39,7 @@ public class Piece {
 	public void resetPlayer() {
 		this.player = -1;
 	}
-	
+
 	/**
 	 * Modifica o jogador atribuido à peça. 
 	 * @param player pode ser 0 ou 1
@@ -56,7 +56,7 @@ public class Piece {
 	public int getPlayer(){
 		return this.player;
 	}
-	
+
 	/**
 	 * Serve para saber a linha da peça.
 	 * @return linha onde a peça está
@@ -64,7 +64,7 @@ public class Piece {
 	public int getRow(){
 		return this.row;
 	}
-	
+
 	/**
 	 * Serve para saber a coluna da peça.
 	 * @return coluna onde a peça está

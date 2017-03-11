@@ -11,7 +11,7 @@ import logic.Board;
 
 public class BoardTest {
 	Board board;
-
+	
 	@Before public void initialize() throws Exception {
 		int n = 14;    
 		board = new Board(n);
@@ -63,7 +63,9 @@ public class BoardTest {
 	}
 
 	@Test
-	public void testCheckValidMove() {
+	public void testCheckValidMove() throws Exception {
+		int n = 14;    
+		board = new Board(n);
 		assertFalse(board.checkValidMove(-1, -1, 0));
 		assertFalse(board.checkValidMove(0, 1, 0));
 		assertFalse(board.checkValidMove(0, 1, 1));

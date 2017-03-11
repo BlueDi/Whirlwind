@@ -15,8 +15,8 @@ public class Board {
 	 */
 	public Board(){
 		int n = 12;
-		int col, 
-		row;
+		int col;
+		int row;
 		board = new Piece[n][n];
 		for(row = 0; row < board.length; row++)
 			for(col = 0; col < board.length; col++)
@@ -274,6 +274,7 @@ public class Board {
 	public Boolean setPiece(int row, int col, int player){
 		try{
 			if(checkValidMove(row, col, player)){
+				//System.out.println("Peca colocada em (" + (row+1) +"," + Utility.itoc(col) + ")");
 				board[row][col].setPlayer(player);
 				return true;
 			}
@@ -291,7 +292,13 @@ public class Board {
 	 * @param col
 	 */
 	public void removePiece(int row, int col){
-		board[row][col].resetPlayer();
+		try{
+			board[row][col].resetPlayer();
+			//System.out.println("Peca removida de (" + (row+1) +"," + Utility.itoc(col) + ")");
+		}
+		catch(IndexOutOfBoundsException e){
+			System.out.println("Bad coords in removePiece().");
+		}
 	}
 
 	/**
@@ -352,7 +359,7 @@ public class Board {
 		return false;
 
 	}
-	
+
 	public Boolean auxwinnerWhite(int row, int col, boolean[][] a) {
 
 		if(win)

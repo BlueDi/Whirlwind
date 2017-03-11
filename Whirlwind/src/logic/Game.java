@@ -36,7 +36,7 @@ public class Game {
 
 	private void turn(){
 		board.display();
-		Heur best_move = MiniMax();
+		Heur best_move = miniMax();
 		moveCalculator(best_move);
 		board.setPiece(best_move.row, best_move.col, activeplayer);
 		activeplayer ^= 1;
@@ -57,7 +57,7 @@ public class Game {
 		public int value;
 	};
 
-	public Heur MiniMax(){
+	public Heur miniMax(){
 		Queue<Piece> player_pieces = board.getPlayerPieces(activeplayer);
 		Queue<Piece> temp_player_pieces = player_pieces;
 		List<Heur> first_calc = new ArrayList<Heur>();

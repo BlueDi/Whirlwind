@@ -10,26 +10,22 @@ import org.junit.Test;
 import logic.Board;
 
 public class BoardTest {
-	int n = 14;    
 	Board board;
 
 	@Before public void initialize() throws Exception {
+		int n = 14;    
 		board = new Board(n);
 	}
 
 	@Test
 	public void testBoard() {
+		int n = 14;    
 		assertEquals(board.getBoard().length, n);
 	}
 
 	@Test
-	public void testBoardInt() {
-		testBoard();
-		testFillWithPieces();
-	}
-
-	@Test
 	public void testFillWithPieces(){
+		int n = 14;
 		for(int row = 0; row < n; row++){
 			int firstpiece = -1;
 
@@ -38,8 +34,8 @@ public class BoardTest {
 					firstpiece = col;
 				}
 				else if(board.getPiece(row, col).getPlayer() != -1){
-					assertTrue((col-firstpiece)==5);
-					assertFalse(board.getPiece(row, firstpiece).getPlayer() == board.getPiece(row, col).getPlayer());
+					assertTrue((col-firstpiece)==5);//verifica se o espaço entre peças é 5
+					assertFalse(board.getPiece(row, firstpiece).getPlayer() == board.getPiece(row, col).getPlayer());//verifica se as peças são de jogadores diferentes
 					firstpiece = col;
 				}
 			}
@@ -75,7 +71,7 @@ public class BoardTest {
 		assertFalse(board.checkValidMove(1, 1, 1));
 	}
 
-/*	@Test
+	/*	@Test
 	public void testWinner() throws Exception{   
 		Board winboard = new Board();
 		for(int i = 0; i < winboard.getBoard().length; i++)
@@ -83,5 +79,5 @@ public class BoardTest {
 			winboard.setPieceAbs(i, j, 0);
 		assertTrue(winboard.winner(0));
 	}
-*/
+	 */
 }

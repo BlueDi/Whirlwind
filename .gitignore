@@ -1,5 +1,6 @@
 .metadata
 bin/
+/bin/
 tmp/
 *.tmp
 *.bak
@@ -56,3 +57,6 @@ local.properties
 .cache-main
 .scala_dependencies
 .worksheet
+
+Whirlwind/.project
+Whirlwind/.settings

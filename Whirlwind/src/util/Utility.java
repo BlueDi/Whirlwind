@@ -3,7 +3,7 @@ package util;
 import java.util.Random;
 
 public final class Utility {
-	static Random rng = new Random();
+	private static Random rng = new Random();
 	
 	/**
 	 * Transforms an Integer into a char.

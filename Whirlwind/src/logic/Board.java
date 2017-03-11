@@ -15,7 +15,8 @@ public class Board {
 	 */
 	public Board(){
 		int n = 12;
-		int col, row;
+		int col, 
+		row;
 		board = new Piece[n][n];
 		for(row = 0; row < board.length; row++)
 			for(col = 0; col < board.length; col++)
@@ -40,7 +41,7 @@ public class Board {
 			for(col = 0; col < board.length; col++)
 				board[row][col]=new Piece(row, col);
 
-		FillWithPieces();
+		fillWithPieces();
 	}
 
 	/**
@@ -65,15 +66,18 @@ public class Board {
 	 * Depois para a próxima linha coloca a primeira peça duas posições à direita da primeira peça, preenchendo antecipadamente as posições antes dessa peça. 
 	 *
 	 */
-	private void FillWithPieces(){
+	private void fillWithPieces(){
 		if(board == null)
-			throw new NullPointerException("Board não inicializado.");
+			throw new IllegalArgumentException("Board não inicializado.");
 
-		int col, row;
+		int col;
+		int row;
 		int line_start_position = 1; //posição da primeira peça da linha
 		int player = 0;
-		int col_position_checker = line_start_position, aux_pc;
-		int col_player_picker = player, aux_pp=0;
+		int col_position_checker = line_start_position;
+		int aux_pc;
+		int col_player_picker = player;
+		int aux_pp = 0;
 
 		for(row = 0; row < board.length; row++){
 			col_player_picker = player;
@@ -206,18 +210,14 @@ public class Board {
 	 */
 	public Boolean checkHasMoves(int row, int col, int player){
 		try{
-			if((row+1) < board.length)
-				if (checkOwner(row+1, col, player))
-					return true;
-			if((row-1) >= 0)
-				if (checkOwner(row-1, col, player))
-					return true;
-			if((col+1) < board.length)
-				if (checkOwner(row, col+1, player))
-					return true;
-			if((col-1) >= 0)
-				if (checkOwner(row, col-1, player))
-					return true;
+			if((row+1) < board.length && checkOwner(row+1, col, player))
+				return true;
+			if((row-1) >= 0 && checkOwner(row-1, col, player))
+				return true;
+			if((col+1) < board.length && checkOwner(row, col+1, player))
+				return true;
+			if((col-1) >= 0 && checkOwner(row, col-1, player))
+				return true;
 		}
 		catch(IndexOutOfBoundsException e){}
 
@@ -283,7 +283,13 @@ public class Board {
 		}
 		return false;
 	}
-	
+
+	/**
+	 * Retira a peça do tabuleiro.
+	 * Na prática apenas atribui à peça o jogador -1 que representa a ausência de jogador
+	 * @param row
+	 * @param col
+	 */
 	public void removePiece(int row, int col){
 		board[row][col].resetPlayer();
 	}
@@ -336,38 +342,39 @@ public class Board {
 		for(int k=0;k<visited.length;k++)
 			for(int j=0;j<visited[k].length;j++)
 				visited[k][j]=false;
-		
+
 		for(int i=0;i<board.length;i++){
 			if(board[i][0].getPlayer()==1)
 				if(auxwinnerWhite(i,0,visited))
 					return true;
-				
+
 		}
 		return false;
-		
+
 	}
-	public Boolean auxwinnerWhite(int row, int col,boolean [][]a) {
-		
+	
+	public Boolean auxwinnerWhite(int row, int col, boolean[][] a) {
+
 		if(win)
 			return true;
-		
-		if( col == board[board.length-1].length-1 && board[row ][col].getPlayer()==1){
+
+		if( col == board[board.length-1].length-1 && board[row][col].getPlayer()==1){
 			win=true;
 			return true;
 		}
-			
+
 		if(board[row][col].getPlayer()==1 && !a[row][col]){
 			a[row][col]=true;
 			if(row+1<board.length)
-			auxwinnerWhite(row+1,col,a);
+				auxwinnerWhite(row+1,col,a);
 			if(col+1<board.length)
-			auxwinnerWhite(row,col+1,a);
+				auxwinnerWhite(row,col+1,a);
 			if(row-1>=0)
-			auxwinnerWhite(row-1,col,a);
+				auxwinnerWhite(row-1,col,a);
 			if(col-1>=0)
-			auxwinnerWhite(row,col-1,a);
-			
-			}
-	return false;
+				auxwinnerWhite(row,col-1,a);
+
+		}
+		return false;
 	}
 }

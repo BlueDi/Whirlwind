@@ -1,14 +1,10 @@
 package logic;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import java.util.Vector;
 
 import util.Utility;
-
-import logic.Piece;
 
 public class Game {
 	private Board board;

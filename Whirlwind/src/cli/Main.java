@@ -1,6 +1,6 @@
 package cli;
 
-import logic.*;
+import logic.Game;
 
 public class Main {
 

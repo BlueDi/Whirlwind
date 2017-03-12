@@ -2,7 +2,8 @@ package logic;
 
 public class Piece {
 	private int player = -1;
-	private int row = -1, col = -1;
+	private int row = -1;
+	private int col = -1;
 
 	/**
 	 * Construtor de uma peça vazia.

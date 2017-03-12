@@ -4,28 +4,25 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import logic.Board;
+import logic.Piece;
 
 public class BoardTest {
-	Board board;
-	
-	@Before public void initialize() throws Exception {
-		int n = 14;    
-		board = new Board(n);
-	}
-
 	@Test
-	public void testBoard() {
-		int n = 14;    
+	public void testBoard() throws Exception {
+		int n = 14;
+		Board board = new Board(n);
+
 		assertEquals(board.getBoard().length, n);
 	}
 
 	@Test
-	public void testFillWithPieces(){
+	public void testFillWithPieces() throws Exception{
 		int n = 14;
+		Board board = new Board(n);
+
 		for(int row = 0; row < n; row++){
 			int firstpiece = -1;
 
@@ -43,7 +40,10 @@ public class BoardTest {
 	}
 
 	@Test
-	public void testCheckFreePosition() {
+	public void testCheckFreePosition() throws Exception {
+		int n = 14;
+		Board board = new Board(n);
+
 		assertTrue(board.checkFreePosition(0, 0));
 		assertFalse(board.checkFreePosition(0, 1));
 		assertTrue(board.checkFreePosition(0, 2));
@@ -51,26 +51,42 @@ public class BoardTest {
 	}
 
 	@Test
-	public void testSetPieceAbs() {
+	public void testSetPieceAbs() throws Exception {
+		int n = 14;
+		Board board = new Board(n);
+
 		//testar jogador 0
-		assertEquals(board.checkFreePosition(0, 0), board.setPieceAbs(0, 0, 0));
+		Piece p = new Piece(0, 0, 0);
+		assertEquals(board.checkFreePosition(0, 0), board.setPieceAbs(p));
 
 		//testar colocar peça numa casa ocupada, ambos falham
-		assertEquals(board.checkFreePosition(0, 1), board.setPieceAbs(0, 1, 0));
+		p = new Piece(0, 1, 0);
+		assertEquals(board.checkFreePosition(0, 1), board.setPieceAbs(p));
 
 		//testar jogador 1
-		assertEquals(board.checkFreePosition(0, 2), board.setPieceAbs(0, 2, 1));
+		p = new Piece(0, 2, 1);
+		assertEquals(board.checkFreePosition(0, 2), board.setPieceAbs(p));
 	}
 
 	@Test
 	public void testCheckValidMove() throws Exception {
-		int n = 14;    
-		board = new Board(n);
-		assertFalse(board.checkValidMove(-1, -1, 0));
-		assertFalse(board.checkValidMove(0, 1, 0));
-		assertFalse(board.checkValidMove(0, 1, 1));
-		assertTrue(board.checkValidMove(1, 1, 0));
-		assertFalse(board.checkValidMove(1, 1, 1));
+		int n = 14;
+		Board board = new Board(n);
+
+		Piece p = new Piece(-1, -1, 0);
+		assertFalse(board.checkValidMove(p));
+
+		p = new Piece(0, 1, 0);
+		assertFalse(board.checkValidMove(p));
+
+		p = new Piece(0, 1, 1);
+		assertFalse(board.checkValidMove(p));
+
+		p = new Piece(1, 1, 0);
+		assertTrue(board.checkValidMove(p));
+
+		p = new Piece(1, 1, 1);
+		assertFalse(board.checkValidMove(p));
 	}
 
 	/*	@Test

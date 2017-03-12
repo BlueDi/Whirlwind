@@ -25,16 +25,14 @@ public final class Utility {
 			System.out.print(letter + " ");
 		}
 	}
-	
+
 	/**
 	 * Imprime uma linha de traços.
 	 * ---------------------------
 	 * @param size número de traços a imprimir
 	 */
 	public static void printDashedLine(int size){
-		char j;
 		for (int i = 0; i < size; i++){
-			j = Utility.itoc(i);
 			System.out.print("--");
 		}
 		System.out.println("--");

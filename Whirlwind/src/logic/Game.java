@@ -14,12 +14,13 @@ public class Game {
 
 	/**
 	 * Construtor da classe Game.
+	 * Um board de dimensão 14 garante que ambos jogadores começam com 20 peças.
 	 * @throws Exception
 	 */
 	public Game() throws Exception{
-		int dimensao_do_tabuleiro = 12;
+		int dimensao_do_tabuleiro = 14;
 		board = new Board(dimensao_do_tabuleiro);
-		activeplayer = 0; //black;
+		activeplayer = 1; //black;
 	}
 
 	/**
@@ -28,9 +29,10 @@ public class Game {
 	private void turn(){
 		board.display();
 		best_move = miniMax();
-		//best_move.moveCalculator();
-		board.setPiece(best_move.row, best_move.col, activeplayer);
-		System.out.println("Jogador " + activeplayer + " tem: " + board.getPlayerPieces(activeplayer).size() + " peças para jogar.");
+		Piece best_piece = new Piece(best_move.row, best_move.col, activeplayer);
+
+		board.setPiece(best_piece);
+		System.out.println("Jogador " + activeplayer + " tem: " + (board.getPlayerPieces(activeplayer).size()-1) + " peças para jogar.");
 		activeplayer ^= 1;
 	}
 
@@ -61,10 +63,9 @@ public class Game {
 	/**
 	 * TODO: Calcula o valor do tabuleiro com a nova peça.
 	 * @param position A peça que vai ser colocada no turno
-	 * @return int que representa o valor do tabuleiro
 	 */
-	private int calcHeur(Heur position){
-		return Utility.random(1, 100); // = board.getValue() //heuristica
+	private void calcHeur(Heur position){
+		position.value = Utility.random(1, 100);
 	}
 
 	/**
@@ -80,8 +81,10 @@ public class Game {
 
 		position2.moveCalculator();
 
-		if(board.setPiece(position2.row, position2.col, activeplayer)){
-			position2.value = calcHeur(position);
+		Piece p = new Piece(position2.row, position2.col, activeplayer);
+
+		if(board.setPiece(p)){
+			calcHeur(position2);
 			board.removePiece(position2.row, position2.col);
 		}
 

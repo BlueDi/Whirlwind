@@ -12,9 +12,10 @@ public class Board {
 	/**
 	 * Construtor vazio.
 	 * Apenas cria um board [n]x[n] sem peças.
+	 * Hard-coded para criar [14]x[14]
 	 */
 	public Board(){
-		int n = 12;
+		int n = 14;
 		int col;
 		int row;
 		board = new Piece[n][n];
@@ -35,11 +36,13 @@ public class Board {
 		else if(n>20)
 			throw new Exception("Board demasiado grande!");
 
-		int col, row;
+		int row;
+		int col;
 		board = new Piece[n][n];
+
 		for(row = 0; row < board.length; row++)
 			for(col = 0; col < board.length; col++)
-				board[row][col]=new Piece(row, col);
+				board[row][col] = new Piece(row, col);
 
 		fillWithPieces();
 	}
@@ -64,7 +67,6 @@ public class Board {
 	 * Coloca a primeira peça.
 	 * Nessa linha coloca a cada 5 espaços uma nova peça, alternando o jogador, até não ter 5 espaços entre a peça e o fim do tabuleiro.
 	 * Depois para a próxima linha coloca a primeira peça duas posições à direita da primeira peça, preenchendo antecipadamente as posições antes dessa peça. 
-	 *
 	 */
 	private void fillWithPieces(){
 		if(board == null)
@@ -138,7 +140,7 @@ public class Board {
 		System.out.print("   ");	
 
 		Utility.printDashedLine(board.length);
-		
+
 		System.out.println();
 	}
 
@@ -159,7 +161,7 @@ public class Board {
 	 * Verifica se a posição não tem nenhuma peça.
 	 * @param row
 	 * @param col
-	 * @return
+	 * @return true se a posição ainda não tiver peça, false se já tiver
 	 */
 	public Boolean checkFreePosition(int row, int col){
 		try{
@@ -194,20 +196,18 @@ public class Board {
 
 	/**
 	 * Verifica se existem peças do player nas posições à volta de (row,col).
-	 * @param row
-	 * @param col
-	 * @param player
+	 * @param Piece
 	 * @return true se exister pelo menos um movimento possível, false se não
 	 */
-	public Boolean checkHasMoves(int row, int col, int player){
+	public Boolean checkHasMoves(Piece p){
 		try{
-			if((row+1) < board.length && checkOwner(row+1, col, player))
+			if((p.getRow() + 1) < board.length && checkOwner(p.getRow() + 1, p.getCol(), p.getPlayer()))
 				return true;
-			if((row-1) >= 0 && checkOwner(row-1, col, player))
+			if((p.getRow() - 1) >= 0 && checkOwner(p.getRow() - 1, p.getCol(), p.getPlayer()))
 				return true;
-			if((col+1) < board.length && checkOwner(row, col+1, player))
+			if((p.getCol() + 1) < board.length && checkOwner(p.getRow(), p.getCol() + 1, p.getPlayer()))
 				return true;
-			if((col-1) >= 0 && checkOwner(row, col-1, player))
+			if((p.getCol() - 1) >= 0 && checkOwner(p.getRow(), p.getCol() - 1, p.getPlayer()))
 				return true;
 		}
 		catch(IndexOutOfBoundsException e){}
@@ -218,23 +218,21 @@ public class Board {
 	/**
 	 * Verifica se o movimento é válido.
 	 * O movimento é válido quando a posição não está já ocupada e há uma peça do jogador numa casa adjacente à desejada, quer na horizontal, quer na vertical.
-	 * @param row
-	 * @param col
-	 * @param player
+	 * @param Piece
 	 * @return true se for válido, false se não for válido
 	 */
-	public Boolean checkValidMove(int row, int col, int player){
+	public Boolean checkValidMove(Piece p){
 		//System.out.println("Trying to put a player " + player + " piece in (" + (row+1) + "," + Utility.itoc(col) + ").");
 
-		if(!checkFreePosition(row, col)){
+		if(!checkFreePosition(p.getRow(), p.getCol())){
 			//System.out.println("Not valid. There is another piece in that position.");
 			return false;
 		}
 
-		if(checkHasMoves(row, col, player))
+		if(checkHasMoves(p))
 			return true;
 
-		System.out.println("Not valid. There isn't a player " + player + " piece next to (" + (row+1) + "," + Utility.itoc(col) + ").");
+		System.out.println("Not valid. There isn't a player " + p.getPlayer() + " piece next to (" + (p.getRow()+1) + "," + Utility.itoc(p.getCol()) + ").");
 		return false;
 	}
 
@@ -257,16 +255,14 @@ public class Board {
 	/**
 	 * Coloca uma peça do player na posição (row,col).
 	 * Não depende das regras do jogo, apenas tem que estar dentro do tabuleiro.
-	 * @param row
-	 * @param col
-	 * @param player a quem a peça pertence
+	 * @param Piece
 	 * @return true se conseguiu rowocar, false se não conseguiu
 	 */
-	public Boolean setPiece(int row, int col, int player){
+	public Boolean setPiece(Piece p){
 		try{
-			if(checkValidMove(row, col, player)){
-				//System.out.println("Peca colocada em (" + (row+1) +"," + Utility.itoc(col) + ")");
-				board[row][col].setPlayer(player);
+			if(checkValidMove(p)){
+				//System.out.println("Peca colocada em (" + (p.getRow()+1) +"," + Utility.itoc(p.getCol()) + ")");
+				board[p.getRow()][p.getCol()].setPlayer(p.getPlayer());
 				return true;
 			}
 		}
@@ -295,15 +291,13 @@ public class Board {
 	/**
 	 * Coloca uma peça do player na posição (row,col).
 	 * Não depende das regras do jogo, apenas tem que ser uma posição livre.
-	 * @param row
-	 * @param col
-	 * @param player a quem a peça pertence
-	 * @return true se conseguiu rowocar, false se não conseguiu
+	 * @param Piece
+	 * @return true se conseguiu colocar, false se não conseguiu
 	 */
-	public Boolean setPieceAbs(int row, int col, int player){
+	public Boolean setPieceAbs(Piece p){
 		try{
-			if(checkFreePosition(row, col)){
-				board[row][col].setPlayer(player);
+			if(checkFreePosition(p.getRow(), p.getCol())){
+				board[p.getRow()][p.getCol()].setPlayer(p.getPlayer());
 				return true;
 			}
 		}
@@ -316,7 +310,7 @@ public class Board {
 	/**
 	 * Devolve todas as peças do player presentes no board.
 	 * @param player
-	 * @return LinkedList<Piece> de todas as peças
+	 * @return Queue<Piece> Fila de todas as peças do player
 	 */
 	public Queue<Piece> getPlayerPieces(int player){ 
 		Queue<Piece> player_pieces = new LinkedList<Piece>();
@@ -342,9 +336,8 @@ public class Board {
 				visited[k][j]=false;
 
 		for(int i=0;i<board.length;i++){
-			if(board[i][0].getPlayer()==1)
-				if(auxwinnerWhite(i,0,visited))
-					return true;
+			if(board[i][0].getPlayer()==1 && auxwinnerWhite(i,0,visited))
+				return true;
 
 		}
 		return false;

@@ -61,11 +61,73 @@ public class Game {
 	}
 
 	/**
+	 * Calcula o valor do tabuleiro para o jogador branco.
+	 * @param position
+	 * @return valor do tabuleiro
+	 */
+	private int calcWhiteHeur(Heur position){
+		int value = 0;
+		Queue<Piece> player_pieces = board.getPlayerPieces(activeplayer);
+		Queue<Piece> enemy_pieces = board.getPlayerPieces(activeplayer ^ 1);
+		
+		for(Piece p: player_pieces){
+			if(p.getCol()==position.col)
+				value++;
+		}	
+
+		int[] inimigos_na_linha = new int[board.getSize()];
+		
+		for(Piece p: enemy_pieces){
+			inimigos_na_linha[p.getRow()]++;
+			if(p.getCol()==position.col)
+				value--;
+		}
+		value += inimigos_na_linha[position.row];
+		
+		return value;
+	}
+	
+	/**
+	 * Calcula o valor do tabuleiro para o jogador preto.
+	 * @param position
+	 * @return valor do tabuleiro
+	 */
+	private int calcBlackHeur(Heur position){
+		int value = 0;
+		Queue<Piece> player_pieces = board.getPlayerPieces(activeplayer);
+		Queue<Piece> enemy_pieces = board.getPlayerPieces(activeplayer ^ 1);
+		
+		for(Piece p: player_pieces){
+			if(p.getRow()==position.row)
+				value++;
+		}	
+
+		int[] inimigos_na_linha = new int[board.getSize()];
+		
+		for(Piece p: enemy_pieces){
+			inimigos_na_linha[p.getCol()]++;
+			if(p.getRow()==position.col)
+				value--;
+		}
+		value += inimigos_na_linha[position.row];
+		
+		return value;
+	}
+
+	/**
 	 * TODO: Calcula o valor do tabuleiro com a nova peça.
 	 * @param position A peça que vai ser colocada no turno
 	 */
 	private void calcHeur(Heur position){
-		position.value = Utility.random(1, 100);
+		int value = 0;
+
+		if(activeplayer == 0)
+			value += calcWhiteHeur(position);
+		else
+			value += calcBlackHeur(position);
+			
+
+		position.value = value;//= Utility.random(1, 100);
 	}
 
 	/**

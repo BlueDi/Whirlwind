@@ -60,7 +60,15 @@ public class Board {
 	public void setBoard(Piece[][] board) {
 		this.board = board;
 	}
-
+	
+	/**
+	 * Devolve o tamanho do board
+	 * @return tamanho do lado do tabuleiro
+	 */
+	public int getSize() {
+		return board.length;
+	}	
+	
 	/**
 	 * Preenche o tabuleiro com peças. 
 	 * O board é preenchido da seguinte maneira:	

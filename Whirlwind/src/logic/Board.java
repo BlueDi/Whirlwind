@@ -345,6 +345,7 @@ public class Board {
 
 		for(int i=0;i<board.length;i++){
 			if(board[i][0].getPlayer()==1 && auxwinnerWhite(i,0,visited))
+				if(win)
 				return true;
 
 		}
@@ -364,7 +365,7 @@ public class Board {
 
 		if(board[row][col].getPlayer()==1 && !a[row][col]){
 			a[row][col]=true;
-			if(row+1<board.length)
+			if(row+1<board.length )
 				auxwinnerWhite(row+1,col,a);
 			if(col+1<board.length)
 				auxwinnerWhite(row,col+1,a);
@@ -372,6 +373,48 @@ public class Board {
 				auxwinnerWhite(row-1,col,a);
 			if(col-1>=0)
 				auxwinnerWhite(row,col-1,a);
+
+		}
+		return false;
+	}
+	
+	public Boolean winnerBlack() {
+		win=false;
+		boolean[][]visited=new boolean[board.length][board.length];
+		for(int k=0;k<visited.length;k++)
+			for(int j=0;j<visited[k].length;j++)
+				visited[k][j]=false;
+
+		for(int i=0;i<board.length;i++){
+			if(board[0][i].getPlayer()==0 && auxwinnerWhite(0,i,visited))
+				if(win)
+				return true;
+
+		}
+		return false;
+
+	}
+
+	public Boolean auxwinnerBlack(int row, int col, boolean[][] a) {
+
+		if(win)
+			return true;
+
+		if( row == board[board.length-1].length-1 && board[row][col].getPlayer()==0){
+			win=true;
+			return true;
+		}
+
+		if(board[row][col].getPlayer()==0 && !a[row][col]){
+			a[row][col]=true;
+			if(row+1<board.length )
+				auxwinnerBlack(row+1,col,a);
+			if(col+1<board.length)
+				auxwinnerBlack(row,col+1,a);
+			if(row-1>=0)
+				auxwinnerBlack(row-1,col,a);
+			if(col-1>=0)
+				auxwinnerBlack(row,col-1,a);
 
 		}
 		return false;

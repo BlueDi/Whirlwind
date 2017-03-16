@@ -331,7 +331,9 @@ public class Board {
 	}
 
 	/**
-	 * Verifica se o player ganhou o jogo.
+	 * Verifica se o playerBranco ganhou o jogo.
+	 * procura neste caso do branco a primeira peça Branca ao longo da coluna 0 se não existir sabemos que é impossivel ter ganho, se encontrar usa o 
+	 * {@link #auxwinnerWhite(int row, int col, boolean[][] a) auxwinnerWhite} para percorrer todas os locais à volta terminando com falso se não conseguir chegar ao outro extremo e mudando o estado do jogo para vitória se pelo contrário atingiu o outro extremo
 	 * @param player
 	 * @return true se fez a linha, false se não
 	 * @throws Exception jogador não válido
@@ -352,7 +354,14 @@ public class Board {
 		return false;
 
 	}
-
+	/**
+	 * Neste caso para o white processa a posição atual [row][col] isto é termina com vitória se for o extremo certo associado ao jogador
+	 * ,exemplo especifico,última coluna do tabuleiro, só tenta processar o local do tabuleiro se lá estiver uma peça do jogador e se ainda não tiver sido visitado
+	 * @param row linha que está a tratar neste momento
+	 * @param col coluna que está a ser tratado neste momento
+	 * @param a array visited para perceber que posições foram testadas anteriormente e assim n se correr o risco de se repetir
+	 * @return se é promising ou não através de bool, true se continuar, false se não for util continuar por este caminho
+	 */
 	public Boolean auxwinnerWhite(int row, int col, boolean[][] a) {
 
 		if(win)
@@ -377,7 +386,14 @@ public class Board {
 		}
 		return false;
 	}
-	
+	/**
+	 * Verifica se o playerPreto ganhou o jogo.
+	 * procura neste caso do branco a primeira peça Branca ao longo da linha 0, isto é o topo do tabuleiro se não existir sabemos que é impossivel ter ganho, se encontrar usa o 
+	 * {@link #auxwinnerBlack(int row, int col, boolean[][] a) auxwinnerBlack} para percorrer todas os locais à volta terminando com falso se não conseguir chegar ao outro extremo e mudando o estado do jogo para vitória se pelo contrário atingiu o outro extremo
+	 * @param player
+	 * @return true se fez a linha, false se não
+	 * @throws Exception jogador não válido
+	 */
 	public Boolean winnerBlack() {
 		win=false;
 		boolean[][]visited=new boolean[board.length][board.length];
@@ -395,6 +411,14 @@ public class Board {
 
 	}
 
+	/**
+	 * Neste caso para o Black processa a posição atual [row][col] isto é termina com vitória se for o extremo certo associado ao jogador
+	 * ,exemplo especifico,última linha do tabuleiro, só tenta processar o local do tabuleiro se lá estiver uma peça do jogador e se ainda não tiver sido visitado
+	 * @param row linha que está a tratar neste momento
+	 * @param col coluna que está a ser tratado neste momento
+	 * @param a array visited para perceber que posições foram testadas anteriormente e assim n se correr o risco de se repetir
+	 * @return se é promising ou não através de bool, true se continuar, false se não for util continuar por este caminho
+	 */
 	public Boolean auxwinnerBlack(int row, int col, boolean[][] a) {
 
 		if(win)

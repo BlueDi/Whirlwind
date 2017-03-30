@@ -7,7 +7,8 @@ import util.Utility;
 
 public class Board {
 	private Piece[][] board = null;
-	private boolean win=false;
+	private boolean winwhite=false;
+	private boolean winblack=false;
 
 	/**
 	 * Construtor vazio.
@@ -339,7 +340,7 @@ public class Board {
 	 * @throws Exception jogador não válido
 	 */
 	public Boolean winnerWhite() {
-		win=false;
+		winwhite=false;
 		boolean[][]visited=new boolean[board.length][board.length];
 		for(int k=0;k<visited.length;k++)
 			for(int j=0;j<visited[k].length;j++)
@@ -347,7 +348,7 @@ public class Board {
 
 		for(int i=0;i<board.length;i++){
 			if(board[i][0].getPlayer()==1 && auxwinnerWhite(i,0,visited))
-				if(win)
+				if(winwhite)
 				return true;
 
 		}
@@ -364,11 +365,11 @@ public class Board {
 	 */
 	public Boolean auxwinnerWhite(int row, int col, boolean[][] a) {
 
-		if(win)
+		if(winwhite)
 			return true;
 
 		if( col == board[board.length-1].length-1 && board[row][col].getPlayer()==1){
-			win=true;
+			winwhite=true;
 			return true;
 		}
 
@@ -395,7 +396,7 @@ public class Board {
 	 * @throws Exception jogador não válido
 	 */
 	public Boolean winnerBlack() {
-		win=false;
+		winblack=false;
 		boolean[][]visited=new boolean[board.length][board.length];
 		for(int k=0;k<visited.length;k++)
 			for(int j=0;j<visited[k].length;j++)
@@ -403,7 +404,7 @@ public class Board {
 
 		for(int i=0;i<board.length;i++){
 			if(board[0][i].getPlayer()==0 && auxwinnerWhite(0,i,visited))
-				if(win)
+				if(winblack)
 				return true;
 
 		}
@@ -421,11 +422,11 @@ public class Board {
 	 */
 	public Boolean auxwinnerBlack(int row, int col, boolean[][] a) {
 
-		if(win)
+		if(winblack)
 			return true;
 
 		if( row == board[board.length-1].length-1 && board[row][col].getPlayer()==0){
-			win=true;
+			winblack=true;
 			return true;
 		}
 
@@ -442,5 +443,11 @@ public class Board {
 
 		}
 		return false;
+	}
+	public Boolean getWinnerWhite(){
+		return winwhite;
+	}
+	public Boolean getWinnerBlack(){
+		return winblack;
 	}
 }

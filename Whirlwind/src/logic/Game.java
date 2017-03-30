@@ -34,6 +34,7 @@ public class Game {
 		board.setPiece(best_piece);
 		System.out.println("Jogador " + activeplayer + " tem: " + (board.getPlayerPieces(activeplayer).size()-1) + " peças para jogar.");
 		activeplayer ^= 1;
+		
 	}
 
 	/**
@@ -44,6 +45,17 @@ public class Game {
 		while(true){
 			turn();
 			Thread.sleep(900);//atrasar para ver a funcionar
+			board.winnerWhite();
+			board.winnerBlack();
+			if(board.getWinnerBlack()){
+				System.out.println("black won");
+				break;
+				}
+			if(board.getWinnerWhite()){
+				System.out.println("white won");
+				break;
+				}
+		
 		}
 	}
 

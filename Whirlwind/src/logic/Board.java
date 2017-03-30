@@ -20,9 +20,10 @@ public class Board {
 		int col;
 		int row;
 		board = new Piece[n][n];
+		
 		for(row = 0; row < board.length; row++)
 			for(col = 0; col < board.length; col++)
-				board[row][col]=new Piece(row, col);	
+				board[row][col] = new Piece(row, col);	
 	}
 
 	/**
@@ -61,7 +62,7 @@ public class Board {
 	public void setBoard(Piece[][] board) {
 		this.board = board;
 	}
-	
+
 	/**
 	 * Devolve o tamanho do board
 	 * @return tamanho do lado do tabuleiro
@@ -69,7 +70,15 @@ public class Board {
 	public int getSize() {
 		return board.length;
 	}	
-	
+
+	public Boolean getWinnerWhite(){
+		return winwhite;
+	}
+
+	public Boolean getWinnerBlack(){
+		return winblack;
+	}
+
 	/**
 	 * Preenche o tabuleiro com peças. 
 	 * O board é preenchido da seguinte maneira:	
@@ -231,12 +240,8 @@ public class Board {
 	 * @return true se for válido, false se não for válido
 	 */
 	public Boolean checkValidMove(Piece p){
-		//System.out.println("Trying to put a player " + player + " piece in (" + (row+1) + "," + Utility.itoc(col) + ").");
-
-		if(!checkFreePosition(p.getRow(), p.getCol())){
-			//System.out.println("Not valid. There is another piece in that position.");
+		if(!checkFreePosition(p.getRow(), p.getCol()))
 			return false;
-		}
 
 		if(checkHasMoves(p))
 			return true;
@@ -323,6 +328,7 @@ public class Board {
 	 */
 	public Queue<Piece> getPlayerPieces(int player){ 
 		Queue<Piece> player_pieces = new LinkedList<Piece>();
+
 		for(Piece[] col: board)
 			for(Piece p: col)
 				if(p.getPlayer() == player)
@@ -332,29 +338,22 @@ public class Board {
 	}
 
 	/**
-	 * Verifica se o playerBranco ganhou o jogo.
-	 * procura neste caso do branco a primeira peça Branca ao longo da coluna 0 se não existir sabemos que é impossivel ter ganho, se encontrar usa o 
-	 * {@link #auxwinnerWhite(int row, int col, boolean[][] a) auxwinnerWhite} para percorrer todas os locais à volta terminando com falso se não conseguir chegar ao outro extremo e mudando o estado do jogo para vitória se pelo contrário atingiu o outro extremo
-	 * @param player
+	 * Verifica se o player Branco ganhou o jogo. 
+	 * Procura a primeira peça Branca ao longo da linha 0 se não existir sabemos que é impossivel ter ganho, se encontrar usa o 
+	 * {@link #auxwinnerWhite(int row, int col, boolean[][] a) auxwinnerWhite} para percorrer todas os locais à volta terminando com falso se não conseguir chegar ao outro extremo e mudando o estado do jogo para vitória se pelo contrário atingiu o outro extremo.
 	 * @return true se fez a linha, false se não
-	 * @throws Exception jogador não válido
 	 */
 	public Boolean winnerWhite() {
-		winwhite=false;
-		boolean[][]visited=new boolean[board.length][board.length];
-		for(int k=0;k<visited.length;k++)
-			for(int j=0;j<visited[k].length;j++)
-				visited[k][j]=false;
+		boolean[][] visited = new boolean[board.length][board.length];
+		winwhite = false;
 
-		for(int i=0;i<board.length;i++){
-			if(board[i][0].getPlayer()==1 && auxwinnerWhite(i,0,visited))
-				if(winwhite)
-				return true;
+		for(int i=0; i < board.length; i++)
+			if(board[i][0].getPlayer() == 0 && auxwinnerWhite(i,0,visited))
+				return winwhite;
 
-		}
 		return false;
-
 	}
+
 	/**
 	 * Neste caso para o white processa a posição atual [row][col] isto é termina com vitória se for o extremo certo associado ao jogador
 	 * ,exemplo especifico,última coluna do tabuleiro, só tenta processar o local do tabuleiro se lá estiver uma peça do jogador e se ainda não tiver sido visitado
@@ -364,90 +363,80 @@ public class Board {
 	 * @return se é promising ou não através de bool, true se continuar, false se não for util continuar por este caminho
 	 */
 	public Boolean auxwinnerWhite(int row, int col, boolean[][] a) {
-
 		if(winwhite)
 			return true;
 
-		if( col == board[board.length-1].length-1 && board[row][col].getPlayer()==1){
-			winwhite=true;
+		if( col == board[board.length-1].length-1 
+				&& board[row][col].getPlayer() == 0){
+			winwhite = true;
 			return true;
 		}
 
-		if(board[row][col].getPlayer()==1 && !a[row][col]){
+		if(board[row][col].getPlayer() == 0
+				&& !a[row][col]){
 			a[row][col]=true;
-			if(row+1<board.length )
+			if(row+1 < board.length )
 				auxwinnerWhite(row+1,col,a);
-			if(col+1<board.length)
+			if(col+1 < board.length)
 				auxwinnerWhite(row,col+1,a);
-			if(row-1>=0)
+			if(row-1 >= 0)
 				auxwinnerWhite(row-1,col,a);
-			if(col-1>=0)
+			if(col-1 >= 0)
 				auxwinnerWhite(row,col-1,a);
-
 		}
+
 		return false;
 	}
+
 	/**
-	 * Verifica se o playerPreto ganhou o jogo.
-	 * procura neste caso do branco a primeira peça Branca ao longo da linha 0, isto é o topo do tabuleiro se não existir sabemos que é impossivel ter ganho, se encontrar usa o 
-	 * {@link #auxwinnerBlack(int row, int col, boolean[][] a) auxwinnerBlack} para percorrer todas os locais à volta terminando com falso se não conseguir chegar ao outro extremo e mudando o estado do jogo para vitória se pelo contrário atingiu o outro extremo
-	 * @param player
-	 * @return true se fez a linha, false se não
-	 * @throws Exception jogador não válido
+	 * Verifica se o player Preto ganhou o jogo.
+	 * Procura a primeira peça Preta ao longo da linha 0, isto é o topo do tabuleiro se não existir sabemos que é impossivel ter ganho. 
+	 * Se encontrar usa o {@link #auxwinnerBlack(int row, int col, boolean[][] a) auxwinnerBlack} para percorrer todos os locais à volta, 
+	 * terminando com falso se não conseguir chegar ao outro extremo e mudando o estado do jogo para vitória se pelo contrário atingiu o outro extremo.
+	 * @return true se fez a coluna, false se não
 	 */
 	public Boolean winnerBlack() {
-		winblack=false;
-		boolean[][]visited=new boolean[board.length][board.length];
-		for(int k=0;k<visited.length;k++)
-			for(int j=0;j<visited[k].length;j++)
-				visited[k][j]=false;
+		boolean[][] visited = new boolean[board.length][board.length];
+		winblack = false;
 
-		for(int i=0;i<board.length;i++){
-			if(board[0][i].getPlayer()==0 && auxwinnerWhite(0,i,visited))
-				if(winblack)
-				return true;
+		for(int i = 0; i < board.length; i++)
+			if(board[0][i].getPlayer() == 1 && auxwinnerBlack(0,i,visited))
+				return winblack;
 
-		}
 		return false;
-
 	}
 
 	/**
-	 * Neste caso para o Black processa a posição atual [row][col] isto é termina com vitória se for o extremo certo associado ao jogador
-	 * ,exemplo especifico,última linha do tabuleiro, só tenta processar o local do tabuleiro se lá estiver uma peça do jogador e se ainda não tiver sido visitado
+	 * Neste caso para o Black processa a posição atual [row][col] isto é termina com vitória se for o extremo certo associado ao jogador, 
+	 * exemplo especifico, última linha do tabuleiro, só tenta processar o local do tabuleiro se lá estiver uma peça do jogador e se ainda não tiver sido visitado
 	 * @param row linha que está a tratar neste momento
 	 * @param col coluna que está a ser tratado neste momento
 	 * @param a array visited para perceber que posições foram testadas anteriormente e assim n se correr o risco de se repetir
 	 * @return se é promising ou não através de bool, true se continuar, false se não for util continuar por este caminho
 	 */
 	public Boolean auxwinnerBlack(int row, int col, boolean[][] a) {
-
 		if(winblack)
 			return true;
 
-		if( row == board[board.length-1].length-1 && board[row][col].getPlayer()==0){
-			winblack=true;
+		if( row == board[board.length-1].length-1 
+				&& board[row][col].getPlayer() == 1){
+			winblack = true;
 			return true;
 		}
 
-		if(board[row][col].getPlayer()==0 && !a[row][col]){
-			a[row][col]=true;
-			if(row+1<board.length )
+		if(board[row][col].getPlayer() == 1
+				&& !a[row][col]){
+			a[row][col] = true;
+			if(row+1 < board.length )
 				auxwinnerBlack(row+1,col,a);
-			if(col+1<board.length)
+			if(col+1 < board.length)
 				auxwinnerBlack(row,col+1,a);
-			if(row-1>=0)
+			if(row-1 >= 0)
 				auxwinnerBlack(row-1,col,a);
-			if(col-1>=0)
+			if(col-1 >= 0)
 				auxwinnerBlack(row,col-1,a);
-
 		}
+		
 		return false;
-	}
-	public Boolean getWinnerWhite(){
-		return winwhite;
-	}
-	public Boolean getWinnerBlack(){
-		return winblack;
 	}
 }

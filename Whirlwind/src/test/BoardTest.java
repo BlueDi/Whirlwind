@@ -89,13 +89,28 @@ public class BoardTest {
 		assertFalse(board.checkValidMove(p));
 	}
 
-	/*	@Test
+	@Test
 	public void testWinner() throws Exception{   
-		Board winboard = new Board();
-		for(int i = 0; i < winboard.getBoard().length; i++)
-			for(int j = 0; j < winboard.getBoard().length; j++)
-			winboard.setPieceAbs(i, j, 0);
-		assertTrue(winboard.winner(0));
+		Board winBoardWhite = new Board();
+		Board winBoardBlack = new Board();
+		
+		for(int i = 0; i < winBoardWhite.getSize(); i++)
+			for(int j = 0; j < winBoardWhite.getSize(); j++){
+				Piece pw = new Piece(i, j, 0);
+				winBoardWhite.setPieceAbs(pw);
+			}
+		
+		
+		for(int i = 0; i < winBoardBlack.getSize(); i++)
+			for(int j = 0; j < winBoardBlack.getSize(); j++){
+				Piece pb = new Piece(i, j, 1);
+				winBoardBlack.setPieceAbs(pb);
+			}
+		
+		assertTrue(winBoardWhite.winnerWhite());
+		assertTrue(winBoardBlack.winnerBlack());	
+		
+		assertFalse(winBoardWhite.winnerBlack());
+		assertFalse(winBoardBlack.winnerWhite());
 	}
-	 */
 }

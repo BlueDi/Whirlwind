@@ -9,9 +9,7 @@ public class Piece {
 	 * Construtor de uma peça vazia.
 	 * Serve para inicializar o tabuleiro.
 	 */
-	public Piece(){
-		player = -1;
-	}
+	public Piece(){}
 
 	/**
 	 * Construtor definindo o jogador

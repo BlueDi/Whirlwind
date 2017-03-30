@@ -9,8 +9,8 @@ import util.Utility;
 public class Game {
 	private Board board;
 	private int activeplayer = -1;
-	private Heur best_move;
 	private List<Heur> first_calc;
+	private int depth;
 
 	/**
 	 * Construtor da classe Game.
@@ -27,14 +27,15 @@ public class Game {
 	 * Turno do jogo.
 	 */
 	private void turn(){
+		depth = 3;
 		board.display();
-		best_move = miniMax();
+		Heur best_move = miniMax();
 		Piece best_piece = new Piece(best_move.row, best_move.col, activeplayer);
 
 		board.setPiece(best_piece);
 		System.out.println("Jogador " + activeplayer + " tem: " + (board.getPlayerPieces(activeplayer).size()-1) + " peças para jogar.");
 		activeplayer ^= 1;
-		
+
 	}
 
 	/**
@@ -50,12 +51,12 @@ public class Game {
 			if(board.getWinnerBlack()){
 				System.out.println("black won");
 				break;
-				}
+			}
 			if(board.getWinnerWhite()){
 				System.out.println("white won");
 				break;
-				}
-		
+			}
+
 		}
 	}
 
@@ -63,12 +64,12 @@ public class Game {
 	 * Compara uma jogada com a atual melhor jogada.
 	 * @param move jogada a analisar
 	 */
-	private void updateBestMove(Heur move){
-		if(move.value > best_move.value){
-			best_move.value = move.value;
-			best_move.row = move.row;
-			best_move.col = move.col;
-			best_move.movement = move.movement;
+	private void updateBestMove(Heur currentBestMove, Heur newMove){
+		if(newMove.value > currentBestMove.value){
+			currentBestMove.value = newMove.value;
+			currentBestMove.row = newMove.row;
+			currentBestMove.col = newMove.col;
+			currentBestMove.movement = newMove.movement;
 		}
 	}
 
@@ -81,24 +82,25 @@ public class Game {
 		int value = 0;
 		Queue<Piece> player_pieces = board.getPlayerPieces(activeplayer);
 		Queue<Piece> enemy_pieces = board.getPlayerPieces(activeplayer ^ 1);
-		
+
 		for(Piece p: player_pieces){
 			if(p.getCol()==position.col)
 				value++;
 		}	
 
 		int[] inimigos_na_linha = new int[board.getSize()];
-		
+
 		for(Piece p: enemy_pieces){
 			inimigos_na_linha[p.getRow()]++;
 			if(p.getCol()==position.col)
 				value--;
 		}
+
 		value += inimigos_na_linha[position.row];
-		
+
 		return value;
 	}
-	
+
 	/**
 	 * Calcula o valor do tabuleiro para o jogador preto.
 	 * @param position
@@ -108,21 +110,22 @@ public class Game {
 		int value = 0;
 		Queue<Piece> player_pieces = board.getPlayerPieces(activeplayer);
 		Queue<Piece> enemy_pieces = board.getPlayerPieces(activeplayer ^ 1);
-		
+
 		for(Piece p: player_pieces){
 			if(p.getRow()==position.row)
 				value++;
 		}	
 
 		int[] inimigos_na_linha = new int[board.getSize()];
-		
+
 		for(Piece p: enemy_pieces){
 			inimigos_na_linha[p.getCol()]++;
 			if(p.getRow()==position.col)
 				value--;
 		}
+
 		value += inimigos_na_linha[position.row];
-		
+
 		return value;
 	}
 
@@ -137,9 +140,8 @@ public class Game {
 			value += calcWhiteHeur(position);
 		else
 			value += calcBlackHeur(position);
-			
 
-		position.value = value;//= Utility.random(1, 100);
+		position.value = value;
 	}
 
 	/**
@@ -159,6 +161,15 @@ public class Game {
 
 		if(board.setPiece(p)){
 			calcHeur(position2);
+
+			if(depth > 0){
+				activeplayer ^= 1;
+				Heur enemymove = miniMax();
+				activeplayer ^= 1;
+
+				position.value -= enemymove.value;
+			}
+
 			board.removePiece(position2.row, position2.col);
 		}
 
@@ -170,15 +181,18 @@ public class Game {
 	 * @param row
 	 * @param col
 	 */
-	private void movesForAPiece(int row, int col){
+	private void movesForAPiece(Heur bestMove, int row, int col){
 		for(int i = 0; i < 4; i++){		
 			Heur position = new Heur();
 			position.row = row;
 			position.col = col;
 			position.movement = i;
 			Heur position2 = singularMoveOfAPiece(position);
-			first_calc.add(position2);
-			updateBestMove(position2);
+			//first_calc.add(position2);
+
+
+
+			updateBestMove(bestMove, position2);
 		}
 	}
 
@@ -187,23 +201,26 @@ public class Game {
 	 * @return Melhor peça possível de se colocar no turno
 	 */
 	private Heur miniMax(){
-		Queue<Piece> player_pieces = board.getPlayerPieces(activeplayer);
-		Queue<Piece> temp_player_pieces = player_pieces;
-		first_calc = new ArrayList<Heur>();
-		best_move = new Heur();
+		depth--;
+		Heur bestMove = new Heur();
 
-		while(!temp_player_pieces.isEmpty()){
+		Queue<Piece> playerPieces = board.getPlayerPieces(activeplayer);
+		Queue<Piece> tempPlayerPieces = playerPieces;
+		first_calc = new ArrayList<Heur>();
+
+		while(!tempPlayerPieces.isEmpty()){
 			/* TODO: calcular o valor do movimento e guardar em first_calc;
 			 * first_calc[iterador] = heuristic(temp_plauer_pieces.first());
 			 */
 			// TODO: Monte-Carlo tree search talvez seja bom para nós
 
-			Piece temp_piece = temp_player_pieces.remove();
+			Piece tempPiece = tempPlayerPieces.remove();
 
-			movesForAPiece(temp_piece.getRow(), temp_piece.getCol());
-
+			movesForAPiece(bestMove, tempPiece.getRow(), tempPiece.getCol());
 		}
-		System.out.println("Melhor jogada para o jogador " + Utility.itop(activeplayer) +": (" + (best_move.row+1) +"," + Utility.itoc(best_move.col) + "), " + Utility.itoa(best_move.movement));
-		return best_move;
+
+		System.out.println("Melhor jogada para o jogador " + Utility.itop(activeplayer) +": (" + (bestMove.row+1) +"," + Utility.itoc(bestMove.col) + "), " + Utility.itoa(bestMove.movement));
+
+		return bestMove;
 	}
 }

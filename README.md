@@ -7,3 +7,6 @@ Projeto para a cadeira de IART
 Jogo de Tabuleiro
 
 [<b>Whirlwind</b>](https://www.boardgamegeek.com/boardgame/159022/whirlwind)
+
+
+https://docs.google.com/document/d/1a-b4cT7xGu9jqU4ofuKxZ8bzeQwJIeJ3b_XtVqUa1TQ/edit?usp=sharing

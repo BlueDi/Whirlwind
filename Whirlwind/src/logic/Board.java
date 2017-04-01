@@ -7,8 +7,9 @@ import util.Utility;
 
 public class Board {
 	private Piece[][] board = null;
-	private boolean winwhite=false;
-	private boolean winblack=false;
+	private boolean winWhite = false;
+	private boolean winBlack = false;
+	private boolean[][] visited = null;
 
 	/**
 	 * Construtor vazio.
@@ -20,7 +21,7 @@ public class Board {
 		int col;
 		int row;
 		board = new Piece[n][n];
-		
+
 		for(row = 0; row < board.length; row++)
 			for(col = 0; col < board.length; col++)
 				board[row][col] = new Piece(row, col);	
@@ -33,9 +34,9 @@ public class Board {
 	 * @throws Exception se o board tiver uma dimensão muito pequena ou muito grande
 	 */
 	public Board(int n) throws Exception{
-		if(n<12)
+		if(n < 12)
 			throw new Exception("Board demasiado pequeno!");
-		else if(n>20)
+		else if(n > 20)
 			throw new Exception("Board demasiado grande!");
 
 		int row;
@@ -72,11 +73,11 @@ public class Board {
 	}	
 
 	public Boolean getWinnerWhite(){
-		return winwhite;
+		return winWhite;
 	}
 
 	public Boolean getWinnerBlack(){
-		return winblack;
+		return winBlack;
 	}
 
 	/**
@@ -134,6 +135,8 @@ public class Board {
 
 	/**
 	 * Desenha o tabuleiro com as peças na consola.
+	 * Primeiro desenha a linha de caracteres que representam as possíveis colunas.
+	 * Depois para cada linha, imprime o caracter que a representa, dependendo se é maior que 9 ou não, e depois o conteúdo da linha.
 	 */
 	public void display(){
 		System.out.print("    ");
@@ -144,15 +147,14 @@ public class Board {
 		Utility.printDashedLine(board.length);
 
 		for(int row = 0; row < board.length; row++){
-			if(row<9)
+			if(row < 9)
 				System.out.print(row+1 +"  |");
-			else{
+			else
 				System.out.print(row+1 +" |");
-			}
 
-			for(int col = 0; col < board.length; col++){
+			for(int col = 0; col < board.length; col++)
 				System.out.print(board[row][col].getSymbol() + " ");
-			}
+
 			System.out.println("|");
 		}		
 		System.out.print("   ");	
@@ -344,45 +346,44 @@ public class Board {
 	 * @return true se fez a linha, false se não
 	 */
 	public Boolean winnerWhite() {
-		boolean[][] visited = new boolean[board.length][board.length];
-		winwhite = false;
+		visited = new boolean[board.length][board.length];
+		winWhite = false;
 
-		for(int i=0; i < board.length; i++)
-			if(board[i][0].getPlayer() == 0 && auxwinnerWhite(i,0,visited))
-				return winwhite;
+		for(int i = 0; i < board.length; i++)
+			if(board[i][0].getPlayer() == 0 && auxwinnerWhite(i, 0))
+				return winWhite;
 
 		return false;
 	}
 
 	/**
 	 * Neste caso para o white processa a posição atual [row][col] isto é termina com vitória se for o extremo certo associado ao jogador
-	 * ,exemplo especifico,última coluna do tabuleiro, só tenta processar o local do tabuleiro se lá estiver uma peça do jogador e se ainda não tiver sido visitado
+	 * ,exemplo especifico,última coluna do tabuleiro, só tenta processar o local do tabuleiro se lá estiver uma peça do jogador e se ainda não tiver sido visitado.
+	 * As posições já visitadas são guardadas em visited.
 	 * @param row linha que está a tratar neste momento
 	 * @param col coluna que está a ser tratado neste momento
-	 * @param a array visited para perceber que posições foram testadas anteriormente e assim n se correr o risco de se repetir
 	 * @return se é promising ou não através de bool, true se continuar, false se não for util continuar por este caminho
 	 */
-	public Boolean auxwinnerWhite(int row, int col, boolean[][] a) {
-		if(winwhite)
+	public Boolean auxwinnerWhite(int row, int col) {
+		if(winWhite)
 			return true;
 
-		if( col == board[board.length-1].length-1 
-				&& board[row][col].getPlayer() == 0){
-			winwhite = true;
+		if(col == getSize()-1 && board[row][col].getPlayer() == 0){
+			winWhite = true;
 			return true;
 		}
 
-		if(board[row][col].getPlayer() == 0
-				&& !a[row][col]){
-			a[row][col]=true;
-			if(row+1 < board.length )
-				auxwinnerWhite(row+1,col,a);
-			if(col+1 < board.length)
-				auxwinnerWhite(row,col+1,a);
-			if(row-1 >= 0)
-				auxwinnerWhite(row-1,col,a);
-			if(col-1 >= 0)
-				auxwinnerWhite(row,col-1,a);
+		if(board[row][col].getPlayer() == 0 && !visited[row][col]){
+			visited[row][col]=true;
+
+			if(row+1 < board.length && auxwinnerWhite(row+1,col))
+				return true;
+			else if(col+1 < board.length && auxwinnerWhite(row,col+1))
+				return true;
+			else if(row-1 >= 0  && auxwinnerWhite(row-1,col))
+				return true;
+			else if(col-1 >= 0 && auxwinnerWhite(row,col-1))
+				return true;
 		}
 
 		return false;
@@ -396,47 +397,47 @@ public class Board {
 	 * @return true se fez a coluna, false se não
 	 */
 	public Boolean winnerBlack() {
-		boolean[][] visited = new boolean[board.length][board.length];
-		winblack = false;
+		visited = new boolean[board.length][board.length];
+		winBlack = false;
 
 		for(int i = 0; i < board.length; i++)
-			if(board[0][i].getPlayer() == 1 && auxwinnerBlack(0,i,visited))
-				return winblack;
+			if(board[0][i].getPlayer() == 1 && auxwinnerBlack(0,i)){
+				return winBlack;
+			}
 
 		return false;
 	}
 
 	/**
 	 * Neste caso para o Black processa a posição atual [row][col] isto é termina com vitória se for o extremo certo associado ao jogador, 
-	 * exemplo especifico, última linha do tabuleiro, só tenta processar o local do tabuleiro se lá estiver uma peça do jogador e se ainda não tiver sido visitado
+	 * exemplo especifico, última linha do tabuleiro, só tenta processar o local do tabuleiro se lá estiver uma peça do jogador e se ainda não tiver sido visitado.
+	 * As posições já visitadas são guardadas em visited.
 	 * @param row linha que está a tratar neste momento
 	 * @param col coluna que está a ser tratado neste momento
-	 * @param a array visited para perceber que posições foram testadas anteriormente e assim n se correr o risco de se repetir
 	 * @return se é promising ou não através de bool, true se continuar, false se não for util continuar por este caminho
 	 */
-	public Boolean auxwinnerBlack(int row, int col, boolean[][] a) {
-		if(winblack)
+	public Boolean auxwinnerBlack(int row, int col) {
+		if(winBlack)
 			return true;
 
-		if( row == board[board.length-1].length-1 
-				&& board[row][col].getPlayer() == 1){
-			winblack = true;
+		if(row == getSize()-1 && board[row][col].getPlayer() == 1){
+			winBlack = true;
 			return true;
 		}
 
-		if(board[row][col].getPlayer() == 1
-				&& !a[row][col]){
-			a[row][col] = true;
-			if(row+1 < board.length )
-				auxwinnerBlack(row+1,col,a);
-			if(col+1 < board.length)
-				auxwinnerBlack(row,col+1,a);
-			if(row-1 >= 0)
-				auxwinnerBlack(row-1,col,a);
-			if(col-1 >= 0)
-				auxwinnerBlack(row,col-1,a);
+		if(board[row][col].getPlayer() == 1 && !visited[row][col]){
+			visited[row][col] = true;
+
+			if(row+1 < board.length && auxwinnerBlack(row+1, col))
+				return true;
+			else if(col+1 < board.length && auxwinnerBlack(row, col+1))
+				return true;
+			else if(row-1 >= 0 && auxwinnerBlack(row-1, col))
+				return true;
+			else if(col-1 >= 0 && auxwinnerBlack(row, col-1))
+				return true;
 		}
-		
+
 		return false;
 	}
 }

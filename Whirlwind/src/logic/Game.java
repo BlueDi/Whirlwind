@@ -3,11 +3,13 @@ package logic;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Scanner;
 
 import util.Utility;
 
 public class Game {
 	private Board board;
+	private int GAMEMODE = 0;
 	private int activeplayer = -1;
 	private List<Heur> first_calc;
 	private int depth;
@@ -27,15 +29,54 @@ public class Game {
 	 * Turno do jogo.
 	 */
 	private void turn(){
-		depth = 3;
 		board.display();
-		Heur best_move = miniMax();
-		Piece best_piece = new Piece(best_move.row, best_move.col, activeplayer);
 
-		board.setPiece(best_piece);
-		System.out.println("Jogador " + activeplayer + " tem: " + (board.getPlayerPieces(activeplayer).size()-1) + " peças para jogar.");
-		activeplayer ^= 1;
+		Piece move;
 
+		if(GAMEMODE == 1)
+			move = turnPlayer();
+		else if(GAMEMODE == 2 && activeplayer == 1)
+			move = turnPlayer();
+		else
+			move = turnCPU();
+
+		board.setPiece(move);
+		System.out.println("Jogador " + activeplayer + " tem: " + (board.getPlayerPieces(activeplayer).size()-1) + " peças no tabuleiro.");
+		changePlayer();
+	}
+
+	/**
+	 * Turno de jogo do Computador.
+	 */
+	private Piece turnCPU(){
+		depth = 3;
+		Heur bestMove = miniMax();
+		Piece bestPiece = new Piece(bestMove.row, bestMove.col, activeplayer);
+
+		return bestPiece;
+	}
+
+	/**
+	 * Turno de jogo do Jogador.
+	 */
+	private Piece turnPlayer(){
+		Piece playerPiece = new Piece();		
+		Scanner reader = new Scanner(System.in);
+		int row = -1;
+		int col = -1;
+
+		do{
+			row = reader.nextInt() - 1;
+			String column = reader.next();
+			col = column.charAt(0) - 'a';
+
+			if(row < 0 || row >= board.getSize() || col < 0 || col >= board.getSize())
+				System.out.println("Try again. Position (" + row + "," + column.charAt(0) + ") is not valid.");
+
+			playerPiece = new Piece(row, col, activeplayer);
+		}while(!board.checkValidMove(playerPiece));
+
+		return playerPiece;
 	}
 
 	/**
@@ -43,20 +84,44 @@ public class Game {
 	 * @throws InterruptedException
 	 */
 	public void startGame() throws InterruptedException{
+		setConfigurations();
+
+		int turnId = 0;
+
 		while(true){
+			System.out.println("\nTurn " + turnId++);
 			turn();
-			Thread.sleep(900);//atrasar para ver a funcionar
-			board.winnerWhite();
-			board.winnerBlack();
-			if(board.getWinnerBlack()){
-				System.out.println("black won");
+
+			//Thread.sleep(900); //atrasar para ver a funcionar
+
+			if(board.winnerBlack()){
+				Thread.sleep(9000);
+				System.out.println("Black Won!");
 				break;
 			}
-			if(board.getWinnerWhite()){
-				System.out.println("white won");
+			else if(board.winnerWhite()){
+				Thread.sleep(9000);
+				System.out.println("White Won!");
 				break;
 			}
 
+		}
+	}
+
+	private void changePlayer(){
+		activeplayer ^= 1;		
+	}
+
+	private void setConfigurations() {
+		System.out.println("Choose the game mode:");
+		System.out.println("1 - Human versus Human");
+		System.out.println("2 - Human versus Computer");
+		System.out.println("3 - Computer versus Computer");
+
+		Scanner reader = new Scanner(System.in);
+
+		while(GAMEMODE != 1 && GAMEMODE != 2 && GAMEMODE != 3){
+			GAMEMODE = reader.nextInt();
 		}
 	}
 
@@ -92,7 +157,7 @@ public class Game {
 
 		for(Piece p: enemy_pieces){
 			inimigos_na_linha[p.getRow()]++;
-			if(p.getCol()==position.col)
+			if(p.getCol() == position.col)
 				value--;
 		}
 
@@ -163,9 +228,9 @@ public class Game {
 			calcHeur(position2);
 
 			if(depth > 0){
-				activeplayer ^= 1;
+				changePlayer();
 				Heur enemymove = miniMax();
-				activeplayer ^= 1;
+				changePlayer();
 
 				position.value -= enemymove.value;
 			}

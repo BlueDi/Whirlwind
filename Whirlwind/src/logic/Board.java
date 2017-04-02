@@ -33,11 +33,11 @@ public class Board {
 	 * @param n tamanho do lado do tabuleiro
 	 * @throws Exception se o board tiver uma dimensão muito pequena ou muito grande
 	 */
-	public Board(int n) throws Exception{
+	public Board(int n) throws IndexOutOfBoundsException{
 		if(n < 12)
-			throw new Exception("Board demasiado pequeno!");
+			throw new IndexOutOfBoundsException("Board demasiado pequeno!");
 		else if(n > 20)
-			throw new Exception("Board demasiado grande!");
+			throw new IndexOutOfBoundsException("Board demasiado grande!");
 
 		int row;
 		int col;
@@ -55,13 +55,6 @@ public class Board {
 	 */
 	public Piece[][] getBoard() {
 		return board;
-	}
-
-	/**
-	 * @param board the board to set
-	 */
-	public void setBoard(Piece[][] board) {
-		this.board = board;
 	}
 
 	/**
@@ -88,9 +81,6 @@ public class Board {
 	 * Depois para a próxima linha coloca a primeira peça duas posições à direita da primeira peça, preenchendo antecipadamente as posições antes dessa peça. 
 	 */
 	private void fillWithPieces(){
-		if(board == null)
-			throw new IllegalArgumentException("Board não inicializado.");
-
 		int col;
 		int row;
 		int line_start_position = 1; //posição da primeira peça da linha
@@ -238,7 +228,7 @@ public class Board {
 	/**
 	 * Verifica se o movimento é válido.
 	 * O movimento é válido quando a posição não está já ocupada e há uma peça do jogador numa casa adjacente à desejada, quer na horizontal, quer na vertical.
-	 * @param Piece
+	 * @param Piece Peça a ser verificada
 	 * @return true se for válido, false se não for válido
 	 */
 	public Boolean checkValidMove(Piece p){

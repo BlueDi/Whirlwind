@@ -17,6 +17,16 @@ public class BoardTest {
 
 		assertEquals(board.getBoard().length, n);
 	}
+	
+	@Test(expected=IndexOutOfBoundsException.class)
+	public void testSmallBoard() {
+		new Board(5);
+	}
+	
+	@Test(expected=IndexOutOfBoundsException.class)
+	public void testBigBoard() {
+		new Board(500);
+	}
 
 	@Test
 	public void testFillWithPieces() throws Exception{
@@ -69,7 +79,7 @@ public class BoardTest {
 	}
 
 	@Test
-	public void testCheckValidMove() throws Exception {
+	public void testCheckValidMove(){
 		int n = 14;
 		Board board = new Board(n);
 
@@ -90,24 +100,78 @@ public class BoardTest {
 	}
 
 	@Test
-	public void testWinner() throws Exception{   
+	public void testWinnerSimple() throws Exception{   
 		Board winBoardWhite = new Board();
 		Board winBoardBlack = new Board();
 
-		for(int i = 0; i < winBoardWhite.getSize(); i++){
-			Piece pw = new Piece(2, i, 0);
-			winBoardWhite.setPieceAbs(pw);
-		}
+		for(int i = 0; i < winBoardWhite.getSize(); i++)
+			winBoardWhite.setPieceAbs(new Piece(2, i, 0));
 
-		for(int i = 0; i < winBoardBlack.getSize(); i++){
-			Piece pb = new Piece(i, 2, 1);
-			winBoardBlack.setPieceAbs(pb);
-		}
+		for(int i = 0; i < winBoardBlack.getSize(); i++)
+			winBoardBlack.setPieceAbs(new Piece(i, 2, 1));
 
 		assertTrue(winBoardWhite.winnerWhite());
-		assertTrue(winBoardBlack.winnerBlack());	
-
 		assertFalse(winBoardWhite.winnerBlack());
+
+		assertTrue(winBoardBlack.winnerBlack());	
 		assertFalse(winBoardBlack.winnerWhite());
+	}
+
+	@Test
+	public void testWinnerComplexWhite() throws Exception{   
+		Board winBoardWhite = new Board();
+
+		winBoardWhite.setPieceAbs(new Piece(2, 0, 0));
+		winBoardWhite.setPieceAbs(new Piece(2, 1, 0));
+		winBoardWhite.setPieceAbs(new Piece(3, 1, 0));
+		winBoardWhite.setPieceAbs(new Piece(4, 1, 0));
+		winBoardWhite.setPieceAbs(new Piece(5, 1, 0));
+		winBoardWhite.setPieceAbs(new Piece(5, 2, 0));
+		winBoardWhite.setPieceAbs(new Piece(5, 3, 0));
+		winBoardWhite.setPieceAbs(new Piece(6, 3, 0));
+		winBoardWhite.setPieceAbs(new Piece(7, 3, 0));
+		winBoardWhite.setPieceAbs(new Piece(8, 3, 0));
+		winBoardWhite.setPieceAbs(new Piece(8, 2, 0));
+		winBoardWhite.setPieceAbs(new Piece(8, 1, 0));
+		winBoardWhite.setPieceAbs(new Piece(9, 1, 0));
+		winBoardWhite.setPieceAbs(new Piece(10, 1, 0));
+		winBoardWhite.setPieceAbs(new Piece(10, 2, 0));
+		winBoardWhite.setPieceAbs(new Piece(10, 3, 0));
+		winBoardWhite.setPieceAbs(new Piece(10, 4, 0));
+		winBoardWhite.setPieceAbs(new Piece(10, 5, 0));
+		winBoardWhite.setPieceAbs(new Piece(10, 6, 0));
+		winBoardWhite.setPieceAbs(new Piece(9, 6, 0));
+		winBoardWhite.setPieceAbs(new Piece(8, 6, 0));
+		winBoardWhite.setPieceAbs(new Piece(8, 7, 0));
+		winBoardWhite.setPieceAbs(new Piece(7, 7, 0));
+		winBoardWhite.setPieceAbs(new Piece(7, 8, 0));
+		winBoardWhite.setPieceAbs(new Piece(6, 8, 0));
+		winBoardWhite.setPieceAbs(new Piece(6, 9, 0));
+		winBoardWhite.setPieceAbs(new Piece(5, 9, 0));
+		winBoardWhite.setPieceAbs(new Piece(5, 10, 0));
+		winBoardWhite.setPieceAbs(new Piece(4, 10, 0));
+		winBoardWhite.setPieceAbs(new Piece(2, 10, 0));
+		winBoardWhite.setPieceAbs(new Piece(2, 8, 0));
+		winBoardWhite.setPieceAbs(new Piece(10, 7, 0));
+
+		for(int i = winBoardWhite.getSize()/2; i < winBoardWhite.getSize(); i++)
+			winBoardWhite.setPieceAbs(new Piece(3, i, 0));
+
+		assertTrue(winBoardWhite.winnerWhite());
+	}
+
+	@Test
+	public void testWinnerComplexBlack() throws Exception{ 
+		Board winBoardBlack = new Board();	 
+
+		for(int i = 0; i < winBoardBlack.getSize()/2+1; i++)
+			winBoardBlack.setPieceAbs(new Piece(i, 2, 1));
+
+		winBoardBlack.setPieceAbs(new Piece(winBoardBlack.getSize()/2, 3, 1));
+		
+		for(int i = winBoardBlack.getSize()/2; i < winBoardBlack.getSize(); i++)
+			winBoardBlack.setPieceAbs(new Piece(i, 4, 1));
+
+		assertTrue(winBoardBlack.winnerBlack());
 	}
 }

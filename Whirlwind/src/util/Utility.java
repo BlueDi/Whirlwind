@@ -3,8 +3,9 @@ package util;
 import java.util.Random;
 
 public final class Utility {
-	private static Random rng = new Random();
-
+	
+	private Utility(){}
+	
 	/**
 	 * Transforms an Integer into a char.
 	 * @param i integer to transform
@@ -70,12 +71,21 @@ public final class Utility {
 		return 'f';
 	}
 
+	/**
+	 * @return Número inteiro aleatório entre [0,10].
+	 */
 	public static int random(){
-		return rng.nextInt((11 - 0) + 1) + 0;
+		return new Random().nextInt((10 - 0) + 1) + 0;
 	}
 
+	/**
+	 * Cria um número inteiro aleatório entre [min, max].
+	 * @param min Valor mínimo possível
+	 * @param max Valor máximo possível
+	 * @return Número aleatório dentro de [min, max]
+	 */
 	public static int random(int min, int max){
-		return rng.nextInt((max - min) + 1) + min;
+		return new Random().nextInt((max - min) + 1) + min;
 	}
 
 }

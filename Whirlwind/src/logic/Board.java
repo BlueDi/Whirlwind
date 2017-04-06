@@ -340,8 +340,8 @@ public class Board {
 		winWhite = false;
 
 		for(int i = 0; i < board.length; i++)
-			if(board[i][0].getPlayer() == 0 && auxwinnerWhite(i, 0))
-				return winWhite;
+			if(board[i][0].getPlayer() == 0 && auxwinnerWhite(i, 0) && winWhite)
+				return true;
 
 		return false;
 	}
@@ -391,8 +391,8 @@ public class Board {
 		winBlack = false;
 
 		for(int i = 0; i < board.length; i++)
-			if(board[0][i].getPlayer() == 1 && auxwinnerBlack(0,i)){
-				return winBlack;
+			if(board[0][i].getPlayer() == 1 && auxwinnerBlack(0,i) && winBlack){
+				return true;
 			}
 
 		return false;

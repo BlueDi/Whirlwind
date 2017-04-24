@@ -13,12 +13,12 @@ import util.Utility;
 
 public class UtilityTest {
 	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-	
+
 	@Before
 	public void setUpStreams() {
 		System.setOut(new PrintStream(outContent));
 	}
-	
+
 	@Test
 	public void testPrintLineOfChar() {
 		Utility.printLineOfChar(5);
@@ -32,7 +32,7 @@ public class UtilityTest {
 	}
 
 	@Test
-	public void testItoa(){
+	public void testItoa() {
 		assertEquals('f', Utility.itoa(-1));
 		assertEquals('^', Utility.itoa(0));
 		assertEquals('>', Utility.itoa(1));
@@ -42,7 +42,7 @@ public class UtilityTest {
 	}
 
 	@Test
-	public void testItop(){
+	public void testItop() {
 		assertEquals('e', Utility.itop(-1));
 		assertEquals('O', Utility.itop(0));
 		assertEquals('X', Utility.itop(1));
@@ -50,20 +50,20 @@ public class UtilityTest {
 	}
 
 	@Test
-	public void testRandom(){
+	public void testRandom() {
 		int min = 5;
 		int max = 10;
 		int rng;
 		int rng2;
 
-		for(int i = 0; i < 100; i++){
+		for (int i = 0; i < 100; i++) {
 			rng = Utility.random(min, max);
 
 			assertTrue(rng >= min);
 			assertTrue(rng <= max);
 		}
 
-		for(int i = 0; i < 100; i++){
+		for (int i = 0; i < 100; i++) {
 			rng2 = Utility.random();
 
 			assertTrue(rng2 >= 0);

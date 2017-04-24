@@ -17,35 +17,33 @@ public class BoardTest {
 
 		assertEquals(board.getBoard().length, n);
 	}
-	
-	@Test(expected=IndexOutOfBoundsException.class)
+
+	@Test(expected = IndexOutOfBoundsException.class)
 	public void testSmallBoard() {
 		new Board(5);
 	}
-	
-	@Test(expected=IndexOutOfBoundsException.class)
+
+	@Test(expected = IndexOutOfBoundsException.class)
 	public void testBigBoard() {
 		new Board(500);
 	}
 
 	@Test
-	public void testFillWithPieces() throws Exception{
+	public void testFillWithPieces() throws Exception {
 		int n = 14;
 		Board board = new Board(n);
 
-		for(int row = 0; row < n; row++){
+		for (int row = 0; row < n; row++) {
 			int firstpiece = -1;
 
-			for(int col = 0; col < n; col++){
-				if(firstpiece == -1 && board.getPiece(row, col).getPlayer() != -1){
+			for (int col = 0; col < n; col++)
+				if (firstpiece == -1 && board.getPiece(row, col).getPlayer() != -1) {
+					firstpiece = col;
+				} else if (board.getPiece(row, col).getPlayer() != -1) {
+					assertTrue((col - firstpiece) == 5);
+					assertFalse(board.getPiece(row, firstpiece).getPlayer() == board.getPiece(row, col).getPlayer());
 					firstpiece = col;
 				}
-				else if(board.getPiece(row, col).getPlayer() != -1){
-					assertTrue((col-firstpiece)==5);//verifica se o espaço entre peças é 5
-					assertFalse(board.getPiece(row, firstpiece).getPlayer() == board.getPiece(row, col).getPlayer());//verifica se as peças são de jogadores diferentes
-					firstpiece = col;
-				}
-			}
 		}
 	}
 
@@ -65,21 +63,21 @@ public class BoardTest {
 		int n = 14;
 		Board board = new Board(n);
 
-		//testar jogador 0
+		// testar jogador 0
 		Piece p = new Piece(0, 0, 0);
 		assertEquals(board.checkFreePosition(0, 0), board.setPieceAbs(p));
 
-		//testar colocar peça numa casa ocupada, ambos falham
+		// testar colocar peça numa casa ocupada, ambos falham
 		p = new Piece(0, 1, 0);
 		assertEquals(board.checkFreePosition(0, 1), board.setPieceAbs(p));
 
-		//testar jogador 1
+		// testar jogador 1
 		p = new Piece(0, 2, 1);
 		assertEquals(board.checkFreePosition(0, 2), board.setPieceAbs(p));
 	}
 
 	@Test
-	public void testCheckValidMove(){
+	public void testCheckValidMove() {
 		int n = 14;
 		Board board = new Board(n);
 
@@ -100,25 +98,25 @@ public class BoardTest {
 	}
 
 	@Test
-	public void testWinnerSimple() throws Exception{   
+	public void testWinnerSimple() throws Exception {
 		Board winBoardWhite = new Board();
 		Board winBoardBlack = new Board();
 
-		for(int i = 0; i < winBoardWhite.getSize(); i++)
+		for (int i = 0; i < winBoardWhite.getSize(); i++)
 			winBoardWhite.setPieceAbs(new Piece(2, i, 0));
 
-		for(int i = 0; i < winBoardBlack.getSize(); i++)
+		for (int i = 0; i < winBoardBlack.getSize(); i++)
 			winBoardBlack.setPieceAbs(new Piece(i, 2, 1));
 
 		assertTrue(winBoardWhite.winnerWhite());
 		assertFalse(winBoardWhite.winnerBlack());
 
-		assertTrue(winBoardBlack.winnerBlack());	
+		assertTrue(winBoardBlack.winnerBlack());
 		assertFalse(winBoardBlack.winnerWhite());
 	}
 
 	@Test
-	public void testWinnerComplexWhite() throws Exception{   
+	public void testWinnerComplexWhite() throws Exception {
 		Board winBoardWhite = new Board();
 
 		winBoardWhite.setPieceAbs(new Piece(2, 0, 0));
@@ -154,22 +152,22 @@ public class BoardTest {
 		winBoardWhite.setPieceAbs(new Piece(2, 8, 0));
 		winBoardWhite.setPieceAbs(new Piece(10, 7, 0));
 
-		for(int i = winBoardWhite.getSize()/2; i < winBoardWhite.getSize(); i++)
+		for (int i = winBoardWhite.getSize() / 2; i < winBoardWhite.getSize(); i++)
 			winBoardWhite.setPieceAbs(new Piece(3, i, 0));
 
 		assertTrue(winBoardWhite.winnerWhite());
 	}
 
 	@Test
-	public void testWinnerComplexBlack() throws Exception{ 
-		Board winBoardBlack = new Board();	 
+	public void testWinnerComplexBlack() throws Exception {
+		Board winBoardBlack = new Board();
 
-		for(int i = 0; i < winBoardBlack.getSize()/2+1; i++)
+		for (int i = 0; i < winBoardBlack.getSize() / 2 + 1; i++)
 			winBoardBlack.setPieceAbs(new Piece(i, 2, 1));
 
-		winBoardBlack.setPieceAbs(new Piece(winBoardBlack.getSize()/2, 3, 1));
-		
-		for(int i = winBoardBlack.getSize()/2; i < winBoardBlack.getSize(); i++)
+		winBoardBlack.setPieceAbs(new Piece(winBoardBlack.getSize() / 2, 3, 1));
+
+		for (int i = winBoardBlack.getSize() / 2; i < winBoardBlack.getSize(); i++)
 			winBoardBlack.setPieceAbs(new Piece(i, 4, 1));
 
 		assertTrue(winBoardBlack.winnerBlack());

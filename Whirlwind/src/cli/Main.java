@@ -1,6 +1,7 @@
 package cli;
 
 import java.awt.EventQueue;
+import java.io.IOException;
 import java.util.Scanner;
 
 import logic.Game;
@@ -16,8 +17,26 @@ public class Main {
 	}
 
 	private static void setConfigurations() {
-		guiConfigs();
-		// consoleConfigs();
+		if(selectDisplay() == 1)
+			guiConfigs();
+		else 
+			consoleConfigs();
+	}
+
+	private static int selectDisplay(){
+		int answer = 0;
+		System.out.println("If you want a Graphic display press 1");
+		System.out.println("If you want a Console display press 2");
+
+		while(answer != 1 && answer != 2)
+			try {
+				answer = -48 + System.in.read();
+				System.out.println(answer);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		return answer;
 	}
 
 	private static void guiConfigs() {

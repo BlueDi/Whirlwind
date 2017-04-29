@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Scanner;
 
-import cli.Gui;
+import cli.GameFrame;
 import util.Utility;
 
 public class Game {
 	private Board board;
-	private Gui screen;
+	private GameFrame gameframe;
 	private int GAMEMODE;
 	private int activeplayer = -1;
 	private List<Heur> first_calc;
@@ -25,7 +25,8 @@ public class Game {
 	public Game() throws Exception {
 		int dimensao_do_tabuleiro = 14;
 		board = new Board(dimensao_do_tabuleiro);
-		screen = new Gui(board);
+		gameframe = new GameFrame(board);
+		gameframe.setVisible(true);
 		activeplayer = 1; // black;
 	}
 
@@ -43,7 +44,8 @@ public class Game {
 	 */
 	private void turn() {
 		board.display();
-		screen.update(board);
+		gameframe.update(board);
+		gameframe.setVisible(true);
 
 		Piece move;
 

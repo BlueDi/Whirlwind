@@ -54,9 +54,15 @@ public class GameFrame extends JFrame {
 
 		for (int i = 0; i < row; i++)
 			for (int j = 0; j < col; j++) {
-				grid[i][j] = new JLabel(" " + b.getBoard()[i][j].getSymbol());
+				char c = b.getBoard()[i][j].getSymbol();
+				grid[i][j] = new JLabel();
 				grid[i][j].setBorder(new LineBorder(Color.BLACK));
-				grid[i][j].setBackground(Color.WHITE);
+				if(c == 'O')
+					grid[i][j].setBackground(Color.WHITE);
+				else if(c == 'X')
+					grid[i][j].setBackground(Color.BLACK);
+				else
+					grid[i][j].setBackground(Color.GRAY);
 				grid[i][j].setOpaque(true);
 				contentPane.add(grid[i][j]);
 			}

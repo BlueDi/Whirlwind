@@ -11,6 +11,8 @@ public class Board {
 	private boolean winBlack = false;
 	private boolean[][] visited = null;
 	private int FIRST_PIECE = 0;
+	private int PLAYER_BLACK = 1;
+	private int PLAYER_WHITE = 0;
 
 	/**
 	 * Construtor vazio. Apenas cria um board [n]x[n] sem peças. Hard-coded para
@@ -69,14 +71,6 @@ public class Board {
 	 */
 	public int getSize() {
 		return board.length;
-	}
-
-	public Boolean getWinnerWhite() {
-		return winWhite;
-	}
-
-	public Boolean getWinnerBlack() {
-		return winBlack;
 	}
 
 	/**
@@ -364,8 +358,8 @@ public class Board {
 		visited = new boolean[board.length][board.length];
 		winWhite = false;
 
-		for (int i = 0; i < board.length; i++)
-			if (board[i][0].getPlayer() == 0 && auxwinnerWhite(i, 0) && winWhite)
+		for (int row = 0; row < board.length; row++)
+			if (board[row][0].getPlayer() == PLAYER_WHITE && auxwinnerWhite(row, 0) && winWhite)
 				return true;
 
 		return false;
@@ -389,12 +383,12 @@ public class Board {
 		if (winWhite)
 			return true;
 
-		if (col == getSize() - 1 && board[row][col].getPlayer() == 0) {
+		if (col == getSize() - 1 && board[row][col].getPlayer() == PLAYER_WHITE) {
 			winWhite = true;
 			return true;
 		}
 
-		if (board[row][col].getPlayer() == 0 && !visited[row][col]) {
+		if (board[row][col].getPlayer() == PLAYER_WHITE && !visited[row][col]) {
 			visited[row][col] = true;
 
 			if (row + 1 < board.length && auxwinnerWhite(row + 1, col))
@@ -404,6 +398,14 @@ public class Board {
 			else if (row - 1 >= 0 && auxwinnerWhite(row - 1, col))
 				return true;
 			else if (col - 1 >= 0 && auxwinnerWhite(row, col - 1))
+				return true;
+			else if (row + 1 < board.length && col + 1 < board.length && auxwinnerWhite(row + 1, col + 1))
+				return true;
+			else if (row + 1 < board.length && col - 1 >= 0 && auxwinnerWhite(row + 1, col - 1))
+				return true;
+			else if (row - 1 >= 0 && col + 1 < board.length && auxwinnerWhite(row - 1, col + 1))
+				return true;
+			else if (row - 1 >= 0 && col - 1 >= 0 && auxwinnerWhite(row - 1, col - 1))
 				return true;
 		}
 
@@ -426,7 +428,7 @@ public class Board {
 		winBlack = false;
 
 		for (int i = 0; i < board.length; i++)
-			if (board[0][i].getPlayer() == 1 && auxwinnerBlack(0, i) && winBlack) {
+			if (board[0][i].getPlayer() == PLAYER_BLACK && auxwinnerBlack(0, i) && winBlack) {
 				return true;
 			}
 
@@ -451,12 +453,12 @@ public class Board {
 		if (winBlack)
 			return true;
 
-		if (row == getSize() - 1 && board[row][col].getPlayer() == 1) {
+		if (row == getSize() - 1 && board[row][col].getPlayer() == PLAYER_BLACK) {
 			winBlack = true;
 			return true;
 		}
 
-		if (board[row][col].getPlayer() == 1 && !visited[row][col]) {
+		if (board[row][col].getPlayer() == PLAYER_BLACK && !visited[row][col]) {
 			visited[row][col] = true;
 
 			if (row + 1 < board.length && auxwinnerBlack(row + 1, col))
@@ -466,6 +468,14 @@ public class Board {
 			else if (row - 1 >= 0 && auxwinnerBlack(row - 1, col))
 				return true;
 			else if (col - 1 >= 0 && auxwinnerBlack(row, col - 1))
+				return true;
+			else if (row + 1 < board.length && col + 1 < board.length && auxwinnerBlack(row + 1, col + 1))
+				return true;
+			else if (row + 1 < board.length && col - 1 >= 0 && auxwinnerBlack(row + 1, col - 1))
+				return true;
+			else if (row - 1 >= 0 && col + 1 < board.length && auxwinnerBlack(row - 1, col + 1))
+				return true;
+			else if (row - 1 >= 0 && col - 1 >= 0 && auxwinnerBlack(row - 1, col - 1))
 				return true;
 		}
 

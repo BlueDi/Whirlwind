@@ -391,6 +391,7 @@ public class Board {
 		if (board[row][col].getPlayer() == PLAYER_WHITE && !visited[row][col]) {
 			visited[row][col] = true;
 
+			// Verificar posi��es ortogonais
 			if (row + 1 < board.length && auxwinnerWhite(row + 1, col))
 				return true;
 			else if (col + 1 < board.length && auxwinnerWhite(row, col + 1))
@@ -399,7 +400,9 @@ public class Board {
 				return true;
 			else if (col - 1 >= 0 && auxwinnerWhite(row, col - 1))
 				return true;
-			else if (row + 1 < board.length && col + 1 < board.length && auxwinnerWhite(row + 1, col + 1))
+			
+			// Verificar posi��es diagonais
+			if (row + 1 < board.length && col + 1 < board.length && auxwinnerWhite(row + 1, col + 1))
 				return true;
 			else if (row + 1 < board.length && col - 1 >= 0 && auxwinnerWhite(row + 1, col - 1))
 				return true;
@@ -461,6 +464,7 @@ public class Board {
 		if (board[row][col].getPlayer() == PLAYER_BLACK && !visited[row][col]) {
 			visited[row][col] = true;
 
+			// Verificar posi��es ortogonais
 			if (row + 1 < board.length && auxwinnerBlack(row + 1, col))
 				return true;
 			else if (col + 1 < board.length && auxwinnerBlack(row, col + 1))
@@ -469,7 +473,9 @@ public class Board {
 				return true;
 			else if (col - 1 >= 0 && auxwinnerBlack(row, col - 1))
 				return true;
-			else if (row + 1 < board.length && col + 1 < board.length && auxwinnerBlack(row + 1, col + 1))
+			
+			// Verificar posi��es diagonais
+			if (row + 1 < board.length && col + 1 < board.length && auxwinnerBlack(row + 1, col + 1))
 				return true;
 			else if (row + 1 < board.length && col - 1 >= 0 && auxwinnerBlack(row + 1, col - 1))
 				return true;

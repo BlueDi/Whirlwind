@@ -18,6 +18,7 @@ public class GameFrame extends JFrame {
 	private Color PLAYER1_COLOR = Color.BLACK;
 	private Color PLAYER2_COLOR = Color.WHITE;
 	private Color NO_PLAYER_COLOR = Color.GRAY;
+	private Color BORDER_COLOR = Color.DARK_GRAY;
 	private JPanel contentPane;
 	private JLabel[][] grid;
 	private int BOARD_SIZE;
@@ -62,7 +63,7 @@ public class GameFrame extends JFrame {
 			for (int col = 0; col < BOARD_SIZE; col++) {
 				char playerSymbol = b.getBoard()[row][col].getSymbol();
 				grid[row][col] = new JLabel();
-				grid[row][col].setBorder(new LineBorder(Color.BLACK));
+				grid[row][col].setBorder(new LineBorder(BORDER_COLOR));
 				grid[row][col].setBackground(choosePieceColor(playerSymbol));
 				grid[row][col].setOpaque(true);
 				contentPane.add(grid[row][col]);
@@ -87,7 +88,7 @@ public class GameFrame extends JFrame {
 				contentPane.remove(jp);
 
 		grid[row][col] = new JLabel();
-		grid[row][col].setBorder(new LineBorder(Color.BLACK));
+		grid[row][col].setBorder(new LineBorder(BORDER_COLOR));
 		grid[row][col].setBackground(choosePieceColor(p.getSymbol()));
 		grid[row][col].setOpaque(true);
 

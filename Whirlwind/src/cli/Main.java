@@ -13,7 +13,14 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 		setConfigurations();
 		Game game = new Game(GAMEMODE);
-		game.startGame();
+		int winner = game.startGame();
+
+		if (winner == 1)
+			System.out.println("Black Won!");
+		else if (winner == 2)
+			System.out.println("White Won!");
+		else
+			System.err.println("Error");
 	}
 
 	private static void setConfigurations() {

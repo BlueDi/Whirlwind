@@ -128,24 +128,21 @@ public class Game {
 	 * 
 	 * @throws InterruptedException
 	 */
-	public void startGame() throws InterruptedException {
+	public int startGame() throws InterruptedException {
 		int turnId = 0;
+		int winner = 0;
 
-		while (true) {
+		while (winner == 0) {
 			System.out.println("\nTurn " + turnId++);
 			turn();
 
-			if (board.winnerBlack()) {
-				Thread.sleep(9000);
-				System.out.println("Black Won!");
-				break;
-			} else if (board.winnerWhite()) {
-				Thread.sleep(9000);
-				System.out.println("White Won!");
-				break;
-			}
-
+			if (board.winnerBlack())
+				winner = 1;
+			else if (board.winnerWhite())
+				winner = 2;
 		}
+
+		return winner;
 	}
 
 	private void changePlayer() {

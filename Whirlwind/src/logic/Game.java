@@ -68,7 +68,7 @@ public class Game {
 		Piece move;
 
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -109,10 +109,12 @@ public class Game {
 		int row = -1;
 		int col = -1;
 
+		System.out.println("Player " + activeplayer + " pick the position for your new piece.");
+		
 		do {
 			row = reader.nextInt() - 1;
 			String column = reader.next();
-			col = column.charAt(0) - 'a';
+			col = column.charAt(0) - 'A';
 
 			if (row < 0 || row >= board.getSize() || col < 0 || col >= board.getSize())
 				System.out.println("Try again. Position (" + (row + 1) + "," + column.charAt(0) + ") is not valid.");

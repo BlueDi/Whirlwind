@@ -13,25 +13,25 @@ public class BoardTest {
 	@Test
 	public void testBoard() throws Exception {
 		int n = 14;
-		Board board = new Board(n);
+		Board board = new Board(n, 0);
 
 		assertEquals(board.getBoard().length, n);
 	}
 
 	@Test(expected = IndexOutOfBoundsException.class)
 	public void testSmallBoard() {
-		new Board(5);
+		new Board(5, 0);
 	}
 
 	@Test(expected = IndexOutOfBoundsException.class)
 	public void testBigBoard() {
-		new Board(500);
+		new Board(500, 0);
 	}
 
 	@Test
 	public void testFillWithPieces() throws Exception {
 		int n = 14;
-		Board board = new Board(n);
+		Board board = new Board(n, 0);
 
 		for (int row = 0; row < n; row++) {
 			int firstpiece = -1;
@@ -50,7 +50,7 @@ public class BoardTest {
 	@Test
 	public void testCheckFreePosition() throws Exception {
 		int n = 14;
-		Board board = new Board(n);
+		Board board = new Board(n, 0);
 
 		assertTrue(board.checkFreePosition(0, 0));
 		assertFalse(board.checkFreePosition(0, 1));
@@ -61,7 +61,7 @@ public class BoardTest {
 	@Test
 	public void testSetPieceAbs() throws Exception {
 		int n = 14;
-		Board board = new Board(n);
+		Board board = new Board(n, 0);
 
 		// testar jogador 0
 		Piece p = new Piece(0, 0, 0);
@@ -79,7 +79,7 @@ public class BoardTest {
 	@Test
 	public void testCheckValidMove() {
 		int n = 14;
-		Board board = new Board(n);
+		Board board = new Board(n, 0);
 
 		Piece p = new Piece(-1, -1, 0);
 		assertFalse(board.checkValidMove(p));

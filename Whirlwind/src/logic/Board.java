@@ -10,6 +10,7 @@ public class Board {
 	private boolean winWhite = false;
 	private boolean winBlack = false;
 	private boolean[][] visited = null;
+	private int FIRST_PIECE = 0;
 
 	/**
 	 * Construtor vazio. Apenas cria um board [n]x[n] sem peças. Hard-coded para
@@ -35,11 +36,13 @@ public class Board {
 	 * @throws Exception
 	 *             se o board tiver uma dimensão muito pequena ou muito grande
 	 */
-	public Board(int n) throws IndexOutOfBoundsException {
+	public Board(int n, int boardPicker) throws IndexOutOfBoundsException {
 		if (n < 12)
 			throw new IndexOutOfBoundsException("Board demasiado pequeno!");
 		else if (n > 20)
 			throw new IndexOutOfBoundsException("Board demasiado grande!");
+
+		FIRST_PIECE = boardPicker;
 
 		int row;
 		int col;
@@ -88,7 +91,7 @@ public class Board {
 		int col;
 		int row;
 		int line_start_position = 1; // posição da primeira peça da linha
-		int player = 0;
+		int player = FIRST_PIECE;
 		int col_position_checker = line_start_position;
 		int aux_pc;
 		int col_player_picker = player;

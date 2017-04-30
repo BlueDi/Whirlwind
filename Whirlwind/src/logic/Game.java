@@ -24,19 +24,40 @@ public class Game {
 	 */
 	public Game() throws Exception {
 		int dimensao_do_tabuleiro = 14;
-		board = new Board(dimensao_do_tabuleiro);
+		board = new Board(dimensao_do_tabuleiro, boardPicker());
 		gameframe = new GameFrame(board);
 		gameframe.setVisible(true);
 		activeplayer = 1; // black;
 	}
 
+	/**
+	 * Cria o jogo escolhendo o modo.
+	 * 
+	 * @param mode
+	 *            Modo de jogo. Entre PVP, PVE, e EVE
+	 * @throws Exception
+	 */
 	public Game(int mode) throws Exception {
 		this();
 		GAMEMODE = mode;
 	}
 
+	/**
+	 * Define o modo de jogo.
+	 * 
+	 * @param gAMEMODE
+	 */
 	public void setGAMEMODE(int gAMEMODE) {
 		GAMEMODE = gAMEMODE;
+	}
+
+	/**
+	 * Escolhe o tabuleiro entre os 2 predefinidos.
+	 * 
+	 * @return Número correspondente ao tabuleiro
+	 */
+	private int boardPicker() {
+		return Utility.random(0, 1);
 	}
 
 	/**

@@ -44,9 +44,6 @@ public class Game {
 	 */
 	private void turn() {
 		board.display();
-		gameframe.update(board);
-		gameframe.setVisible(true);
-
 		Piece move;
 
 		try {
@@ -63,6 +60,9 @@ public class Game {
 			move = turnCPU();
 
 		board.setPiece(move);
+		gameframe.update(move);
+		gameframe.setVisible(true);
+
 		System.out.println("Jogador " + activeplayer + " tem: " + (board.getPlayerPieces(activeplayer).size() - 1)
 				+ " peças no tabuleiro.");
 		changePlayer();

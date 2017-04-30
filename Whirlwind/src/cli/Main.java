@@ -31,7 +31,6 @@ public class Main {
 		while(answer != 1 && answer != 2)
 			try {
 				answer = -48 + System.in.read();
-				System.out.println(answer);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

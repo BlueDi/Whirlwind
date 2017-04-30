@@ -17,18 +17,18 @@ public class Main {
 	}
 
 	private static void setConfigurations() {
-		if(selectDisplay() == 1)
+		if (selectDisplay() == 1)
 			guiConfigs();
-		else 
+		else
 			consoleConfigs();
 	}
 
-	private static int selectDisplay(){
+	private static int selectDisplay() {
 		int answer = 0;
 		System.out.println("If you want a Graphic display press 1");
 		System.out.println("If you want a Console display press 2");
 
-		while(answer != 1 && answer != 2)
+		while (answer != 1 && answer != 2)
 			try {
 				answer = -48 + System.in.read();
 			} catch (IOException e) {

@@ -176,15 +176,15 @@ public class Game {
 		Queue<Piece> enemy_pieces = board.getPlayerPieces(activeplayer ^ 1);
 
 		for (Piece p : player_pieces) {
-			if (p.getCol() == position.col)
+			if (p.getRow() == position.row)
 				value++;
 		}
 
 		int[] inimigos_na_linha = new int[board.getSize()];
 
 		for (Piece p : enemy_pieces) {
-			inimigos_na_linha[p.getRow()]++;
-			if (p.getCol() == position.col)
+			inimigos_na_linha[p.getCol()]++;
+			if (p.getRow() == position.col)
 				value--;
 		}
 
@@ -205,15 +205,15 @@ public class Game {
 		Queue<Piece> enemy_pieces = board.getPlayerPieces(activeplayer ^ 1);
 
 		for (Piece p : player_pieces) {
-			if (p.getRow() == position.row)
+			if (p.getCol() == position.col)
 				value++;
 		}
 
 		int[] inimigos_na_linha = new int[board.getSize()];
 
 		for (Piece p : enemy_pieces) {
-			inimigos_na_linha[p.getCol()]++;
-			if (p.getRow() == position.col)
+			inimigos_na_linha[p.getRow()]++;
+			if (p.getCol() == position.col)
 				value--;
 		}
 

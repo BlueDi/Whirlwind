@@ -46,7 +46,7 @@ public class GameFrame extends JFrame {
 		BOARD_SIZE = b.getSize();
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
-		contentPane.setLayout(new GridLayout(BOARD_SIZE, BOARD_SIZE));
+		contentPane.setLayout(new GridLayout(BOARD_SIZE + 2, BOARD_SIZE + 2));
 		create(b);
 	}
 
@@ -59,7 +59,10 @@ public class GameFrame extends JFrame {
 	public void create(Board b) {
 		grid = new JLabel[BOARD_SIZE][BOARD_SIZE];
 
-		for (int row = 0; row < BOARD_SIZE; row++)
+		insertLine(PLAYER1_COLOR);
+
+		for (int row = 0; row < BOARD_SIZE; row++) {
+			insertLabel(PLAYER2_COLOR);
 			for (int col = 0; col < BOARD_SIZE; col++) {
 				char playerSymbol = b.getBoard()[row][col].getSymbol();
 				grid[row][col] = new JLabel();
@@ -68,7 +71,28 @@ public class GameFrame extends JFrame {
 				grid[row][col].setOpaque(true);
 				contentPane.add(grid[row][col]);
 			}
+			insertLabel(PLAYER2_COLOR);
+		}
+
+		insertLine(PLAYER1_COLOR);
+
 		add(contentPane);
+	}
+
+	private void insertLine(Color color) {
+		for (int col = 0; col < BOARD_SIZE + 2; col++)
+			insertLabel(color);
+	}
+
+	private void insertLabel(Color color) {
+		JLabel border = new JLabel();
+
+		border = new JLabel();
+		border.setBorder(new LineBorder(color));
+		border.setBackground(color);
+		border.setOpaque(true);
+
+		contentPane.add(border);
 	}
 
 	/**
@@ -82,10 +106,9 @@ public class GameFrame extends JFrame {
 		row = p.getRow();
 		col = p.getCol();
 
-		// Remover todas as JLabels do JPanel
-		for (JLabel[] jpa : grid)
-			for (JLabel jp : jpa)
-				contentPane.remove(jp);
+		contentPane.removeAll();
+
+		insertLine(PLAYER1_COLOR);
 
 		grid[row][col] = new JLabel();
 		grid[row][col].setBorder(new LineBorder(BORDER_COLOR));
@@ -93,9 +116,14 @@ public class GameFrame extends JFrame {
 		grid[row][col].setOpaque(true);
 
 		// Adicionar todas as JLabels ao JPanel
-		for (JLabel[] jpa : grid)
+		for (JLabel[] jpa : grid) {
+			insertLabel(PLAYER2_COLOR);
 			for (JLabel jp : jpa)
 				contentPane.add(jp);
+			insertLabel(PLAYER2_COLOR);
+		}
+
+		insertLine(PLAYER1_COLOR);
 
 		add(contentPane);
 	}

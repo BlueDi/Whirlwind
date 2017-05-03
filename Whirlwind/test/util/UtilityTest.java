@@ -9,28 +9,28 @@ import java.io.PrintStream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class UtilityTest {
+class UtilityTest {
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 
     @BeforeEach
-    public void setUpStreams() {
+    void setUpStreams() {
         System.setOut(new PrintStream(outContent));
     }
 
     @Test
-    public void testPrintLineOfChar() {
+    void testPrintLineOfChar() {
         Utility.printLineOfChar(5);
         assertEquals("A B C D E ", outContent.toString());
     }
 
     @Test
-    public void testPrintDashedLine() {
+    void testPrintDashedLine() {
         Utility.printDashedLine(5);
         assertEquals("------------" + System.getProperty("line.separator"), outContent.toString());
     }
 
     @Test
-    public void testItoa() {
+    void testItoa() {
         assertEquals('f', Utility.itoa(-1));
         assertEquals('^', Utility.itoa(0));
         assertEquals('>', Utility.itoa(1));
@@ -40,7 +40,7 @@ public class UtilityTest {
     }
 
     @Test
-    public void testItop() {
+    void testItop() {
         assertEquals('e', Utility.itop(-1));
         assertEquals('O', Utility.itop(0));
         assertEquals('X', Utility.itop(1));
@@ -48,7 +48,7 @@ public class UtilityTest {
     }
 
     @Test
-    public void testRandom() {
+    void testRandom() {
         int min = 5;
         int max = 10;
         int rng;

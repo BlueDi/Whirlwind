@@ -11,6 +11,11 @@ local.properties
 .loadpath
 .recommenders
 
+*.iml
+.idea
+lib
+out
+
 # Eclipse Core
 .project
 

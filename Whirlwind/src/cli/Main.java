@@ -11,8 +11,8 @@ public class Main {
     private static int GAMEMODE = 0;
 
     public static void main(String[] args) throws Exception {
-        setConfigurations();
-        Game game = new Game(GAMEMODE);
+        int DISPLAY = setConfigurations();
+        Game game = new Game(DISPLAY, GAMEMODE);
         int winner = game.startGame();
 
         if (winner == 1)
@@ -23,11 +23,13 @@ public class Main {
             System.err.println("Error");
     }
 
-    private static void setConfigurations() {
-        if (selectDisplay() == 1)
+    private static int setConfigurations() {
+        if (selectDisplay() == 1) {
             guiConfigs();
-        else
+            return 1;
+        } else
             consoleConfigs();
+        return 0;
     }
 
     private static int selectDisplay() {

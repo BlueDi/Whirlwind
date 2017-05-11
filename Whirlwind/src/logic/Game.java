@@ -3,42 +3,39 @@ package logic;
 import cli.GameFrame;
 import util.Utility;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
-import java.util.Scanner;
+import java.util.*;
 
 public class Game {
     private Board board;
     private GameFrame gameframe;
     private int GAMEMODE;
+    private int DISPLAY;
+    private int turnId;
+    private int DEPTH = 3;
     private int activeplayer = -1;
     private List<Heur> first_calc;
     private int depth;
+    private Deque<String> bestMoveMessages;
 
     /**
-     * Construtor da classe Game. Um board de dimensão 14 garante que ambos
-     * jogadores começam com 20 peças.
+     * Cria o jogo escolhendo o display e o modo.
+     * Um board de dimensão 14 garante que ambos jogadores começam com 20 peças.
      *
-     * @throws Exception falha ao iniciar
-     */
-    private Game() throws Exception {
-        int dimensao_do_tabuleiro = 14;
-        board = new Board(dimensao_do_tabuleiro, boardPicker());
-        gameframe = new GameFrame(board);
-        gameframe.setVisible(true);
-        activeplayer = 1; // black;
-    }
-
-    /**
-     * Cria o jogo escolhendo o modo.
-     *
-     * @param mode Modo de jogo. Entre PVP, PVE, e EVE
+     * @param display Mode de display. GUI ou Consola
+     * @param mode    Modo de jogo. Entre PVP, PVE, e EVE
      * @throws Exception falha a iniciar
      */
-    public Game(int mode) throws Exception {
-        this();
+    public Game(int display, int mode) throws Exception {
+        DISPLAY = display;
         GAMEMODE = mode;
+        activeplayer = 1; // black;
+        int dimensao_do_tabuleiro = 14;
+        board = new Board(dimensao_do_tabuleiro, boardPicker());
+
+        if (DISPLAY == 1) {
+            gameframe = new GameFrame(board);
+            gameframe.setVisible(true);
+        }
     }
 
     /**
@@ -55,6 +52,7 @@ public class Game {
      */
     private void turn() {
         board.display();
+        bestMoveMessages = new LinkedList<>();
         Piece move;
 
         try {
@@ -71,8 +69,11 @@ public class Game {
             move = turnCPU();
 
         board.setPiece(move);
-        gameframe.update(move);
-        gameframe.setVisible(true);
+
+        if (DISPLAY == 1) {
+            gameframe.update(move);
+            gameframe.setVisible(true);
+        }
 
         System.out.println("Jogador " + activeplayer + " tem: " + (board.getPlayerPieces(activeplayer).size() - 1)
                 + " peças no tabuleiro.");
@@ -83,8 +84,10 @@ public class Game {
      * Turno de jogo do Computador.
      */
     private Piece turnCPU() {
-        depth = 3;
+        depth = DEPTH;
         Heur bestMove = miniMax();
+
+        bestMoveMessages.addFirst("Melhor jogada para o jogador " + Utility.itop(activeplayer) + " no turno " + turnId + ": (" + (bestMove.row + 1) + "," + Utility.itoc(bestMove.col) + "). ");
 
         return new Piece(bestMove.row, bestMove.col, activeplayer);
     }
@@ -118,12 +121,17 @@ public class Game {
      * Inicia o jogo.
      */
     public int startGame() {
-        int turnId = 0;
+        turnId = 0;
         int winner = 0;
 
         while (winner == 0) {
-            System.out.println("\nTurn " + turnId++);
+            turnId++;
+            System.out.println("\nTurno " + turnId + ": " + Utility.itop(activeplayer) + " a jogar");
             turn();
+
+            for (String s : bestMoveMessages) {
+                System.out.println(s);
+            }
 
             if (board.winnerBlack())
                 winner = 1;
@@ -244,7 +252,7 @@ public class Game {
 
             if (depth > 0) {
                 changePlayer();
-                Heur enemymove = miniMax();
+                Heur enemymove = miniMax(p);
                 changePlayer();
 
                 position.value -= enemymove.value;
@@ -269,10 +277,10 @@ public class Game {
             position.row = row;
             position.col = col;
             position.movement = i;
-            Heur position2 = singularMoveOfAPiece(position);
+            Heur bestForThisMove = singularMoveOfAPiece(position);
             // first_calc.add(position2);
 
-            updateBestMove(bestMove, position2);
+            updateBestMove(bestMove, bestForThisMove);
         }
     }
 
@@ -291,7 +299,7 @@ public class Game {
 
         while (!tempPlayerPieces.isEmpty()) {
             /*
-			 * TODO: calcular o valor do movimento e guardar em first_calc;
+             * TODO: calcular o valor do movimento e guardar em first_calc;
 			 * first_calc[iterador] = heuristic(temp_plauer_pieces.first());
 			 */
             // TODO: Monte-Carlo tree search talvez seja bom para nós
@@ -301,9 +309,11 @@ public class Game {
             movesForAPiece(bestMove, tempPiece.getRow(), tempPiece.getCol());
         }
 
-        System.out.println("Melhor jogada para o jogador " + Utility.itop(activeplayer) + ": (" + (bestMove.row + 1)
-                + "," + Utility.itoc(bestMove.col) + "), " + Utility.itoa(bestMove.movement));
-
         return bestMove;
+    }
+
+    private Heur miniMax(Piece p) {
+        bestMoveMessages.add("Melhor jogada para o jogador " + Utility.itop(activeplayer) + " no turno " + (turnId + DEPTH - depth) + ": (" + (p.getRow() + 1) + "," + Utility.itoc(p.getCol()) + "). ");
+        return miniMax();
     }
 }

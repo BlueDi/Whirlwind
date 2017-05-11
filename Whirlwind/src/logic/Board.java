@@ -269,7 +269,7 @@ public class Board {
      * Coloca uma peça do player na posição (row,col). Não depende das regras do jogo, apenas tem que estar dentro do tabuleiro.
      *
      * @param p Peça a colocar
-     * @return true se conseguiu rowocar, false se não conseguiu
+     * @return true se conseguiu colocar, false se não conseguiu
      */
     Boolean setPiece(Piece p) {
         try {
@@ -354,14 +354,6 @@ public class Board {
             if (board[row][0].getPlayer() == PLAYER_WHITE && auxwinnerWhite(row, 0) && winWhite)
                 return true;
 
-        for (boolean[] ab : visited) {
-            for (boolean b : ab)
-                System.out.print(b + " ");
-            System.out.println();
-        }
-
-        System.out.println();
-
         return false;
     }
 
@@ -431,14 +423,6 @@ public class Board {
             if (board[0][i].getPlayer() == PLAYER_BLACK && auxwinnerBlack(0, i) && winBlack) {
                 return true;
             }
-
-        for (boolean[] ab : visited) {
-            for (boolean b : ab)
-                System.out.print(b + " ");
-            System.out.println();
-        }
-
-        System.out.println();
 
         return false;
     }

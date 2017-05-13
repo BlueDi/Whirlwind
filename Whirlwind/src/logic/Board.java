@@ -417,25 +417,35 @@ public class Board {
             visited[row][col] = true;
 
             // Verificar posições ortogonais
-            if (row + 1 < board.length && auxwinnerWhite(row + 1, col))
-                return true;
-            else if (col + 1 < board.length && auxwinnerWhite(row, col + 1))
-                return true;
-            else if (row - 1 >= 0 && auxwinnerWhite(row - 1, col))
-                return true;
-            else if (col - 1 >= 0 && auxwinnerWhite(row, col - 1))
-                return true;
-
-            // Verificar posições diagonais
-            if (row + 1 < board.length && col + 1 < board.length && auxwinnerWhite(row + 1, col + 1))
-                return true;
-            else if (row + 1 < board.length && col - 1 >= 0 && auxwinnerWhite(row + 1, col - 1))
-                return true;
-            else if (row - 1 >= 0 && col + 1 < board.length && auxwinnerWhite(row - 1, col + 1))
-                return true;
-            else if (row - 1 >= 0 && col - 1 >= 0 && auxwinnerWhite(row - 1, col - 1))
+            if (auxwinnerWhiteOrtogonal(row, col) || auxwinnerWhiteDiagonal(row, col))
                 return true;
         }
+
+        return false;
+    }
+
+    private Boolean auxwinnerWhiteOrtogonal(int row, int col) {
+        if (row + 1 < board.length && auxwinnerWhite(row + 1, col))
+            return true;
+        else if (col + 1 < board.length && auxwinnerWhite(row, col + 1))
+            return true;
+        else if (row - 1 >= 0 && auxwinnerWhite(row - 1, col))
+            return true;
+        else if (col - 1 >= 0 && auxwinnerWhite(row, col - 1))
+            return true;
+
+        return false;
+    }
+
+    private Boolean auxwinnerWhiteDiagonal(int row, int col) {
+        if (row + 1 < board.length && col + 1 < board.length && auxwinnerWhite(row + 1, col + 1))
+            return true;
+        else if (row + 1 < board.length && col - 1 >= 0 && auxwinnerWhite(row + 1, col - 1))
+            return true;
+        else if (row - 1 >= 0 && col + 1 < board.length && auxwinnerWhite(row - 1, col + 1))
+            return true;
+        else if (row - 1 >= 0 && col - 1 >= 0 && auxwinnerWhite(row - 1, col - 1))
+            return true;
 
         return false;
     }
@@ -486,26 +496,35 @@ public class Board {
         if (board[row][col].getPlayer() == PLAYER_BLACK && !visited[row][col]) {
             visited[row][col] = true;
 
-            // Verificar posições ortogonais
-            if (row + 1 < board.length && auxwinnerBlack(row + 1, col))
-                return true;
-            else if (col + 1 < board.length && auxwinnerBlack(row, col + 1))
-                return true;
-            else if (row - 1 >= 0 && auxwinnerBlack(row - 1, col))
-                return true;
-            else if (col - 1 >= 0 && auxwinnerBlack(row, col - 1))
-                return true;
-
-            // Verificar posições diagonais
-            if (row + 1 < board.length && col + 1 < board.length && auxwinnerBlack(row + 1, col + 1))
-                return true;
-            else if (row + 1 < board.length && col - 1 >= 0 && auxwinnerBlack(row + 1, col - 1))
-                return true;
-            else if (row - 1 >= 0 && col + 1 < board.length && auxwinnerBlack(row - 1, col + 1))
-                return true;
-            else if (row - 1 >= 0 && col - 1 >= 0 && auxwinnerBlack(row - 1, col - 1))
+            if (auxwinnerBlackOrtogonal(row, col) || auxwinnerBlackDiagonal(row, col))
                 return true;
         }
+
+        return false;
+    }
+
+    private Boolean auxwinnerBlackOrtogonal(int row, int col) {
+        if (row + 1 < board.length && auxwinnerBlack(row + 1, col))
+            return true;
+        else if (col + 1 < board.length && auxwinnerBlack(row, col + 1))
+            return true;
+        else if (row - 1 >= 0 && auxwinnerBlack(row - 1, col))
+            return true;
+        else if (col - 1 >= 0 && auxwinnerBlack(row, col - 1))
+            return true;
+
+        return false;
+    }
+
+    private Boolean auxwinnerBlackDiagonal(int row, int col) {
+        if (row + 1 < board.length && col + 1 < board.length && auxwinnerBlack(row + 1, col + 1))
+            return true;
+        else if (row + 1 < board.length && col - 1 >= 0 && auxwinnerBlack(row + 1, col - 1))
+            return true;
+        else if (row - 1 >= 0 && col + 1 < board.length && auxwinnerBlack(row - 1, col + 1))
+            return true;
+        else if (row - 1 >= 0 && col - 1 >= 0 && auxwinnerBlack(row - 1, col - 1))
+            return true;
 
         return false;
     }

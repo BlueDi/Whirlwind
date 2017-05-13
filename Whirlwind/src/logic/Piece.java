@@ -22,8 +22,14 @@ public class Piece {
      * @param player pode ser 0 ou 1
      */
     Piece(int row, int col, int player) {
-        this.row = row;
-        this.col = col;
+        this(row, col);
+        if (player == 0 || player == 1)
+            this.player = player;
+    }
+
+    Piece(Heur h, int player) {
+        row = h.row;
+        col = h.col;
         if (player == 0 || player == 1)
             this.player = player;
     }

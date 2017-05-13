@@ -3,7 +3,10 @@ package logic;
 import cli.GameFrame;
 import util.Utility;
 
-import java.util.*;
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
 
 public class Game {
     private Board board;
@@ -12,8 +15,8 @@ public class Game {
     private int DISPLAY;
     private int turnId;
     private int DEPTH = 3;
+    private int LOWESTVALUE = -99999;
     private int activeplayer = -1;
-    private List<Heur> first_calc;
     private int depth;
     private Deque<String> bestMoveMessages;
 
@@ -89,7 +92,7 @@ public class Game {
 
         bestMoveMessages.addFirst("Melhor jogada para o jogador " + Utility.itop(activeplayer) + " no turno " + turnId + ": (" + (bestMove.row + 1) + "," + Utility.itoc(bestMove.col) + "). ");
 
-        return new Piece(bestMove.row, bestMove.col, activeplayer);
+        return new Piece(bestMove, activeplayer);
     }
 
     /**
@@ -142,6 +145,9 @@ public class Game {
         return winner;
     }
 
+    /**
+     * Muda de jogador
+     */
     private void changePlayer() {
         activeplayer ^= 1;
     }
@@ -151,14 +157,17 @@ public class Game {
      *
      * @param currentBestMove Melhor jogada atual
      * @param newMove         Jogada a verificar se &eacute; a melhor atual
+     * @return Cortes Alfa-Beta: true se viável continuar à procura, false se não
      */
-    private void updateBestMove(Heur currentBestMove, Heur newMove) {
+    private boolean updateBestMove(Heur currentBestMove, Heur newMove) {
         if (newMove.value > currentBestMove.value) {
             currentBestMove.value = newMove.value;
             currentBestMove.row = newMove.row;
             currentBestMove.col = newMove.col;
             currentBestMove.movement = newMove.movement;
+            return true;
         }
+        return false;
     }
 
     /**
@@ -238,17 +247,13 @@ public class Game {
      * @return Heur que representa a melhor peça para o turno
      */
     private Heur singularMoveOfAPiece(Heur position) {
-        Heur position2 = new Heur();
-        position2.row = position.row;
-        position2.col = position.col;
-        position2.movement = position.movement;
+        Heur valueOfMove = new Heur(position);
+        valueOfMove.moveCalculator();
 
-        position2.moveCalculator();
-
-        Piece p = new Piece(position2.row, position2.col, activeplayer);
+        Piece p = new Piece(valueOfMove, activeplayer);
 
         if (board.setPiece(p)) {
-            calcHeur(position2);
+            calcHeur(valueOfMove);
 
             if (depth > 0) {
                 changePlayer();
@@ -258,30 +263,39 @@ public class Game {
                 position.value -= enemymove.value;
             }
 
-            board.removePiece(position2.row, position2.col);
+            board.removePiece(valueOfMove.row, valueOfMove.col);
         }
 
-        return position2;
+        return valueOfMove;
     }
 
     /**
      * Calcula todos os movimentos possíveis para a posição (row,col).
      *
-     * @param bestMove Melhor peça a colocar no tabuleiro
-     * @param row      Linha da posição a calcular as jogadas possiveis
-     * @param col      Coluna da posiçao a calcular as jogadas possiveis
+     * @param actualBestMove Melhor peça a colocar no tabuleiro
+     * @param pieceToCheck   Peça a calcular as jogadas possiveis
      */
-    private void movesForAPiece(Heur bestMove, int row, int col) {
-        for (int i = 0; i < 4; i++) {
-            Heur position = new Heur();
-            position.row = row;
-            position.col = col;
-            position.movement = i;
-            Heur bestForThisMove = singularMoveOfAPiece(position);
-            // first_calc.add(position2);
+    private Heur movesForAPiece(Heur actualBestMove, Piece pieceToCheck) {
+        int row = pieceToCheck.getRow();
+        int col = pieceToCheck.getCol();
+        Heur originalBestMove = new Heur(actualBestMove);
+        Heur[] movesForThis = new Heur[4];
+        int lowest = 999999;
 
-            updateBestMove(bestMove, bestForThisMove);
+        for (int i = 0; i < 4; i++) {
+            movesForThis[i] = new Heur(row, col, i);
+            Heur bestForThisMove = singularMoveOfAPiece(movesForThis[i]);
+
+            if (bestForThisMove.value < lowest)
+                lowest = bestForThisMove.value;
+
+            if (lowest < LOWESTVALUE)
+                return originalBestMove;
+
+            updateBestMove(actualBestMove, bestForThisMove);
         }
+
+        return actualBestMove;
     }
 
     /**
@@ -292,21 +306,10 @@ public class Game {
     private Heur miniMax() {
         depth--;
         Heur bestMove = new Heur();
+        Queue<Piece> playerPieces = board.getPlayerPiecesWithPossibleMovements(activeplayer);
 
-        Queue<Piece> playerPieces = board.getPlayerPieces(activeplayer);
-        Queue<Piece> tempPlayerPieces = playerPieces;
-        first_calc = new ArrayList<>();
-
-        while (!tempPlayerPieces.isEmpty()) {
-            /*
-             * TODO: calcular o valor do movimento e guardar em first_calc;
-			 * first_calc[iterador] = heuristic(temp_plauer_pieces.first());
-			 */
-            // TODO: Monte-Carlo tree search talvez seja bom para nós
-
-            Piece tempPiece = tempPlayerPieces.remove();
-
-            movesForAPiece(bestMove, tempPiece.getRow(), tempPiece.getCol());
+        while (!playerPieces.isEmpty()) {
+            bestMove = movesForAPiece(bestMove, playerPieces.remove());
         }
 
         return bestMove;

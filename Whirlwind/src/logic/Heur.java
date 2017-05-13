@@ -9,6 +9,24 @@ class Heur {
     int movement;
     int value;
 
+    Heur() {
+        value = -99999;
+    }
+
+    Heur(int row, int col, int movement) {
+        this();
+        this.row = row;
+        this.col = col;
+        this.movement = movement;
+    }
+
+    Heur(Heur h) {
+        row = h.row;
+        col = h.col;
+        movement = h.movement;
+        value = h.value;
+    }
+
     /**
      * Calcula onde a peça irá ficar.
      */

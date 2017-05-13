@@ -196,11 +196,8 @@ public class Board {
      * não tiver peça
      */
     private Boolean checkOwner(int row, int col, int player) {
-        // System.out.println("(" + (row+1) + "," + (col+1) + ") player: " +
-        // board[row][col].getPlayer());
         try {
-            if (board[row][col].getPlayer() == player)
-                return true;
+            return board[row][col].getPlayer() == player;
         } catch (IndexOutOfBoundsException e) {
             System.out.println("Bad coords in checkOwner().");
         }
@@ -213,18 +210,34 @@ public class Board {
      * @param p Peça que se vai verificar se tem peças à volta
      * @return true se exister pelo menos um movimento possível, false se não
      */
-    private Boolean checkHasMoves(Piece p) {
-        try {
-            if ((p.getRow() + 1) < board.length && checkOwner(p.getRow() + 1, p.getCol(), p.getPlayer()))
-                return true;
-            if ((p.getRow() - 1) >= 0 && checkOwner(p.getRow() - 1, p.getCol(), p.getPlayer()))
-                return true;
-            if ((p.getCol() + 1) < board.length && checkOwner(p.getRow(), p.getCol() + 1, p.getPlayer()))
-                return true;
-            if ((p.getCol() - 1) >= 0 && checkOwner(p.getRow(), p.getCol() - 1, p.getPlayer()))
-                return true;
-        } catch (IndexOutOfBoundsException e) {
-        }
+    private Boolean checkHasPlayerNext(Piece p) {
+        if ((p.getRow() + 1) < board.length && checkOwner(p.getRow() + 1, p.getCol(), p.getPlayer()))
+            return true;
+        if ((p.getRow() - 1) >= 0 && checkOwner(p.getRow() - 1, p.getCol(), p.getPlayer()))
+            return true;
+        if ((p.getCol() + 1) < board.length && checkOwner(p.getRow(), p.getCol() + 1, p.getPlayer()))
+            return true;
+        if ((p.getCol() - 1) >= 0 && checkOwner(p.getRow(), p.getCol() - 1, p.getPlayer()))
+            return true;
+
+        return false;
+    }
+
+    /**
+     * Verifica se existem posições livres nas posições à volta de (row,col).
+     *
+     * @param p Peça que se vai verificar se tem posições livres à volta
+     * @return true se exister pelo menos um movimento possível, false se não
+     */
+    private Boolean checkHasEmptyNext(Piece p) {
+        if ((p.getRow() + 1) < board.length && checkFreePosition(p.getRow() + 1, p.getCol()))
+            return true;
+        if ((p.getRow() - 1) >= 0 && checkFreePosition(p.getRow() - 1, p.getCol()))
+            return true;
+        if ((p.getCol() + 1) < board.length && checkFreePosition(p.getRow(), p.getCol() + 1))
+            return true;
+        if ((p.getCol() - 1) >= 0 && checkFreePosition(p.getRow(), p.getCol() - 1))
+            return true;
 
         return false;
     }
@@ -241,7 +254,7 @@ public class Board {
         if (!checkFreePosition(p.getRow(), p.getCol()))
             return false;
 
-        if (checkHasMoves(p))
+        if (checkHasPlayerNext(p))
             return true;
 
         System.out.println("Not valid. There isn't a player " + p.getPlayer() + " piece next to (" + (p.getRow() + 1)
@@ -332,8 +345,31 @@ public class Board {
             for (Piece p : col)
                 if (p.getPlayer() == player)
                     player_pieces.add(p);
-        return player_pieces;
 
+        return player_pieces;
+    }
+
+    /**
+     * Devolve todas as peças do player presentes no board que têm posições livres ortogonalmente.
+     *
+     * @param player Jogador de que se quer obter as peças
+     * @return Queue<Piece> Fila de todas as peças do player com posições livres
+     */
+    Queue<Piece> getPlayerPiecesWithPossibleMovements(int player) {
+        Queue<Piece> player_pieces_with_movements = new LinkedList<>();
+        Queue<Piece> player_pieces = getPlayerPieces(player);
+
+        while (!player_pieces.isEmpty()) {
+            Piece piece_to_check = player_pieces.remove();
+
+            if (checkHasEmptyNext(piece_to_check)) {
+                player_pieces_with_movements.add(piece_to_check);
+            }
+        }
+
+        System.out.println("----------> --__-- -> " + player_pieces_with_movements.size());
+
+        return player_pieces_with_movements;
     }
 
     /**

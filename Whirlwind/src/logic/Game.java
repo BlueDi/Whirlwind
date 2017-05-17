@@ -14,8 +14,13 @@ public class Game {
     private int GAMEMODE;
     private int DISPLAY;
     private int turnId;
+    private int BOARDDIMENSION = 20;
     private int DEPTH = 3;
     private int LOWESTVALUE = -99999;
+    /**
+     * When activeplayer = 1 is the black player turn;
+     * When activeplayer = 0 is the white player turn.
+     */
     private int activeplayer = -1;
     private int depth;
     private Deque<String> bestMoveMessages;
@@ -32,8 +37,7 @@ public class Game {
         DISPLAY = display;
         GAMEMODE = mode;
         activeplayer = 1; // black;
-        int dimensao_do_tabuleiro = 14;
-        board = new Board(dimensao_do_tabuleiro, boardPicker());
+        board = new Board(BOARDDIMENSION, boardPicker());
 
         if (DISPLAY == 1) {
             gameframe = new GameFrame(board);
@@ -129,16 +133,16 @@ public class Game {
 
         while (winner == 0) {
             turnId++;
-            System.out.println("\nTurno " + turnId + ": " + Utility.itop(activeplayer) + " a jogar");
+            System.out.println("\nTurno " + turnId + ": Peças " + Utility.itoPlayer(activeplayer) + " a jogar");
             turn();
 
             for (String s : bestMoveMessages) {
                 System.out.println(s);
             }
 
-            if (board.winnerBlack())
+            if (activeplayer == 0 && board.winnerBlack())
                 winner = 1;
-            else if (board.winnerWhite())
+            else if (activeplayer == 1 && board.winnerWhite())
                 winner = 2;
         }
 

@@ -16,10 +16,7 @@ public class GameFrame extends JFrame {
     public int win = 0;
     private Color PLAYER1_COLOR = Color.BLACK;
     private Color PLAYER2_COLOR = Color.WHITE;
-    private Color NO_PLAYER_COLOR = Color.GRAY;
-    private Color BORDER_COLOR = Color.DARK_GRAY;
     private JPanel contentPane;
-    private JLabel[][] grid;
     private int BOARD_SIZE;
     private Game logic;
     private ImageIcon icon0 = new ImageIcon("white.gif");
@@ -40,19 +37,19 @@ public class GameFrame extends JFrame {
     }
 
     /**
-     * Create the frame setting a board.
+     * Cria a frame configurando o tabuleiro.
      *
-     * @param b Tabuleiro a ser desenhado
+     * @param actualgame Estado do jogo
      */
-    public GameFrame(Board b, Game g) {
+    public GameFrame(Game actualgame) {
         this();
-        logic = g;
-        BOARD_SIZE = b.getSize();
+        logic = actualgame;
+        BOARD_SIZE = logic.getBOARDDIMENSION();
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
         contentPane.setLayout(new GridLayout(BOARD_SIZE + 2, BOARD_SIZE + 2));
         buttons = new ArrayList<>();
-        create(b);
+        create(logic.getBoard());
     }
 
     /**
@@ -61,7 +58,6 @@ public class GameFrame extends JFrame {
      * @param b Tabuleiro a ser desenhado
      */
     private void create(Board b) {
-        grid = new JLabel[BOARD_SIZE][BOARD_SIZE];
         Insets buttonMargin = new Insets(0, 0, 0, 0);
 
         insertLine(PLAYER1_COLOR);
@@ -70,13 +66,8 @@ public class GameFrame extends JFrame {
             insertLabel(PLAYER2_COLOR);
             for (int col = 0; col < BOARD_SIZE; col++) {
                 char playerSymbol = b.getBoard()[row][col].getSymbol();
-                grid[row][col] = new JLabel(row + " " + col);
-                /*grid[row][col].setBorder(new LineBorder(BORDER_COLOR));
-                grid[row][col].setBackground(choosePieceColor(playerSymbol));
-                grid[row][col].setOpaque(true);
-                contentPane.add(grid[row][col]);*/
-                specialButton j = new specialButton(row, col);
-                j.setMargin(buttonMargin);
+                specialButton board_position = new specialButton(row, col);
+                board_position.setMargin(buttonMargin);
 
                 ImageIcon icon;
                 if (playerSymbol == 'X')
@@ -85,13 +76,13 @@ public class GameFrame extends JFrame {
                     icon = icon0;
                 else
                     icon = null;
-                j.setIcon(icon);
+                board_position.setIcon(icon);
 
-                contentPane.add(j);
-                buttons.add(j);
+                contentPane.add(board_position);
+                buttons.add(board_position);
 
                 if (logic.getMode() == 2 || logic.getMode() == 1) {
-                    j.addActionListener(e -> {
+                    board_position.addActionListener(e -> {
                         specialButton now = (specialButton) e.getSource();
                         if (now.getIcon() == null) {
 
@@ -172,19 +163,5 @@ public class GameFrame extends JFrame {
         border.setOpaque(true);
 
         contentPane.add(border);
-    }
-
-    /**
-     * Define a cor da Peça do Jogador
-     *
-     * @param symbol Simbolo do qual se quer obter a cor correspondente
-     * @return Cor correspondente ao simbolo
-     */
-    private Color choosePieceColor(char symbol) {
-        if (symbol == 'X')
-            return PLAYER1_COLOR;
-        else if (symbol == 'O')
-            return PLAYER2_COLOR;
-        return NO_PLAYER_COLOR;
     }
 }

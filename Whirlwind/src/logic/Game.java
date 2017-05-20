@@ -42,7 +42,7 @@ public class Game {
         board = new Board(BOARDDIMENSION, boardPicker());
 
         if (DISPLAY == 1) {
-            gameframe = new GameFrame(board, this);
+            gameframe = new GameFrame(this);
             gameframe.setVisible(true);
         }
     }
@@ -54,6 +54,14 @@ public class Game {
      */
     private int boardPicker() {
         return Utility.random(0, 1);
+    }
+
+    public Board getBoard(){
+        return board;
+    }
+
+    public int getBOARDDIMENSION(){
+        return BOARDDIMENSION;
     }
 
     public void initiatebestMoveMessages() {

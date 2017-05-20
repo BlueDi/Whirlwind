@@ -367,8 +367,6 @@ public class Board {
             }
         }
 
-        System.out.println("----------> --__-- -> " + player_pieces_with_movements.size());
-
         return player_pieces_with_movements;
     }
 

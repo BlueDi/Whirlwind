@@ -1,6 +1,7 @@
 package logic;
 
 import cli.GameFrame;
+import cli.specialButton;
 import util.Utility;
 
 import java.util.Deque;
@@ -10,20 +11,16 @@ import java.util.Scanner;
 
 public class Game {
     private Board board;
-    private GameFrame gameframe;
+    public GameFrame gameframe;
     private int GAMEMODE;
     private int DISPLAY;
     private int turnId;
-    private int BOARDDIMENSION = 20;
     private int DEPTH = 3;
     private int LOWESTVALUE = -99999;
-    /**
-     * When activeplayer = 1 is the black player turn;
-     * When activeplayer = 0 is the white player turn.
-     */
     private int activeplayer = -1;
     private int depth;
     private Deque<String> bestMoveMessages;
+   
 
     /**
      * Cria o jogo escolhendo o display e o modo.
@@ -37,10 +34,11 @@ public class Game {
         DISPLAY = display;
         GAMEMODE = mode;
         activeplayer = 1; // black;
-        board = new Board(BOARDDIMENSION, boardPicker());
+        int dimensao_do_tabuleiro = 14;
+        board = new Board(dimensao_do_tabuleiro, boardPicker());
 
         if (DISPLAY == 1) {
-            gameframe = new GameFrame(board);
+            gameframe = new GameFrame(board,this);
             gameframe.setVisible(true);
         }
     }
@@ -57,9 +55,13 @@ public class Game {
     /**
      * Turno do jogo.
      */
-    private void turn() {
+    
+    public void initiatebestMoveMessages(){
+    	bestMoveMessages = new LinkedList<>();
+    }
+    public void turn() {
         board.display();
-        bestMoveMessages = new LinkedList<>();
+        initiatebestMoveMessages();
         Piece move;
 
         try {
@@ -67,7 +69,8 @@ public class Game {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
+        
+       
         if (GAMEMODE == 1)
             move = turnPlayer();
         else if (GAMEMODE == 2 && activeplayer == 1)
@@ -75,22 +78,26 @@ public class Game {
         else
             move = turnCPU();
 
-        board.setPiece(move);
-
+        setPiece(move);
+      
+       /*
         if (DISPLAY == 1) {
             gameframe.update(move);
             gameframe.setVisible(true);
-        }
+        }*/
 
         System.out.println("Jogador " + activeplayer + " tem: " + (board.getPlayerPieces(activeplayer).size() - 1)
                 + " peças no tabuleiro.");
         changePlayer();
     }
 
+    public void setPiece(Piece p){
+    	board.setPiece(p);
+    }
     /**
      * Turno de jogo do Computador.
      */
-    private Piece turnCPU() {
+    public Piece turnCPU() {
         depth = DEPTH;
         Heur bestMove = miniMax();
 
@@ -102,7 +109,7 @@ public class Game {
     /**
      * Turno de jogo do Jogador.
      */
-    private Piece turnPlayer() {
+    public Piece turnPlayer() {
         Piece playerPiece;
         Scanner reader = new Scanner(System.in);
         int row;
@@ -124,6 +131,41 @@ public class Game {
         return playerPiece;
     }
 
+    public boolean turnAction(specialButton b){
+    	
+    	if(b==null){
+    		return false;
+    	}
+    	else{
+    		if(board.setPiece(new Piece(b.getRow(),b.getCol(), activeplayer))){
+    			
+    	    	changePlayer();
+    	    	if(checkwin()==1)
+    	    		gameframe.win=1;
+    	    	if(checkwin()==2)
+    	    		gameframe.win=2;
+    	    	
+    	    	return true;
+    		}
+    		
+    	
+    	
+    	}
+    	return false;
+    }
+ 
+    public int checkwin(){
+    	if(board.winnerBlack()){
+    		return 1;
+    	
+    		}
+    	if(board.winnerWhite()){
+    		return 2;
+    		
+    		}
+    	return 0;
+    }
+    
     /**
      * Inicia o jogo.
      */
@@ -132,17 +174,19 @@ public class Game {
         int winner = 0;
 
         while (winner == 0) {
-            turnId++;
-            System.out.println("\nTurno " + turnId + ": Peças " + Utility.itoPlayer(activeplayer) + " a jogar");
+          
+            
+            	  turnId++;
+                  System.out.println("\nTurno " + turnId + ": " + Utility.itop(activeplayer) + " a jogar");
             turn();
-
+            
             for (String s : bestMoveMessages) {
                 System.out.println(s);
+            
             }
-
-            if (activeplayer == 0 && board.winnerBlack())
+            if (board.winnerBlack())
                 winner = 1;
-            else if (activeplayer == 1 && board.winnerWhite())
+            else if (board.winnerWhite())
                 winner = 2;
         }
 
@@ -152,7 +196,7 @@ public class Game {
     /**
      * Muda de jogador
      */
-    private void changePlayer() {
+    public void changePlayer() {
         activeplayer ^= 1;
     }
 
@@ -275,6 +319,7 @@ public class Game {
 
     /**
      * Calcula todos os movimentos possíveis para a posição (row,col).
+     * cortes alfa-beta 
      *
      * @param actualBestMove Melhor peça a colocar no tabuleiro
      * @param pieceToCheck   Peça a calcular as jogadas possiveis
@@ -322,5 +367,11 @@ public class Game {
     private Heur miniMax(Piece p) {
         bestMoveMessages.add("Melhor jogada para o jogador " + Utility.itop(activeplayer) + " no turno " + (turnId + DEPTH - depth) + ": (" + (p.getRow() + 1) + "," + Utility.itoc(p.getCol()) + "). ");
         return miniMax();
+    }
+    public int getActivePlayer(){
+    	return activeplayer;
+    }
+    public int getMode(){
+    	return GAMEMODE;
     }
 }

@@ -11,16 +11,22 @@ public class Main {
     private static int GAMEMODE = 0;
 
     public static void main(String[] args) throws Exception {
+    	int winner=0;
         int DISPLAY = setConfigurations();
         Game game = new Game(DISPLAY, GAMEMODE);
-        int winner = game.startGame();
+        if(DISPLAY==1){
+        }
+        else{
+        	  winner= game.startGame();
+        }
+       
 
         if (winner == 1)
             System.out.println("Black Won!");
         else if (winner == 2)
             System.out.println("White Won!");
-        else
-            System.err.println("Error");
+       /* else
+            System.err.println("Error");*/
     }
 
     private static int setConfigurations() {

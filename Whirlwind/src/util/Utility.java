@@ -76,15 +76,6 @@ public final class Utility {
         return 'f';
     }
 
-    public static String itoPlayer(int i) {
-        if(i == 0)
-            return "Brancas";
-        else if(i == 1)
-            return "Pretas";
-        else
-            return "Error";
-    }
-
     /**
      * @return Número inteiro aleatório entre [0,10].
      */

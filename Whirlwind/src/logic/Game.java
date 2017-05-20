@@ -161,21 +161,18 @@ public class Game {
     }
 
     public boolean turnAction(specialButton b) {
-        if (b == null) {
-            return false;
-        } else {
-            if (board.setPiece(new Piece(b.getRow(), b.getCol(), activeplayer))) {
-                changePlayer();
+        if (b != null && board.setPiece(new Piece(b.getRow(), b.getCol(), activeplayer))) {
+            changePlayer();
 
-                int winner = checkwin();
-                if (winner == 1)
-                    gameframe.win = 1;
-                if (winner == 2)
-                    gameframe.win = 2;
+            int winner = checkwin();
+            if (winner == 1)
+                gameframe.win = 1;
+            if (winner == 2)
+                gameframe.win = 2;
 
-                return true;
-            }
+            return true;
         }
+
         return false;
     }
 

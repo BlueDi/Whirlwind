@@ -11,42 +11,33 @@ public class Main {
     private static int GAMEMODE = 0;
 
     public static void main(String[] args) throws Exception {
-    	int winner=0;
         int DISPLAY = setConfigurations();
         Game game = new Game(DISPLAY, GAMEMODE);
-        int nwinsrand=0;
-        int nwinsheur=0;
-        if(DISPLAY==1){
+        int wins_of_random = 0;
+        int wins_of_heur = 0;
+        int winner;
+
+        if (GAMEMODE == 4) {
+            for (int i = 0; i < 5; i++) {
+                winner = game.startGame();
+                if (winner == 0)
+                    wins_of_random++;
+                else if (winner == 1)
+                    wins_of_heur++;
+            }
+            System.out.println("\nNúmero de vitórias sem heuristicas: " + wins_of_random);
+            System.out.println("Número de vitórias com heuristica: " + wins_of_heur);
+        } else {
+            winner = game.startGame();
+
+            if (winner == 1)
+                System.out.println("Black Won!");
+            else if (winner == 0)
+                System.out.println("White Won!");
+            else
+                System.err.println("Error. Invalid Winner.");
         }
-        else{
-        	if(GAMEMODE==4)
-        		for(int i=0;i<4;i++){
-        	  winner= game.startGame();
-        	  if(winner==2){
-        		  nwinsrand++;
-        	  }
-        	  if(winner==1){
-        		  nwinsheur++;
-        	  }
-        	  }
-        	else{
-        		winner= game.startGame();
-        	}
-        }
-       
-        if(GAMEMODE==4){
-        	System.out.println("number of wins with no heuristic: "+nwinsrand);
-        	System.out.println("number of wins with heuristic: "+nwinsheur);
-        }
-        else{
-        if (winner == 1)
-            System.out.println("Black Won!");
-        else if (winner == 2)
-            System.out.println("White Won!");
-       /* else
-            System.err.println("Error");*/
     }
-        }
 
     private static int setConfigurations() {
         if (selectDisplay() == 1) {
@@ -90,10 +81,10 @@ public class Main {
 
     private static void consoleConfigs() {
         System.out.println("Choose the game mode:");
-        System.out.println("1 - Human versus Human");
-        System.out.println("2 - Human versus Computer");
-        System.out.println("3 - Computer versus Computer");
-        System.out.println("4 - CPU vs CPU stats");
+        System.out.println("1 - Human vs Human");
+        System.out.println("2 - Human vs Computer");
+        System.out.println("3 - Computer vs Computer");
+        System.out.println("4 - CPU vs CPU with stats");
 
         Scanner reader = new Scanner(System.in);
 

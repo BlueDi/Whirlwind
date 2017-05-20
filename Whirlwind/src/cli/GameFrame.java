@@ -129,7 +129,7 @@ public class GameFrame extends JFrame {
                 		   
                 	   if(logic.getMode()==2){
                 		   logic.initiatebestMoveMessages();
-                		   Piece p=logic.turnCPU();
+                		   Piece p=logic.turnCPU(0);
                 		   logic.setPiece(p);
                 		   System.out.println(p.getRow()+","+p.getCol());
                 		   for(int i=0; i<buttons.size();i++)
@@ -176,7 +176,7 @@ public class GameFrame extends JFrame {
      	   while(logic.checkwin()!=1 && logic.checkwin() !=2){
      		   
      	   logic.initiatebestMoveMessages();
-   		   Piece p=logic.turnCPU();
+   		   Piece p=logic.turnCPU(0);
    		   logic.setPiece(p);
    		   	for(int i=0; i<buttons.size();i++)
 			   if(buttons.get(i).getRow()==p.getRow() && buttons.get(i).getCol()==p.getCol()){
@@ -189,8 +189,6 @@ public class GameFrame extends JFrame {
    		 if(logic.checkwin()	==2 || logic.checkwin()==1){
 			   for(int i=0; i<buttons.size();i++)
 				   buttons.get(i).setEnabled(false);
-			   
-			   
 			   
 		   }
 		   logic.changePlayer();

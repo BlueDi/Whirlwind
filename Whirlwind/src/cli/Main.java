@@ -14,13 +14,31 @@ public class Main {
     	int winner=0;
         int DISPLAY = setConfigurations();
         Game game = new Game(DISPLAY, GAMEMODE);
+        int nwinsrand=0;
+        int nwinsheur=0;
         if(DISPLAY==1){
         }
         else{
+        	if(GAMEMODE==4)
+        		for(int i=0;i<4;i++){
         	  winner= game.startGame();
+        	  if(winner==2){
+        		  nwinsrand++;
+        	  }
+        	  if(winner==1){
+        		  nwinsheur++;
+        	  }
+        	  }
+        	else{
+        		winner= game.startGame();
+        	}
         }
        
-
+        if(GAMEMODE==4){
+        	System.out.println("number of wins with no heuristic: "+nwinsrand);
+        	System.out.println("number of wins with heuristic: "+nwinsheur);
+        }
+        else{
         if (winner == 1)
             System.out.println("Black Won!");
         else if (winner == 2)
@@ -28,6 +46,7 @@ public class Main {
        /* else
             System.err.println("Error");*/
     }
+        }
 
     private static int setConfigurations() {
         if (selectDisplay() == 1) {
@@ -74,10 +93,11 @@ public class Main {
         System.out.println("1 - Human versus Human");
         System.out.println("2 - Human versus Computer");
         System.out.println("3 - Computer versus Computer");
+        System.out.println("4 - CPU vs CPU stats");
 
         Scanner reader = new Scanner(System.in);
 
-        while (GAMEMODE != 1 && GAMEMODE != 2 && GAMEMODE != 3) {
+        while (GAMEMODE != 1 && GAMEMODE != 2 && GAMEMODE != 3 && GAMEMODE != 4) {
             GAMEMODE = reader.nextInt();
         }
     }

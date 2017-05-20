@@ -7,6 +7,7 @@ import util.Utility;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Game {
@@ -75,9 +76,18 @@ public class Game {
             move = turnPlayer();
         else if (GAMEMODE == 2 && activeplayer == 1)
             move = turnPlayer();
-        else
-            move = turnCPU();
-
+        else{
+        	if(GAMEMODE==4){
+        		
+            move = turnCPU(0);
+            setPiece(move);
+            
+            changePlayer();
+            move = turnCPU(1);
+            }
+        	else 
+        		move=turnCPU(0);
+        }
         setPiece(move);
       
        /*
@@ -97,13 +107,19 @@ public class Game {
     /**
      * Turno de jogo do Computador.
      */
-    public Piece turnCPU() {
+    public Piece turnCPU(int i) {
         depth = DEPTH;
+        if(i==0){
         Heur bestMove = miniMax();
 
         bestMoveMessages.addFirst("Melhor jogada para o jogador " + Utility.itop(activeplayer) + " no turno " + turnId + ": (" + (bestMove.row + 1) + "," + Utility.itoc(bestMove.col) + "). ");
 
         return new Piece(bestMove, activeplayer);
+        }
+        else{
+        	return new Piece(new Heur(Utility.random(0,13),Utility.random(0,13),Utility.random(0,3)),activeplayer);
+        }
+        	
     }
 
     /**

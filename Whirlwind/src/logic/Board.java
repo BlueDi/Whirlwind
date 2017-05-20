@@ -15,7 +15,7 @@ public class Board {
     private int PLAYER_WHITE = 0;
 
     /**
-     * Construtor vazio. Apenas cria um board [n]x[n] sem peÁas. Hard-coded para
+     * Construtor vazio. Apenas cria um board [n]x[n] sem pe√ßas. Hard-coded para
      * criar [14]x[14]
      */
     Board() {
@@ -30,11 +30,11 @@ public class Board {
     }
 
     /**
-     * Construtor de um board quadrado. O board È preenchido pela funÁ„o
+     * Construtor de um board quadrado. O board √© preenchido pela fun√ß√£o
      * auxiliar FillWithPieces().
      *
      * @param n tamanho do lado do tabuleiro
-     * @throws IndexOutOfBoundsException se o board tiver uma dimens„o muito pequena ou muito grande
+     * @throws IndexOutOfBoundsException se o board tiver uma dimens√£o muito pequena ou muito grande
      */
     Board(int n, int boardPicker) throws IndexOutOfBoundsException {
         if (n < 12)
@@ -72,17 +72,17 @@ public class Board {
     }
 
     /**
-     * Preenche o tabuleiro com peÁas. O board È preenchido da seguinte maneira:
-     * Coloca a primeira peÁa. Nessa linha coloca a cada 5 espaÁos uma nova
-     * peÁa, alternando o jogador, atÈ n„o ter 5 espaÁos entre a peÁa e o fim do
-     * tabuleiro. Depois para a prÛxima linha coloca a primeira peÁa duas
-     * posiÁıes ‡ direita da primeira peÁa, preenchendo antecipadamente as
-     * posiÁıes antes dessa peÁa.
+     * Preenche o tabuleiro com pe√ßas. O board √© preenchido da seguinte maneira:
+     * Coloca a primeira pe√ßa. Nessa linha coloca a cada 5 espa√ßos uma nova
+     * pe√ßa, alternando o jogador, at√© n√£o ter 5 espa√ßos entre a pe√ßa e o fim do
+     * tabuleiro. Depois para a pr√≥xima linha coloca a primeira pe√ßa duas
+     * posi√ß√µes √† direita da primeira pe√ßa, preenchendo antecipadamente as
+     * posi√ß√µes antes dessa pe√ßa.
      */
     private void fillWithPieces() {
         int col;
         int row;
-        int line_start_position = 1; // posiÁ„o da primeira peÁa da linha
+        int line_start_position = 1; // posi√ß√£o da primeira pe√ßa da linha
         int player = FIRST_PIECE;
         int col_position_checker;
         int aux_pc;
@@ -112,7 +112,7 @@ public class Board {
                 }
             }
 
-            // preparar a prÛxima linha
+            // preparar a pr√≥xima linha
             player ^= 1;
             line_start_position += 2;
             if (line_start_position > 13) {
@@ -123,10 +123,10 @@ public class Board {
     }
 
     /**
-     * Desenha o tabuleiro com as peÁas na consola. Primeiro desenha a linha de
-     * caracteres que representam as possÌveis colunas. Depois para cada linha,
-     * imprime o caracter que a representa, dependendo se È maior que 9 ou n„o,
-     * e depois o conte˙do da linha.
+     * Desenha o tabuleiro com as pe√ßas na consola. Primeiro desenha a linha de
+     * caracteres que representam as poss√≠veis colunas. Depois para cada linha,
+     * imprime o caracter que a representa, dependendo se √© maior que 9 ou n√£o,
+     * e depois o conte√∫do da linha.
      */
     void display() {
         System.out.print("    ");
@@ -155,9 +155,9 @@ public class Board {
     }
 
     /**
-     * Calcula quantas peÁas de ambos os jogadores est„o no tabuleiro.
+     * Calcula quantas pe√ßas de ambos os jogadores est√£o no tabuleiro.
      *
-     * @return n˙mero de peÁas no tabuleiro
+     * @return n√∫mero de pe√ßas no tabuleiro
      */
     public int getNumPieces() {
         int numPieces = 0;
@@ -169,11 +169,11 @@ public class Board {
     }
 
     /**
-     * Verifica se a posiÁ„o n„o tem nenhuma peÁa.
+     * Verifica se a posi√ß√£o n√£o tem nenhuma pe√ßa.
      *
-     * @param row Linha da posiÁ„o a verificar
-     * @param col Coluna da posiÁ„o a verificar
-     * @return true se a posiÁ„o ainda n„o tiver peÁa, false se j· tiver
+     * @param row Linha da posi√ß√£o a verificar
+     * @param col Coluna da posi√ß√£o a verificar
+     * @return true se a posi√ß√£o ainda n√£o tiver pe√ßa, false se j√° tiver
      */
     Boolean checkFreePosition(int row, int col) {
         try {
@@ -187,13 +187,13 @@ public class Board {
     }
 
     /**
-     * Compara o player dos argumentos com o player da peÁa.
+     * Compara o player dos argumentos com o player da pe√ßa.
      *
-     * @param row    Linha da posiÁ„o a verificar
-     * @param col    Coluna da posiÁ„o a verificar
-     * @param player Jogador a comparar com o dono da peÁa
-     * @return true se forem o mesmo player, false se n„o forem ou se a posiÁ„o
-     * n„o tiver peÁa
+     * @param row    Linha da posi√ß√£o a verificar
+     * @param col    Coluna da posi√ß√£o a verificar
+     * @param player Jogador a comparar com o dono da pe√ßa
+     * @return true se forem o mesmo player, false se n√£o forem ou se a posi√ß√£o
+     * n√£o tiver pe√ßa
      */
     private Boolean checkOwner(int row, int col, int player) {
         try {
@@ -205,10 +205,10 @@ public class Board {
     }
 
     /**
-     * Verifica se existem peÁas do player nas posiÁıes ‡ volta de (row,col).
+     * Verifica se existem pe√ßas do player nas posi√ß√µes √† volta de (row,col).
      *
-     * @param p PeÁa que se vai verificar se tem peÁas ‡ volta
-     * @return true se exister pelo menos um movimento possÌvel, false se n„o
+     * @param p Pe√ßa que se vai verificar se tem pe√ßas √† volta
+     * @return true se exister pelo menos um movimento poss√≠vel, false se n√£o
      */
     private Boolean checkHasPlayerNext(Piece p) {
         if ((p.getRow() + 1) < board.length && checkOwner(p.getRow() + 1, p.getCol(), p.getPlayer()))
@@ -224,10 +224,10 @@ public class Board {
     }
 
     /**
-     * Verifica se existem posiÁıes livres nas posiÁıes ‡ volta de (row,col).
+     * Verifica se existem posi√ß√µes livres nas posi√ß√µes √† volta de (row,col).
      *
-     * @param p PeÁa que se vai verificar se tem posiÁıes livres ‡ volta
-     * @return true se exister pelo menos um movimento possÌvel, false se n„o
+     * @param p Pe√ßa que se vai verificar se tem posi√ß√µes livres √† volta
+     * @return true se exister pelo menos um movimento poss√≠vel, false se n√£o
      */
     private Boolean checkHasEmptyNext(Piece p) {
         if ((p.getRow() + 1) < board.length && checkFreePosition(p.getRow() + 1, p.getCol()))
@@ -243,12 +243,12 @@ public class Board {
     }
 
     /**
-     * Verifica se o movimento È v·lido. O movimento È v·lido quando a posiÁ„o
-     * n„o est· j· ocupada e h· uma peÁa do jogador numa casa adjacente ‡
+     * Verifica se o movimento √© v√°lido. O movimento √© v√°lido quando a posi√ß√£o
+     * n√£o est√° j√° ocupada e h√° uma pe√ßa do jogador numa casa adjacente √†
      * desejada, quer na horizontal, quer na vertical.
      *
-     * @param p PeÁa a ser verificada
-     * @return true se for v·lido, false se n„o for v·lido
+     * @param p Pe√ßa a ser verificada
+     * @return true se for v√°lido, false se n√£o for v√°lido
      */
     Boolean checkValidMove(Piece p) {
         if (!checkFreePosition(p.getRow(), p.getCol()))
@@ -263,11 +263,11 @@ public class Board {
     }
 
     /**
-     * Retorna a peÁa na posiÁ„o (row,col).
+     * Retorna a pe√ßa na posi√ß√£o (row,col).
      *
      * @param row linha desejada
      * @param col coluna desejada
-     * @return Piece na posiÁ„o
+     * @return Piece na posi√ß√£o
      */
     Piece getPiece(int row, int col) {
         try {
@@ -279,10 +279,10 @@ public class Board {
     }
 
     /**
-     * Coloca uma peÁa do player na posiÁ„o (row,col). N„o depende das regras do jogo, apenas tem que estar dentro do tabuleiro.
+     * Coloca uma pe√ßa do player na posi√ß√£o (row,col). N√£o depende das regras do jogo, apenas tem que estar dentro do tabuleiro.
      *
-     * @param p PeÁa a colocar
-     * @return true se conseguiu colocar, false se n„o conseguiu
+     * @param p Pe√ßa a colocar
+     * @return true se conseguiu colocar, false se n√£o conseguiu
      */
     Boolean setPiece(Piece p) {
         try {
@@ -299,10 +299,10 @@ public class Board {
     }
 
     /**
-     * Retira a peÁa do tabuleiro. Na pr·tica apenas atribui ‡ peÁa o jogador -1 que representa a ausÍncia de jogador
+     * Retira a pe√ßa do tabuleiro. Na pr√°tica apenas atribui √† pe√ßa o jogador -1 que representa a aus√™ncia de jogador
      *
-     * @param row Linha da peÁa a remover
-     * @param col Coluna da peÁa a remover
+     * @param row Linha da pe√ßa a remover
+     * @param col Coluna da pe√ßa a remover
      */
     void removePiece(int row, int col) {
         try {
@@ -315,10 +315,10 @@ public class Board {
     }
 
     /**
-     * Coloca uma peÁa do player na posiÁ„o (row,col). N„o depende das regras do jogo, apenas tem que ser uma posiÁ„o livre.
+     * Coloca uma pe√ßa do player na posi√ß√£o (row,col). N√£o depende das regras do jogo, apenas tem que ser uma posi√ß√£o livre.
      *
-     * @param p PeÁa a colocar
-     * @return true se conseguiu colocar, false se n„o conseguiu
+     * @param p Pe√ßa a colocar
+     * @return true se conseguiu colocar, false se n√£o conseguiu
      */
     Boolean setPieceAbs(Piece p) {
         try {
@@ -333,10 +333,10 @@ public class Board {
     }
 
     /**
-     * Devolve todas as peÁas do player presentes no board.
+     * Devolve todas as pe√ßas do player presentes no board.
      *
-     * @param player Jogador de que se quer obter as peÁas
-     * @return Queue<Piece> Fila de todas as peÁas do player
+     * @param player Jogador de que se quer obter as pe√ßas
+     * @return Queue<Piece> Fila de todas as pe√ßas do player
      */
     Queue<Piece> getPlayerPieces(int player) {
         Queue<Piece> player_pieces = new LinkedList<>();
@@ -350,10 +350,10 @@ public class Board {
     }
 
     /**
-     * Devolve todas as peÁas do player presentes no board que tÍm posiÁıes livres ortogonalmente.
+     * Devolve todas as pe√ßas do player presentes no board que t√™m posi√ß√µes livres ortogonalmente.
      *
-     * @param player Jogador de que se quer obter as peÁas
-     * @return Queue<Piece> Fila de todas as peÁas do player com posiÁıes livres
+     * @param player Jogador de que se quer obter as pe√ßas
+     * @return Queue<Piece> Fila de todas as pe√ßas do player com posi√ß√µes livres
      */
     Queue<Piece> getPlayerPiecesWithPossibleMovements(int player) {
         Queue<Piece> player_pieces_with_movements = new LinkedList<>();
@@ -367,20 +367,18 @@ public class Board {
             }
         }
 
-        System.out.println("----------> --__-- -> " + player_pieces_with_movements.size());
-
         return player_pieces_with_movements;
     }
 
     /**
-     * Verifica se o player Branco ganhou o jogo. Procura a primeira peÁa Branca
-     * ao longo da linha 0 se n„o existir sabemos que È impossivel ter ganho, se
+     * Verifica se o player Branco ganhou o jogo. Procura a primeira pe√ßa Branca
+     * ao longo da linha 0 se n√£o existir sabemos que √© impossivel ter ganho, se
      * encontrar usa o {@link #auxwinnerWhite(int row, int col)
-     * auxwinnerWhite} para percorrer todas os locais ‡ volta terminando com
-     * falso se n„o conseguir chegar ao outro extremo e mudando o estado do jogo
-     * para vitÛria se pelo contr·rio atingiu o outro extremo.
+     * auxwinnerWhite} para percorrer todas os locais √† volta terminando com
+     * falso se n√£o conseguir chegar ao outro extremo e mudando o estado do jogo
+     * para vit√≥ria se pelo contr√°rio atingiu o outro extremo.
      *
-     * @return true se fez a linha, false se n„o
+     * @return true se fez a linha, false se n√£o
      */
     Boolean winnerWhite() {
         visited = new boolean[board.length][board.length];
@@ -394,15 +392,15 @@ public class Board {
     }
 
     /**
-     * Neste caso para o white processa a posiÁ„o atual [row][col] isto È
-     * termina com vitÛria se for o extremo certo associado ao jogador ,exemplo
-     * especifico,˙ltima coluna do tabuleiro, sÛ tenta processar o local do
-     * tabuleiro se l· estiver uma peÁa do jogador e se ainda n„o tiver sido
-     * visitado. As posiÁıes j· visitadas s„o guardadas em visited.
+     * Neste caso para o white processa a posi√ß√£o atual [row][col] isto √©
+     * termina com vit√≥ria se for o extremo certo associado ao jogador ,exemplo
+     * especifico,√∫ltima coluna do tabuleiro, s√≥ tenta processar o local do
+     * tabuleiro se l√° estiver uma pe√ßa do jogador e se ainda n√£o tiver sido
+     * visitado. As posi√ß√µes j√° visitadas s√£o guardadas em visited.
      *
-     * @param row linha que est· a tratar neste momento
-     * @param col coluna que est· a ser tratado neste momento
-     * @return se È promising ou n„o atravÈs de bool, true se continuar, false se n„o for util continuar por este caminho
+     * @param row linha que est√° a tratar neste momento
+     * @param col coluna que est√° a ser tratado neste momento
+     * @return se √© promising ou n√£o atrav√©s de bool, true se continuar, false se n√£o for util continuar por este caminho
      */
     private Boolean auxwinnerWhite(int row, int col) {
         if (winWhite)
@@ -416,7 +414,7 @@ public class Board {
         if (board[row][col].getPlayer() == PLAYER_WHITE && !visited[row][col]) {
             visited[row][col] = true;
 
-            // Verificar posiÁıes ortogonais
+            // Verificar posi√ß√µes ortogonais
             if (auxwinnerWhiteOrtogonal(row, col) || auxwinnerWhiteDiagonal(row, col))
                 return true;
         }
@@ -451,15 +449,15 @@ public class Board {
     }
 
     /**
-     * Verifica se o player Preto ganhou o jogo. Procura a primeira peÁa Preta
-     * ao longo da linha 0, isto È o topo do tabuleiro se n„o existir sabemos
-     * que È impossivel ter ganho. Se encontrar usa o
+     * Verifica se o player Preto ganhou o jogo. Procura a primeira pe√ßa Preta
+     * ao longo da linha 0, isto √© o topo do tabuleiro se n√£o existir sabemos
+     * que √© impossivel ter ganho. Se encontrar usa o
      * {@link #auxwinnerBlack(int row, int col) auxwinnerBlack}
-     * para percorrer todos os locais ‡ volta, terminando com falso se n„o
-     * conseguir chegar ao outro extremo e mudando o estado do jogo para vitÛria
-     * se pelo contr·rio atingiu o outro extremo.
+     * para percorrer todos os locais √† volta, terminando com falso se n√£o
+     * conseguir chegar ao outro extremo e mudando o estado do jogo para vit√≥ria
+     * se pelo contr√°rio atingiu o outro extremo.
      *
-     * @return true se fez a coluna, false se n„o
+     * @return true se fez a coluna, false se n√£o
      */
     Boolean winnerBlack() {
         visited = new boolean[board.length][board.length];
@@ -474,15 +472,15 @@ public class Board {
     }
 
     /**
-     * Neste caso para o Black processa a posiÁ„o atual [row][col] isto È
-     * termina com vitÛria se for o extremo certo associado ao jogador, exemplo
-     * especifico, ˙ltima linha do tabuleiro, sÛ tenta processar o local do
-     * tabuleiro se l· estiver uma peÁa do jogador e se ainda n„o tiver sido
-     * visitado. As posiÁıes j· visitadas s„o guardadas em visited.
+     * Neste caso para o Black processa a posi√ß√£o atual [row][col] isto √©
+     * termina com vit√≥ria se for o extremo certo associado ao jogador, exemplo
+     * especifico, √∫ltima linha do tabuleiro, s√≥ tenta processar o local do
+     * tabuleiro se l√° estiver uma pe√ßa do jogador e se ainda n√£o tiver sido
+     * visitado. As posi√ß√µes j√° visitadas s√£o guardadas em visited.
      *
-     * @param row linha que est· a tratar neste momento
-     * @param col coluna que est· a ser tratado neste momento
-     * @return se È promising ou n„o atravÈs de bool, true se continuar, false se n„o for util continuar por este caminho
+     * @param row linha que est√° a tratar neste momento
+     * @param col coluna que est√° a ser tratado neste momento
+     * @return se √© promising ou n√£o atrav√©s de bool, true se continuar, false se n√£o for util continuar por este caminho
      */
     private Boolean auxwinnerBlack(int row, int col) {
         if (winBlack)

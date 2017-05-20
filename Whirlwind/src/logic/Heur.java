@@ -1,7 +1,7 @@
 package logic;
 
 /**
- * Classe para juntar v·rios elementos que classificam uma jogada.
+ * Classe para juntar v√°rios elementos que classificam uma jogada.
  */
 class Heur {
     int row;
@@ -28,7 +28,7 @@ class Heur {
     }
 
     /**
-     * Calcula onde a peÁa ir· ficar.
+     * Calcula onde a pe√ßa ir√° ficar.
      */
     void moveCalculator() {
         switch (movement) {

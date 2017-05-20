@@ -70,7 +70,7 @@ class BoardTest {
         Piece p = new Piece(0, 0, 0);
         assertEquals(board.checkFreePosition(0, 0), board.setPieceAbs(p));
 
-        // testar colocar peça numa casa ocupada, ambos falham
+        // testar colocar peÃ§a numa casa ocupada, ambos falham
         p = new Piece(0, 1, 0);
         assertEquals(board.checkFreePosition(0, 1), board.setPieceAbs(p));
 

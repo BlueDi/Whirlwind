@@ -8,8 +8,8 @@ public class Piece {
     /**
      * Construtor definindo o jogador
      *
-     * @param row Linha onde colocar a peça
-     * @param col Coluna onde colocar a peça
+     * @param row Linha onde colocar a peÃ§a
+     * @param col Coluna onde colocar a peÃ§a
      */
     Piece(int row, int col) {
         this.row = row;
@@ -35,23 +35,23 @@ public class Piece {
     }
 
     /**
-     * Modifica o jogador atribuido à peça.
+     * Modifica o jogador atribuido Ã  peÃ§a.
      */
     void resetPlayer() {
         this.player = -1;
     }
 
     /**
-     * Serve para saber de quem é a peça.
+     * Serve para saber de quem Ã© a peÃ§a.
      *
-     * @return Jogador a quem a peça pertence
+     * @return Jogador a quem a peÃ§a pertence
      */
     int getPlayer() {
         return this.player;
     }
 
     /**
-     * Modifica o jogador atribuido à peça.
+     * Modifica o jogador atribuido Ã  peÃ§a.
      *
      * @param player pode ser 0 ou 1
      */
@@ -61,18 +61,18 @@ public class Piece {
     }
 
     /**
-     * Serve para saber a linha da peça.
+     * Serve para saber a linha da peÃ§a.
      *
-     * @return linha onde a peça está
+     * @return linha onde a peÃ§a estÃ¡
      */
     public int getRow() {
         return this.row;
     }
 
     /**
-     * Serve para saber a coluna da peça.
+     * Serve para saber a coluna da peÃ§a.
      *
-     * @return coluna onde a peça está
+     * @return coluna onde a peÃ§a estÃ¡
      */
     public int getCol() {
         return this.col;

@@ -20,7 +20,7 @@ public final class Utility {
     /**
      * Imprime uma linha de Letras.
      *
-     * @param size número de letras a imprimir
+     * @param size nÃºmero de letras a imprimir
      */
     public static void printLineOfChar(int size) {
         char letter;
@@ -31,9 +31,9 @@ public final class Utility {
     }
 
     /**
-     * Imprime uma linha de traços. ---------------------------
+     * Imprime uma linha de traÃ§os. ---------------------------
      *
-     * @param size número de traços a imprimir
+     * @param size nÃºmero de traÃ§os a imprimir
      */
     public static void printDashedLine(int size) {
         for (int i = 0; i < size; i++) {
@@ -48,7 +48,7 @@ public final class Utility {
      * @param i integer to transform
      * @return char arrow representation of i
      */
-    public static char itoa(int i) {
+    static char itoa(int i) {
         if (i == 0)
             return '^';
         if (i == 1)
@@ -76,19 +76,28 @@ public final class Utility {
         return 'f';
     }
 
+    public static String itoPlayer(int i) {
+        if (i == 0)
+            return "Brancas";
+        else if (i == 1)
+            return "Pretas";
+        else
+            return "Error";
+    }
+
     /**
-     * @return Número inteiro aleatório entre [0,10].
+     * @return NÃºmero inteiro aleatÃ³rio entre [0,10].
      */
     static int random() {
         return new Random().nextInt((10) + 1);
     }
 
     /**
-     * Cria um número inteiro aleatório entre [min, max].
+     * Cria um nÃºmero inteiro aleatÃ³rio entre [min, max].
      *
-     * @param min Valor mínimo possível
-     * @param max Valor máximo possível
-     * @return Número aleatório dentro de [min, max]
+     * @param min Valor mÃ­nimo possÃ­vel
+     * @param max Valor mÃ¡ximo possÃ­vel
+     * @return NÃºmero aleatÃ³rio dentro de [min, max]
      */
     public static int random(int min, int max) {
         return new Random().nextInt((max - min) + 1) + min;

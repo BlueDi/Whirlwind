@@ -81,11 +81,10 @@ public class GameFrame extends JFrame {
                 contentPane.add(board_position);
                 buttons.add(board_position);
 
-                if (logic.getMode() == 2 || logic.getMode() == 1) {
+                if (logic.getGAMEMODE() == 2 || logic.getGAMEMODE() == 1) {
                     board_position.addActionListener(e -> {
                         specialButton now = (specialButton) e.getSource();
                         if (now.getIcon() == null) {
-
                             if (logic.turnAction(now)) {
                                 if (logic.getActivePlayer() == 1)
                                     now.setIcon(icon1);
@@ -97,9 +96,9 @@ public class GameFrame extends JFrame {
                                 for (specialButton button : buttons)
                                     button.setEnabled(false);
 
-                            if (logic.getMode() == 2) {
+                            if (logic.getGAMEMODE() == 2) {
                                 logic.initiatebestMoveMessages();
-                                Piece p = logic.turnCPU(0);
+                                Piece p = logic.turnCPU(1);
                                 logic.setPiece(p);
                                 System.out.println(p.getRow() + "," + p.getCol());
                                 updateButton(p);
@@ -117,10 +116,10 @@ public class GameFrame extends JFrame {
 
         add(contentPane);
 
-        if (logic.getMode() == 3) {
+        if (logic.getGAMEMODE() == 3) {
             while (logic.checkwin() != 1 && logic.checkwin() != 2) {
                 logic.initiatebestMoveMessages();
-                Piece p = logic.turnCPU(0);
+                Piece p = logic.turnCPU(1);
                 logic.setPiece(p);
                 updateButton(p);
 

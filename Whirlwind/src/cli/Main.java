@@ -4,29 +4,23 @@ import logic.Game;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
 
     private static int GAMEMODE = 0;
+    private static Game game;
+    private static int DISPLAY;
+    private static ArrayList<String> winnersMessages;
 
     public static void main(String[] args) throws Exception {
-        int DISPLAY = setConfigurations();
-        Game game = new Game(DISPLAY, GAMEMODE);
-        int wins_of_random = 0;
-        int wins_of_heur = 0;
+        DISPLAY = setConfigurations();
         int winner;
+        game = new Game(DISPLAY, GAMEMODE);
 
         if (GAMEMODE == 4) {
-            for (int i = 0; i < 5; i++) {
-                winner = game.startGame();
-                if (winner == 0)
-                    wins_of_random++;
-                else if (winner == 1)
-                    wins_of_heur++;
-            }
-            System.out.println("\nNúmero de vitórias sem heuristicas: " + wins_of_random);
-            System.out.println("Número de vitórias com heuristica: " + wins_of_heur);
+            analyseProgram();
         } else {
             winner = game.startGame();
 
@@ -90,6 +84,60 @@ public class Main {
 
         while (GAMEMODE != 1 && GAMEMODE != 2 && GAMEMODE != 3 && GAMEMODE != 4) {
             GAMEMODE = reader.nextInt();
+        }
+    }
+
+    private static void analyseProgram() throws Exception {
+        winnersMessages = new ArrayList<>();
+        for (int i = 0; i < 6; i++) {
+            GAMEMODE = i + 3;
+            game = new Game(DISPLAY, GAMEMODE);
+            runManyTimes();
+        }
+        System.out.println("\n\nResultados:");
+        printWinnersMessages();
+    }
+
+    private static void runManyTimes() {
+        int wins_of_A = 0;
+        int wins_of_B = 0;
+        int winner;
+
+        for (int i = 0; i < 10; i++) {
+            winner = game.startGame();
+            if (winner == 0)
+                wins_of_A++;
+            else if (winner == 1)
+                wins_of_B++;
+        }
+        storeWinnersMessages(wins_of_A, wins_of_B);
+    }
+
+    private static void storeWinnersMessages(int wins_of_A, int wins_of_B) {
+        if (GAMEMODE == 3) {
+            winnersMessages.add("\nCPU A Hard venceu: " + wins_of_A);
+            winnersMessages.add("CPU B Hard venceu: " + wins_of_B);
+        } else if (GAMEMODE == 4) {
+            winnersMessages.add("\nCPU Random venceu: " + wins_of_A);
+            winnersMessages.add("CPU Easy venceu: " + wins_of_B);
+        } else if (GAMEMODE == 5) {
+            winnersMessages.add("\nCPU Random venceu: " + wins_of_A);
+            winnersMessages.add("CPU Hard venceu: " + wins_of_B);
+        } else if (GAMEMODE == 6) {
+            winnersMessages.add("\nCPU Easy venceu: " + wins_of_A);
+            winnersMessages.add("CPU Medium venceu: " + wins_of_B);
+        } else if (GAMEMODE == 7) {
+            winnersMessages.add("\nCPU Medium venceu: " + wins_of_A);
+            winnersMessages.add("CPU Hard venceu: " + wins_of_B);
+        } else if (GAMEMODE == 8) {
+            winnersMessages.add("\nCPU Easy venceu: " + wins_of_A);
+            winnersMessages.add("CPU Hard venceu: " + wins_of_B);
+        }
+    }
+
+    private static void printWinnersMessages() {
+        for(String s : winnersMessages){
+            System.out.println(s);
         }
     }
 }

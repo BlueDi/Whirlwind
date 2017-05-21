@@ -131,7 +131,7 @@ public class Game {
             DIFFICULTY = 1;
     }
 
-    private Piece pieceToPlace() {
+    public Piece pieceToPlace() {
         Piece move;
         if (GAMEMODE == 1)
             move = turnPlayer();
@@ -227,19 +227,24 @@ public class Game {
     }
 
     public boolean turnAction(specialButton b) {
-        if (b != null && board.setPiece(new Piece(b.getRow(), b.getCol(), activeplayer))) {
-            changePlayer();
-
-            int winner = checkwin();
-            if (winner == 1)
-                gameframe.win = 1;
-            if (winner == 2)
-                gameframe.win = 2;
-
-            return true;
-        }
-
-        return false;
+    	if(b==null){
+    		return false;
+    	}
+    	else{    		
+    		if(board.setPiece(new Piece(b.getRow(),b.getCol(), activeplayer))){
+    			
+    	    	changePlayer();
+    	    	if(checkwin()==1)
+    	    		gameframe.win=1;
+    	    	if(checkwin()==2)
+    	    		gameframe.win=2;
+    	    	
+    	    	return true;
+    		}
+    		
+    	
+    	}
+    	return false;
     }
 
     public int checkwin() {

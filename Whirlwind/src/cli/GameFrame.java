@@ -84,26 +84,37 @@ public class GameFrame extends JFrame {
                 if (logic.getGAMEMODE() == 2 || logic.getGAMEMODE() == 1) {
                     board_position.addActionListener(e -> {
                         specialButton now = (specialButton) e.getSource();
+                        boolean f=false;
                         if (now.getIcon() == null) {
-                            if (logic.turnAction(now)) {
-                                if (logic.getActivePlayer() == 1)
-                                    now.setIcon(icon1);
-                                else
-                                    now.setIcon(icon0);
-                            }
-
+                        	
+                        	  if(logic.getActivePlayer()==1){
+                        		
+                   			   if(logic.turnAction(now)){
+                   				f=true;
+                   			   now.setIcon(icon1);
+                   			   }
+                   		   }
+                   		   else{
+                   			   if(logic.turnAction(now)){
+                   				f=true;
+                   			   now.setIcon(icon0);}
+                   		   }
+                        	 
                             if (win == 1 || win == 2)
                                 for (specialButton button : buttons)
                                     button.setEnabled(false);
 
-                            if (logic.getGAMEMODE() == 2) {
+                            if (logic.getGAMEMODE() == 2 && f==true) {
                                 logic.initiatebestMoveMessages();
-                                Piece p = logic.turnCPU(1);
+                                
+                                Piece p = logic.turnCPU(3);
                                 logic.setPiece(p);
-                                System.out.println(p.getRow() + "," + p.getCol());
                                 updateButton(p);
+                                System.out.println(p.getRow() + "," + p.getCol());
+                                
                                 logic.checkwin();
                                 logic.changePlayer();
+                                
                             }
                         }
                     });
@@ -118,6 +129,7 @@ public class GameFrame extends JFrame {
 
         if (logic.getGAMEMODE() == 3) {
             while (logic.checkwin() != 1 && logic.checkwin() != 2) {
+            	
                 logic.initiatebestMoveMessages();
                 Piece p = logic.turnCPU(1);
                 logic.setPiece(p);
@@ -139,14 +151,14 @@ public class GameFrame extends JFrame {
     }
 
     private void updateButton(Piece p) {
-        for (specialButton button : buttons)
+        for (specialButton button : buttons){
             if (button.getRow() == p.getRow() && button.getCol() == p.getCol()) {
                 if (logic.getActivePlayer() == 1)
                     button.setIcon(icon1);
                 else if (logic.getActivePlayer() == 0)
                     button.setIcon(icon0);
             }
-    }
+    }}
 
     private void insertLine(Color color) {
         for (int col = 0; col < BOARD_SIZE + 2; col++)

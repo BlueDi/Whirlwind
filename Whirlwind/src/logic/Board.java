@@ -255,9 +255,10 @@ public class Board {
             return false;
 
         if (checkHasPlayerNext(p))
+        {
             return true;
-
-        System.err.println("Not valid. There isn't a player " + Utility.itop(p.getPlayer()) + " piece next to (" + (p.getRow() + 1) + "," + Utility.itoc(p.getCol()) + ").");
+        }
+        //System.err.println("Not valid. There isn't a player " + Utility.itop(p.getPlayer()) + " piece next to (" + (p.getRow() + 1) + "," + Utility.itoc(p.getCol()) + ").");
         return false;
     }
 

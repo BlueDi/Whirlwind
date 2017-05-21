@@ -16,20 +16,25 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         DISPLAY = setConfigurations();
-        int winner;
+        int winner=-1;
         game = new Game(DISPLAY, GAMEMODE);
-
+        
+        
+        if(DISPLAY==1){
+        	
+        }
+        else{
         if (GAMEMODE == 4) {
             analyseProgram();
         } else {
             winner = game.startGame();
-
+        }
             if (winner == 1)
                 System.out.println("Black Won!");
             else if (winner == 0)
                 System.out.println("White Won!");
-            else
-                System.err.println("Error. Invalid Winner.");
+            /*else
+                System.err.println("Error. Invalid Winner.");*/
         }
     }
 
@@ -77,12 +82,15 @@ public class Main {
         System.out.println("Choose the game mode:");
         System.out.println("1 - Human vs Human");
         System.out.println("2 - Human vs Computer");
-        System.out.println("3 - Computer vs Computer");
-        System.out.println("4 - CPU vs CPU with stats");
+        System.out.print("3 - CPU Hard vs CPU Hard"+"\n"+"4 - CPU Random vs CPU Easy"+"\n"+"5 - CPU Random vs CPU Hard"+"\n"+""
+        		+ "6 - CPU Easy vs CPU Medium"+"\n"+
+     "7 - CPU Medium vs CPU Hard"+"\n"+
+     "8 - CPU Easy vs CPU Hard"+"\n");
+
 
         Scanner reader = new Scanner(System.in);
 
-        while (GAMEMODE != 1 && GAMEMODE != 2 && GAMEMODE != 3 && GAMEMODE != 4) {
+        while (GAMEMODE != 1 && GAMEMODE != 2 && GAMEMODE != 3 && GAMEMODE != 4 && GAMEMODE != 5 && GAMEMODE != 6 && GAMEMODE != 7 && GAMEMODE != 8) {
             GAMEMODE = reader.nextInt();
         }
     }

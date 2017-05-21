@@ -216,7 +216,7 @@ public class Game {
             random_index = Utility.random(0, free_pieces.size() - 1);
             piece_to_return = free_pieces.remove(random_index);
             piece_to_return.setPlayer(activeplayer);
-        } while (board.checkValidMove(piece_to_return));
+        } while (!board.checkValidMove(piece_to_return) && free_pieces.size()>1);
 
         return piece_to_return;
     }

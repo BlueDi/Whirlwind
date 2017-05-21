@@ -181,7 +181,7 @@ public class Board {
                 return true;
             }
         } catch (IndexOutOfBoundsException e) {
-            // System.out.println("Bad coords in checkFreePosition().");
+            // System.err.println("Bad coords in checkFreePosition().");
         }
         return false;
     }
@@ -199,7 +199,7 @@ public class Board {
         try {
             return board[row][col].getPlayer() == player;
         } catch (IndexOutOfBoundsException e) {
-            System.out.println("Bad coords in checkOwner().");
+            System.err.println("Bad coords in checkOwner().");
         }
         return false;
     }
@@ -257,8 +257,7 @@ public class Board {
         if (checkHasPlayerNext(p))
             return true;
 
-        System.out.println("Not valid. There isn't a player " + p.getPlayer() + " piece next to (" + (p.getRow() + 1)
-                + "," + Utility.itoc(p.getCol()) + ").");
+        System.err.println("Not valid. There isn't a player " + Utility.itop(p.getPlayer()) + " piece next to (" + (p.getRow() + 1) + "," + Utility.itoc(p.getCol()) + ").");
         return false;
     }
 
@@ -273,7 +272,7 @@ public class Board {
         try {
             return board[row][col];
         } catch (IndexOutOfBoundsException e) {
-            System.out.println("Bad coords in getPiece().");
+            System.err.println("Bad coords in getPiece().");
         }
         return null;
     }
@@ -293,7 +292,7 @@ public class Board {
                 return true;
             }
         } catch (IndexOutOfBoundsException e) {
-            System.out.println("Bad coords in setPiece().");
+            System.err.println("Bad coords in setPiece().");
         }
         return false;
     }
@@ -310,7 +309,7 @@ public class Board {
             // System.out.println("Peca removida de (" + (row+1) +"," +
             // Utility.itoc(col) + ")");
         } catch (IndexOutOfBoundsException e) {
-            System.out.println("Bad coords in removePiece().");
+            //System.err.println("Bad coords in removePiece().");
         }
     }
 
@@ -327,7 +326,7 @@ public class Board {
                 return true;
             }
         } catch (IndexOutOfBoundsException e) {
-            System.out.println("Bad coords in setPieceAbs().");
+            System.err.println("Bad coords in setPieceAbs().");
         }
         return false;
     }

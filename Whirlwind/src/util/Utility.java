@@ -3,15 +3,14 @@ package util;
 import java.util.Random;
 
 public final class Utility {
-
     private Utility() {
     }
 
     /**
-     * Transforms an Integer into a char.
+     * Transforma um int num char.
      *
-     * @param i integer to transform
-     * @return char representation of i
+     * @param i int a transformar
+     * @return char representaçao em char de i
      */
     public static char itoc(int i) {
         return (char) (65 + i);
@@ -31,7 +30,8 @@ public final class Utility {
     }
 
     /**
-     * Imprime uma linha de traços. ---------------------------
+     * Imprime uma linha de traços.<P>
+     * ---------------------------
      *
      * @param size número de traços a imprimir
      */
@@ -43,7 +43,7 @@ public final class Utility {
     }
 
     /**
-     * Transforms an Integer into an Arrow.
+     * Transforma um int numa seta.
      *
      * @param i integer to transform
      * @return char arrow representation of i
@@ -61,7 +61,7 @@ public final class Utility {
     }
 
     /**
-     * Transforms an Integer into a Player.
+     * Transforma um int num Player.
      *
      * @param i integer to transform
      * @return char arrow representation of i

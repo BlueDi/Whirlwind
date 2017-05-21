@@ -1,6 +1,7 @@
 package cli;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class specialButton extends JButton {
     private int row;
@@ -9,6 +10,7 @@ public class specialButton extends JButton {
     specialButton(int r, int c) {
         row = r;
         col = c;
+        this.setBackground(Color.GRAY);
     }
 
     public int getRow() {

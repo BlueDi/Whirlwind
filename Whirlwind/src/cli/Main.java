@@ -16,25 +16,20 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         DISPLAY = setConfigurations();
-        int winner=-1;
+        int winner = -1;
         game = new Game(DISPLAY, GAMEMODE);
-        
-        
-        if(DISPLAY==1){
-        	
-        }
-        else{
-        if (GAMEMODE == 4) {
-            analyseProgram();
-        } else {
-            winner = game.startGame();
-        }
+
+
+        if (DISPLAY != 1) {
+            if (GAMEMODE == 4) {
+                analyseProgram();
+            } else {
+                winner = game.startGame();
+            }
             if (winner == 1)
                 System.out.println("Black Won!");
             else if (winner == 0)
                 System.out.println("White Won!");
-            /*else
-                System.err.println("Error. Invalid Winner.");*/
         }
     }
 
@@ -82,11 +77,13 @@ public class Main {
         System.out.println("Choose the game mode:");
         System.out.println("1 - Human vs Human");
         System.out.println("2 - Human vs Computer");
-        System.out.print("3 - CPU Hard vs CPU Hard"+"\n"+"4 - CPU Random vs CPU Easy"+"\n"+"5 - CPU Random vs CPU Hard"+"\n"+""
-        		+ "6 - CPU Easy vs CPU Medium"+"\n"+
-     "7 - CPU Medium vs CPU Hard"+"\n"+
-     "8 - CPU Easy vs CPU Hard"+"\n");
-
+        System.out.println("3 - CPU Hard vs CPU Hard");
+        System.out.println("4 - All modes with stats");
+        System.out.println("5 - CPU Random vs CPU Hard");
+        System.out.println("6 - CPU Easy vs CPU Medium");
+        System.out.println("7 - CPU Medium vs CPU Hard");
+        System.out.println("8 - CPU Easy vs CPU Hard");
+        System.out.println();
 
         Scanner reader = new Scanner(System.in);
 
@@ -144,7 +141,7 @@ public class Main {
     }
 
     private static void printWinnersMessages() {
-        for(String s : winnersMessages){
+        for (String s : winnersMessages) {
             System.out.println(s);
         }
     }

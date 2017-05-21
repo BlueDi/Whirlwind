@@ -103,7 +103,7 @@ public class Game {
      * Turno do jogo.
      */
     private void turn() {
-        if(!DISPLAY_OFF)
+        if (!DISPLAY_OFF)
             board.display();
         initiatebestMoveMessages();
         Piece move;
@@ -119,7 +119,7 @@ public class Game {
         move = pieceToPlace();
         setPiece(move);
 
-        if(!DISPLAY_OFF)
+        if (!DISPLAY_OFF)
             System.out.println("Jogador das peças " + Utility.itoPlayer(activeplayer) + " tem: " + (board.getPlayerPieces(activeplayer).size() - 1) + " peças no tabuleiro.");
         changePlayer();
     }
@@ -168,7 +168,7 @@ public class Game {
                 else
                     DIFFICULTY = 1;
             } else if (GAMEMODE == 9) {
-                    DIFFICULTY = 1;
+                DIFFICULTY = 1;
             } else if (GAMEMODE == 10) {
                 DIFFICULTY = 2;
             } else if (GAMEMODE == 11) {
@@ -183,7 +183,10 @@ public class Game {
     }
 
     /**
-     * Turno de jogo do Computador.
+     * Turno do Computador.
+     *
+     * @param difficulty Nível da Heuristica, ver DIFFICULTY
+     * @return Peça a colocar neste turno
      */
     public Piece turnCPU(int difficulty) {
         depth = DEPTH;
@@ -198,23 +201,27 @@ public class Game {
         return turnRandomCPU();
     }
 
+    /**
+     * Turno random do CPU.
+     *
+     * @return Peça a colocar neste turno
+     */
     private Piece turnRandomCPU() {
-        Piece p;
+        Piece random_piece;
         int random_row;
         int random_col;
 
-        //TODO: É preciso verificar a posição criada random, mas como está crasha
-        //do {
-        random_row = Utility.random(0, BOARDDIMENSION);
-        random_col = Utility.random(0, BOARDDIMENSION);
-        p = new Piece(random_row, random_col, activeplayer);
-        //} while (board.checkValidMove(p));
+        do {
+            random_row = Utility.random(0, BOARDDIMENSION - 1);
+            random_col = Utility.random(0, BOARDDIMENSION - 1);
+            random_piece = new Piece(random_row, random_col, activeplayer);
+        } while (!board.checkValidMove(random_piece));
 
-        return p;
+        return random_piece;
     }
 
     /**
-     * Turno de jogo do Jogador.
+     * Turno do Jogador.
      */
     private Piece turnPlayer() {
         Piece playerPiece;
@@ -239,40 +246,36 @@ public class Game {
     }
 
     public boolean turnAction(specialButton b) {
-    	if(b==null){
-    		return false;
-    	}
-    	else{    		
-    		if(board.setPiece(new Piece(b.getRow(),b.getCol(), activeplayer))){
-    			
-    	    	changePlayer();
-    	    	if(checkwin()==1)
-    	    		gameframe.win=1;
-    	    	if(checkwin()==2)
-    	    		gameframe.win=2;
-    	    	
-    	    	return true;
-    		}
-    		
-    	
-    	}
-    	return false;
+        if (b == null) {
+            return false;
+        } else {
+            if (board.setPiece(new Piece(b.getRow(), b.getCol(), activeplayer))) {
+                changePlayer();
+                if (checkwin() == 1)
+                    gameframe.win = 1;
+                if (checkwin() == 2)
+                    gameframe.win = 2;
+
+                return true;
+            }
+        }
+        return false;
     }
 
     public int checkwin() {
         if (board.winnerBlack()) {
             return 1;
-
         }
         if (board.winnerWhite()) {
             return 2;
-
         }
         return 0;
     }
 
     /**
      * Inicia o jogo.
+     *
+     * @return Vencedor
      */
     public int startGame() {
         turnId = 0;
@@ -280,7 +283,7 @@ public class Game {
 
         while (winner == -1) {
             turnId++;
-            if(!DISPLAY_OFF)
+            if (!DISPLAY_OFF)
                 System.out.println("\nTurno " + turnId + ": Peças " + Utility.itoPlayer(activeplayer) + " a jogar");
 
             turn();

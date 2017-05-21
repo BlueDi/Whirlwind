@@ -12,7 +12,7 @@ public class Main {
     private static int GAMEMODE = 0;
     private static Game game;
     private static int DISPLAY;
-    private static int NUMBER_OF_LOOPS = 1000;
+    private static int NUMBER_OF_LOOPS = 500;
     private static ArrayList<String> winnersMessages;
 
     public static void main(String[] args) throws Exception {
@@ -113,7 +113,7 @@ public class Main {
         int wins_of_B = 0;
         int winner;
 
-        for (int i = 1; i < NUMBER_OF_LOOPS; i++) {
+        for (int i = 1; i < NUMBER_OF_LOOPS+1; i++) {
             game = new Game(DISPLAY, GAMEMODE);
             winner = game.startGame();
             if (winner == 0)

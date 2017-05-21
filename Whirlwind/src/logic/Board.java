@@ -2,6 +2,7 @@ package logic;
 
 import util.Utility;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -346,6 +347,22 @@ public class Board {
                     player_pieces.add(p);
 
         return player_pieces;
+    }
+
+    /**
+     * Devolve todas as peças livres no board.
+     *
+     * @return ArrayList<Piece> Fila de todas as peças do player
+     */
+    ArrayList<Piece> getFreePieces() {
+        ArrayList<Piece> free_pieces = new ArrayList<>();
+
+        for (Piece[] col : board)
+            for (Piece p : col)
+                if (p.getPlayer() == -1)
+                    free_pieces.add(p);
+
+        return free_pieces;
     }
 
     /**

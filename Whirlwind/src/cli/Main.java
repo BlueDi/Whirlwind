@@ -12,7 +12,7 @@ public class Main {
     private static int GAMEMODE = 0;
     private static Game game;
     private static int DISPLAY;
-    private static int NUMBER_OF_LOOPS = 500;
+    private static int NUMBER_OF_LOOPS = 2000;
     private static ArrayList<String> winnersMessages;
 
     public static void main(String[] args) throws Exception {
@@ -95,9 +95,8 @@ public class Main {
 
     private static void analyseProgram() throws Exception {
         winnersMessages = new ArrayList<>();
-        for (int i = 0; i < 9; i++) {
+        for (GAMEMODE = 3; GAMEMODE < 12; GAMEMODE++) {
             long start = System.nanoTime();
-            GAMEMODE = i + 3;
             runManyTimes();
             long diff = System.nanoTime() - start;
             double elapsedTime = (double) diff / 1000000000.0;
@@ -121,7 +120,7 @@ public class Main {
             else if (winner == 1)
                 wins_of_B++;
 
-            progressbar(i, NUMBER_OF_LOOPS);
+            progressbar(i, NUMBER_OF_LOOPS+1);
         }
         storeWinnersMessages(wins_of_A, wins_of_B);
     }

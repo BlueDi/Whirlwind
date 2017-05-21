@@ -8,6 +8,7 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Game {
     private Board board;
@@ -207,17 +208,17 @@ public class Game {
      * @return Peça a colocar neste turno
      */
     private Piece turnRandomCPU() {
-        Piece random_piece;
-        int random_row;
-        int random_col;
+        ArrayList<Piece> free_pieces = board.getFreePieces();
+        int random_index;
+        Piece piece_to_return;
 
         do {
-            random_row = Utility.random(0, BOARDDIMENSION - 1);
-            random_col = Utility.random(0, BOARDDIMENSION - 1);
-            random_piece = new Piece(random_row, random_col, activeplayer);
-        } while (!board.checkValidMove(random_piece));
+            random_index = Utility.random(0, free_pieces.size() - 1);
+            piece_to_return = free_pieces.remove(random_index);
+            piece_to_return.setPlayer(activeplayer);
+        } while (board.checkValidMove(piece_to_return));
 
-        return random_piece;
+        return piece_to_return;
     }
 
     /**

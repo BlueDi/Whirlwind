@@ -100,6 +100,16 @@ public final class Utility {
      * @return Número aleatório dentro de [min, max]
      */
     public static int random(int min, int max) {
+        if(max < min){
+            int t = min;
+            min = max;
+            max = t;
+        }
+        if(min < 0)
+            min = 0;
+        if(max < 0)
+            max = 0;
+
         return new Random().nextInt((max - min) + 1) + min;
     }
 

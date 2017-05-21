@@ -20,7 +20,10 @@ public class Game {
      * 5: CPU Random vs CPU Hard<P>
      * 6: CPU Easy vs CPU Medium<P>
      * 7: CPU Medium vs CPU Hard<P>
-     * 8: CPU Easy vs CPU Hard
+     * 8: CPU Easy vs CPU Hard<P>
+     * 9: CPU Easy vs CPU Easy<P>
+     * 10: CPU Medium vs CPU Medium<P>
+     * 11: CPU Random vs CPU Random
      */
     private int GAMEMODE;
     /**
@@ -36,6 +39,7 @@ public class Game {
     private int DEPTH = 3;
     private int depth;
     private int DISPLAY;
+    private boolean DISPLAY_OFF = true;
     private int turnId;
     private int BOARDDIMENSION = 14;
     private boolean SLOWMODE = false;
@@ -57,8 +61,8 @@ public class Game {
     public Game(int display, int mode) throws Exception {
         DISPLAY = display;
         GAMEMODE = mode;
-        activeplayer = 1; // black;
-        board = new Board(BOARDDIMENSION, boardPicker());
+        activeplayer = 1; // as peças pretas jogam primeiro;
+        board = new Board(BOARDDIMENSION, 0/*boardPicker()*/);
 
         if (DISPLAY == 1) {
             gameframe = new GameFrame(this);
@@ -99,7 +103,8 @@ public class Game {
      * Turno do jogo.
      */
     private void turn() {
-        board.display();
+        if(!DISPLAY_OFF)
+            board.display();
         initiatebestMoveMessages();
         Piece move;
 
@@ -114,24 +119,25 @@ public class Game {
         move = pieceToPlace();
         setPiece(move);
 
-        System.out.println("Jogador das peças " + Utility.itoPlayer(activeplayer) + " tem: " + (board.getPlayerPieces(activeplayer).size() - 1) + " peças no tabuleiro.");
+        if(!DISPLAY_OFF)
+            System.out.println("Jogador das peças " + Utility.itoPlayer(activeplayer) + " tem: " + (board.getPlayerPieces(activeplayer).size() - 1) + " peças no tabuleiro.");
         changePlayer();
     }
 
     private void defineFirstPlayer() {
         if (GAMEMODE == 2 || GAMEMODE == 3)
             DIFFICULTY = 3;
-        else if (GAMEMODE == 4 || GAMEMODE == 5)
+        else if (GAMEMODE == 4 || GAMEMODE == 5 || GAMEMODE == 11)
             DIFFICULTY = 0;
         else if (GAMEMODE == 6 || GAMEMODE == 8)
             DIFFICULTY = 1;
-        else if (GAMEMODE == 7)
+        else if (GAMEMODE == 7 || GAMEMODE == 10)
             DIFFICULTY = 2;
         else
             DIFFICULTY = 1;
     }
 
-    public Piece pieceToPlace() {
+    private Piece pieceToPlace() {
         Piece move;
         if (GAMEMODE == 1)
             move = turnPlayer();
@@ -161,6 +167,12 @@ public class Game {
                     DIFFICULTY = 3;
                 else
                     DIFFICULTY = 1;
+            } else if (GAMEMODE == 9) {
+                    DIFFICULTY = 1;
+            } else if (GAMEMODE == 10) {
+                DIFFICULTY = 2;
+            } else if (GAMEMODE == 11) {
+                DIFFICULTY = 3;
             }
         }
         return move;
@@ -268,10 +280,12 @@ public class Game {
 
         while (winner == -1) {
             turnId++;
-            System.out.println("\nTurno " + turnId + ": Peças " + Utility.itoPlayer(activeplayer) + " a jogar");
+            if(!DISPLAY_OFF)
+                System.out.println("\nTurno " + turnId + ": Peças " + Utility.itoPlayer(activeplayer) + " a jogar");
+
             turn();
 
-            if (DIFFICULTY != 0)
+            if (DIFFICULTY != 0 && !DISPLAY_OFF)
                 for (String s : bestMoveMessages) {
                     System.out.println(s);
                 }

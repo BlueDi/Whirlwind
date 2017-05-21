@@ -12,6 +12,7 @@ public class Main {
     private static int GAMEMODE = 0;
     private static Game game;
     private static int DISPLAY;
+    private static int NUMBER_OF_LOOPS = 1000;
     private static ArrayList<String> winnersMessages;
 
     public static void main(String[] args) throws Exception {
@@ -94,28 +95,44 @@ public class Main {
 
     private static void analyseProgram() throws Exception {
         winnersMessages = new ArrayList<>();
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 9; i++) {
+            long start = System.nanoTime();
             GAMEMODE = i + 3;
-            game = new Game(DISPLAY, GAMEMODE);
             runManyTimes();
+            long diff = System.nanoTime() - start;
+            double elapsedTime = (double) diff / 1000000000.0;
+            winnersMessages.add("Tempo de execução: " + elapsedTime + " segundos.");
+            System.out.println("Gamemode " + GAMEMODE + " done.");
         }
         System.out.println("\n\nResultados:");
         printWinnersMessages();
     }
 
-    private static void runManyTimes() {
+    private static void runManyTimes() throws Exception {
         int wins_of_A = 0;
         int wins_of_B = 0;
         int winner;
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 1; i < NUMBER_OF_LOOPS; i++) {
+            game = new Game(DISPLAY, GAMEMODE);
             winner = game.startGame();
             if (winner == 0)
                 wins_of_A++;
             else if (winner == 1)
                 wins_of_B++;
+
+            progressbar(i, NUMBER_OF_LOOPS);
         }
         storeWinnersMessages(wins_of_A, wins_of_B);
+    }
+
+    private static void progressbar(int done, int total) {
+        String format = "\r%3d%% ";
+        int percent = (++done * 100) / total;
+        System.out.printf(format, percent);
+
+        if (done >= total)
+            System.out.flush();
     }
 
     private static void storeWinnersMessages(int wins_of_A, int wins_of_B) {
@@ -137,6 +154,15 @@ public class Main {
         } else if (GAMEMODE == 8) {
             winnersMessages.add("\nCPU Easy venceu: " + wins_of_A);
             winnersMessages.add("CPU Hard venceu: " + wins_of_B);
+        } else if (GAMEMODE == 9) {
+            winnersMessages.add("\nCPU A Easy venceu: " + wins_of_A);
+            winnersMessages.add("CPU B Easy venceu: " + wins_of_B);
+        } else if (GAMEMODE == 10) {
+            winnersMessages.add("\nCPU A Medium venceu: " + wins_of_A);
+            winnersMessages.add("CPU B Medium venceu: " + wins_of_B);
+        } else if (GAMEMODE == 11) {
+            winnersMessages.add("\nCPU A Random venceu: " + wins_of_A);
+            winnersMessages.add("CPU B Random venceu: " + wins_of_B);
         }
     }
 

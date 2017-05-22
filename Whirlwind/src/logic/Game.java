@@ -4,11 +4,7 @@ import cli.GameFrame;
 import cli.specialButton;
 import util.Utility;
 
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Scanner;
-import java.util.ArrayList;
+import java.util.*;
 
 public class Game {
     private Board board;
@@ -37,7 +33,7 @@ public class Game {
     /**
      * Profundidade do algoritmo MiniMax.
      */
-    private int DEPTH = 3;
+    private int DEPTH = 5;
     private int depth;
     private int DISPLAY;
     private boolean DISPLAY_OFF = true;
@@ -45,10 +41,11 @@ public class Game {
     private int BOARDDIMENSION = 14;
     private boolean SLOWMODE = false;
     /**
-     * Quando activeplayer = 1 é o turno do jogador com as peças pretas;
-     * Quando activeplayer = 0 é o turno do jogador com as peças brancas.
+     * Quando activeplayer = 1 é o turno do jogador com as peças pretas;<P>
+     * Quando activeplayer = 0 é o turno do jogador com as peças brancas;<P>
+     * As peças pretas jogam primeiro.
      */
-    private int activeplayer = -1;
+    private int activeplayer = 1;
     private Deque<String> bestMoveMessages;
 
     /**
@@ -62,8 +59,7 @@ public class Game {
     public Game(int display, int mode) throws Exception {
         DISPLAY = display;
         GAMEMODE = mode;
-        activeplayer = 1; // as peças pretas jogam primeiro;
-        board = new Board(BOARDDIMENSION, 0/*boardPicker()*/);
+        board = new Board(BOARDDIMENSION, 1/*boardPicker()*/);
 
         if (DISPLAY == 1) {
             gameframe = new GameFrame(this);
@@ -116,13 +112,11 @@ public class Game {
                 e.printStackTrace();
             }
 
-        defineFirstPlayer();
         move = pieceToPlace();
         setPiece(move);
 
         if (!DISPLAY_OFF)
             System.out.println("Jogador das peças " + Utility.itoPlayer(activeplayer) + " tem: " + (board.getPlayerPieces(activeplayer).size() - 1) + " peças no tabuleiro.");
-        changePlayer();
     }
 
     private void defineFirstPlayer() {
@@ -216,7 +210,7 @@ public class Game {
             random_index = Utility.random(0, free_pieces.size() - 1);
             piece_to_return = free_pieces.remove(random_index);
             piece_to_return.setPlayer(activeplayer);
-        } while (!board.checkValidMove(piece_to_return) && free_pieces.size()>1);
+        } while (!board.checkValidMove(piece_to_return) && free_pieces.size() > 0);
 
         return piece_to_return;
     }
@@ -282,6 +276,8 @@ public class Game {
         turnId = 0;
         int winner = -1;
 
+        defineFirstPlayer();
+
         while (winner == -1) {
             turnId++;
             if (!DISPLAY_OFF)
@@ -298,6 +294,8 @@ public class Game {
                 winner = 1;
             else if (activeplayer == 0 && board.winnerWhite())
                 winner = 0;
+
+            changePlayer();
         }
 
         return winner;
@@ -359,7 +357,7 @@ public class Game {
         if (DIFFICULTY > 2) {
             for (Piece p : player_pieces) {
                 if (p.getCol() == position.col++ || p.getRow() == position.col--)
-                    value += 1;
+                    value++;
             }
         }
 

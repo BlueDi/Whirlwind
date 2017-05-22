@@ -12,7 +12,7 @@ public class Main {
     private static int GAMEMODE = 0;
     private static Game game;
     private static int DISPLAY;
-    private static int NUMBER_OF_LOOPS = 2000;
+    private static int NUMBER_OF_LOOPS = 100;
     private static ArrayList<String> winnersMessages;
 
     public static void main(String[] args) throws Exception {
@@ -108,7 +108,7 @@ public class Main {
     }
 
     private static void runManyTimes() throws Exception {
-        int wins_of_A = 0;
+        int wins_of_W = 0;
         int wins_of_B = 0;
         int winner;
 
@@ -116,13 +116,13 @@ public class Main {
             game = new Game(DISPLAY, GAMEMODE);
             winner = game.startGame();
             if (winner == 0)
-                wins_of_A++;
+                wins_of_W++;
             else if (winner == 1)
                 wins_of_B++;
 
             progressbar(i, NUMBER_OF_LOOPS+1);
         }
-        storeWinnersMessages(wins_of_A, wins_of_B);
+        storeWinnersMessages(wins_of_B, wins_of_W);
     }
 
     private static void progressbar(int done, int total) {
@@ -134,34 +134,34 @@ public class Main {
             System.out.flush();
     }
 
-    private static void storeWinnersMessages(int wins_of_A, int wins_of_B) {
+    private static void storeWinnersMessages(int wins_of_B, int wins_of_W) {
         if (GAMEMODE == 3) {
-            winnersMessages.add("\nCPU A Hard venceu: " + wins_of_A);
-            winnersMessages.add("CPU B Hard venceu: " + wins_of_B);
+            winnersMessages.add("\nCPU A Hard venceu: " + wins_of_B);
+            winnersMessages.add("CPU B Hard venceu: " + wins_of_W);
         } else if (GAMEMODE == 4) {
-            winnersMessages.add("\nCPU Random venceu: " + wins_of_A);
-            winnersMessages.add("CPU Easy venceu: " + wins_of_B);
+            winnersMessages.add("\nCPU Random venceu: " + wins_of_B);
+            winnersMessages.add("CPU Easy venceu: " + wins_of_W);
         } else if (GAMEMODE == 5) {
-            winnersMessages.add("\nCPU Random venceu: " + wins_of_A);
-            winnersMessages.add("CPU Hard venceu: " + wins_of_B);
+            winnersMessages.add("\nCPU Random venceu: " + wins_of_B);
+            winnersMessages.add("CPU Hard venceu: " + wins_of_W);
         } else if (GAMEMODE == 6) {
-            winnersMessages.add("\nCPU Easy venceu: " + wins_of_A);
-            winnersMessages.add("CPU Medium venceu: " + wins_of_B);
+            winnersMessages.add("\nCPU Easy venceu: " + wins_of_B);
+            winnersMessages.add("CPU Medium venceu: " + wins_of_W);
         } else if (GAMEMODE == 7) {
-            winnersMessages.add("\nCPU Medium venceu: " + wins_of_A);
-            winnersMessages.add("CPU Hard venceu: " + wins_of_B);
+            winnersMessages.add("\nCPU Medium venceu: " + wins_of_B);
+            winnersMessages.add("CPU Hard venceu: " + wins_of_W);
         } else if (GAMEMODE == 8) {
-            winnersMessages.add("\nCPU Easy venceu: " + wins_of_A);
-            winnersMessages.add("CPU Hard venceu: " + wins_of_B);
+            winnersMessages.add("\nCPU Easy venceu: " + wins_of_B);
+            winnersMessages.add("CPU Hard venceu: " + wins_of_W);
         } else if (GAMEMODE == 9) {
-            winnersMessages.add("\nCPU A Easy venceu: " + wins_of_A);
-            winnersMessages.add("CPU B Easy venceu: " + wins_of_B);
+            winnersMessages.add("\nCPU A Easy venceu: " + wins_of_B);
+            winnersMessages.add("CPU B Easy venceu: " + wins_of_W);
         } else if (GAMEMODE == 10) {
-            winnersMessages.add("\nCPU A Medium venceu: " + wins_of_A);
-            winnersMessages.add("CPU B Medium venceu: " + wins_of_B);
+            winnersMessages.add("\nCPU A Medium venceu: " + wins_of_B);
+            winnersMessages.add("CPU B Medium venceu: " + wins_of_W);
         } else if (GAMEMODE == 11) {
-            winnersMessages.add("\nCPU A Random venceu: " + wins_of_A);
-            winnersMessages.add("CPU B Random venceu: " + wins_of_B);
+            winnersMessages.add("\nCPU A Random venceu: " + wins_of_B);
+            winnersMessages.add("CPU B Random venceu: " + wins_of_W);
         }
     }
 

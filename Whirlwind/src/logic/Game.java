@@ -119,14 +119,21 @@ public class Game {
             System.out.println("Jogador das peças " + Utility.itoPlayer(activeplayer) + " tem: " + (board.getPlayerPieces(activeplayer).size() - 1) + " peças no tabuleiro.");
     }
 
-    private void defineFirstPlayer() {
+    private void setFirstPlayerDifficulty() {
         if (GAMEMODE == 2 || GAMEMODE == 3)
             DIFFICULTY = 3;
         else if (GAMEMODE == 4 || GAMEMODE == 5 || GAMEMODE == 11)
             DIFFICULTY = 0;
-        else if (GAMEMODE == 6 || GAMEMODE == 8)
-            DIFFICULTY = 1;
         else if (GAMEMODE == 7 || GAMEMODE == 10)
+            DIFFICULTY = 2;
+        else
+            DIFFICULTY = 1;
+    }
+
+    private void setSecondPlayerDifficulty() {
+        if (GAMEMODE == 2 || GAMEMODE == 3 || GAMEMODE == 5 || GAMEMODE == 7 || GAMEMODE == 8)
+            DIFFICULTY = 3;
+        else if (GAMEMODE == 6 || GAMEMODE == 10)
             DIFFICULTY = 2;
         else
             DIFFICULTY = 1;
@@ -139,36 +146,11 @@ public class Game {
         else if (GAMEMODE == 2 && activeplayer == 1)
             move = turnPlayer();
         else {
+            if(activeplayer == 1)
+                setFirstPlayerDifficulty();
+            else
+                setSecondPlayerDifficulty();
             move = turnCPU(DIFFICULTY);
-            if (GAMEMODE == 4) {
-                DIFFICULTY ^= 1;
-            } else if (GAMEMODE == 5) {
-                if (DIFFICULTY == 0)
-                    DIFFICULTY = 3;
-                else
-                    DIFFICULTY = 0;
-            } else if (GAMEMODE == 6) {
-                if (DIFFICULTY == 1)
-                    DIFFICULTY = 2;
-                else
-                    DIFFICULTY = 1;
-            } else if (GAMEMODE == 7) {
-                if (DIFFICULTY == 2)
-                    DIFFICULTY = 3;
-                else
-                    DIFFICULTY = 2;
-            } else if (GAMEMODE == 8) {
-                if (DIFFICULTY == 1)
-                    DIFFICULTY = 3;
-                else
-                    DIFFICULTY = 1;
-            } else if (GAMEMODE == 9) {
-                DIFFICULTY = 1;
-            } else if (GAMEMODE == 10) {
-                DIFFICULTY = 2;
-            } else if (GAMEMODE == 11) {
-                DIFFICULTY = 3;
-            }
         }
         return move;
     }
@@ -280,7 +262,7 @@ public class Game {
         turnId = 0;
         int winner = -1;
 
-        defineFirstPlayer();
+        setFirstPlayerDifficulty();
 
         while (winner == -1) {
             turnId++;

@@ -1,36 +1,32 @@
 package util;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-class UtilityTest {
+public class UtilityTest {
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 
-    @BeforeEach
-    void setUpStreams() {
-        System.setOut(new PrintStream(outContent));
-    }
-
     @Test
-    void testPrintLineOfChar() {
+    public void testPrintLineOfChar() {
+        System.setOut(new PrintStream(outContent));
         Utility.printLineOfChar(5);
         assertEquals("A B C D E ", outContent.toString());
     }
 
     @Test
-    void testPrintDashedLine() {
+    public void testPrintDashedLine() {
+        System.setOut(new PrintStream(outContent));
         Utility.printDashedLine(5);
         assertEquals("------------" + System.getProperty("line.separator"), outContent.toString());
     }
 
     @Test
-    void testItoa() {
+    public void testItoa() {
         assertEquals('f', Utility.itoa(-1));
         assertEquals('^', Utility.itoa(0));
         assertEquals('>', Utility.itoa(1));
@@ -40,7 +36,7 @@ class UtilityTest {
     }
 
     @Test
-    void testItop() {
+    public void testItop() {
         assertEquals('e', Utility.itop(-1));
         assertEquals('O', Utility.itop(0));
         assertEquals('X', Utility.itop(1));
@@ -48,7 +44,7 @@ class UtilityTest {
     }
 
     @Test
-    void testRandom() {
+    public void testRandom() {
         int min = 5;
         int max = 10;
         int rng;

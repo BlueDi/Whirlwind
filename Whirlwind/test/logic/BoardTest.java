@@ -1,12 +1,12 @@
 package logic;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
-class BoardTest {
+public class BoardTest {
     @Test
-    void testBoard() throws Exception {
+    public void testBoard() throws Exception {
         int n = 14;
         Board board = new Board(n, 0);
 
@@ -14,7 +14,7 @@ class BoardTest {
     }
 
     @Test
-    void testSmallBoard() {
+    public void testSmallBoard() {
         try {
             new Board(5, 0);
         } catch (IndexOutOfBoundsException e) {
@@ -23,7 +23,7 @@ class BoardTest {
     }
 
     @Test
-    void testBigBoard() {
+    public void testBigBoard() {
         try {
             new Board(500, 0);
         } catch (IndexOutOfBoundsException e) {
@@ -32,7 +32,7 @@ class BoardTest {
     }
 
     @Test
-    void testFillWithPieces() throws Exception {
+    public void testFillWithPieces() throws Exception {
         int n = 14;
         Board board = new Board(n, 0);
 
@@ -51,7 +51,7 @@ class BoardTest {
     }
 
     @Test
-    void testCheckFreePosition() throws Exception {
+    public void testCheckFreePosition() throws Exception {
         int n = 14;
         Board board = new Board(n, 0);
 
@@ -62,7 +62,7 @@ class BoardTest {
     }
 
     @Test
-    void testSetPieceAbs() throws Exception {
+    public void testSetPieceAbs() throws Exception {
         int n = 14;
         Board board = new Board(n, 0);
 
@@ -80,7 +80,7 @@ class BoardTest {
     }
 
     @Test
-    void testCheckValidMove() {
+    public void testCheckValidMove() {
         int n = 14;
         Board board = new Board(n, 0);
 
@@ -101,7 +101,7 @@ class BoardTest {
     }
 
     @Test
-    void testWinnerSimple() throws Exception {
+    public void testWinnerSimple() throws Exception {
         Board winBoardWhite = new Board();
         Board winBoardBlack = new Board();
 
@@ -119,7 +119,7 @@ class BoardTest {
     }
 
     @Test
-    void testWinnerComplexWhite() throws Exception {
+    public void testWinnerComplexWhite() throws Exception {
         Board winBoardWhite = new Board();
 
         winBoardWhite.setPieceAbs(new Piece(2, 0, 0));
@@ -162,7 +162,7 @@ class BoardTest {
     }
 
     @Test
-    void testWinnerComplexBlack() throws Exception {
+    public void testWinnerComplexBlack() throws Exception {
         Board winBoardBlack = new Board();
 
         for (int i = 0; i < winBoardBlack.getSize() / 2 + 1; i++)

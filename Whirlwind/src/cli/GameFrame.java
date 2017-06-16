@@ -3,6 +3,7 @@ package cli;
 import logic.Board;
 import logic.Game;
 import logic.Piece;
+import util.Utility;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -63,7 +64,6 @@ public class GameFrame extends JFrame {
         insertLine(PLAYER1_COLOR);
 
         for (int row = 0; row < BOARD_SIZE; row++) {
-            insertLabel(PLAYER2_COLOR);
             for (int col = 0; col < BOARD_SIZE; col++) {
                 char playerSymbol = b.getBoard()[row][col].getSymbol();
                 specialButton board_position = new specialButton(row, col);
@@ -120,7 +120,6 @@ public class GameFrame extends JFrame {
                     });
                 }
             }
-            insertLabel(PLAYER2_COLOR);
         }
 
         insertLine(PLAYER1_COLOR);
@@ -165,14 +164,19 @@ public class GameFrame extends JFrame {
     }
 
     private void insertLine(Color color) {
-        for (int col = 0; col < BOARD_SIZE + 2; col++)
-            insertLabel(color);
+        insertLabel(color, null);
+        for (int col = 1; col < BOARD_SIZE + 1; col++) {
+            char letter = Utility.itoc(col - 1);
+            String text = String.valueOf(letter);
+            insertLabel(color, text);
+        }
+        insertLabel(color, null);
     }
 
-    private void insertLabel(Color color) {
+    private void insertLabel(Color color, String text) {
         JLabel border;
 
-        border = new JLabel();
+        border = new JLabel(text, SwingConstants.CENTER);
         border.setBorder(new LineBorder(color));
         border.setBackground(color);
         border.setOpaque(true);

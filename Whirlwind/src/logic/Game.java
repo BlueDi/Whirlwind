@@ -29,7 +29,7 @@ public class Game {
      * DIFFICULTY = 2: CPU Medium<P>
      * DIFFICULTY = 3: CPU Hard
      */
-    private int DIFFICULTY = 0;
+    private int DIFFICULTY;
     /**
      * Profundidade do algoritmo MiniMax.
      */
@@ -59,7 +59,7 @@ public class Game {
     public Game(int display, int mode) throws Exception {
         DISPLAY = display;
         GAMEMODE = mode;
-        board = new Board(BOARDDIMENSION, 1/*boardPicker()*/);
+        board = new Board(BOARDDIMENSION, boardPicker());
 
         if (DISPLAY == 1) {
             gameframe = new GameFrame(this);
@@ -97,6 +97,36 @@ public class Game {
     }
 
     /**
+     * Inicia o jogo.
+     *
+     * @return Vencedor
+     */
+    public int startGame() {
+        turnId = 0;
+        int winner = -1;
+
+        setFirstPlayerDifficulty();
+
+        while (winner == -1) {
+            turnId++;
+            if (!DISPLAY_OFF)
+                System.out.println("\nTurno " + turnId + ": Peças " + Utility.itoPlayer(activeplayer) + " a jogar");
+
+            turn();
+
+            if (DIFFICULTY != 0 && !DISPLAY_OFF)
+                for (String s : bestMoveMessages) {
+                    System.out.println(s);
+                }
+
+            winner = checkWin();
+            changePlayerAndDifficulty();
+        }
+
+        return winner;
+    }
+
+    /**
      * Turno do jogo.
      */
     private void turn() {
@@ -119,6 +149,27 @@ public class Game {
             System.out.println("Jogador das peças " + Utility.itoPlayer(activeplayer) + " tem: " + (board.getPlayerPieces(activeplayer).size() - 1) + " peças no tabuleiro.");
     }
 
+    /**
+     * Atualiza o Jogador e a Dificuldade.
+     */
+    private void changePlayerAndDifficulty() {
+        changePlayer();
+        changeDifficulty();
+    }
+
+    /**
+     * Atualiza a Dificuldade.
+     */
+    private void changeDifficulty() {
+        if (activeplayer == 1)
+            setFirstPlayerDifficulty();
+        else
+            setSecondPlayerDifficulty();
+    }
+
+    /**
+     * Atualiza a Dificuldade das peças pretas.
+     */
     private void setFirstPlayerDifficulty() {
         if (GAMEMODE == 2 || GAMEMODE == 3)
             DIFFICULTY = 3;
@@ -130,6 +181,9 @@ public class Game {
             DIFFICULTY = 1;
     }
 
+    /**
+     * Atualiza a Dificuldade das peças brancas.
+     */
     private void setSecondPlayerDifficulty() {
         if (GAMEMODE == 2 || GAMEMODE == 3 || GAMEMODE == 5 || GAMEMODE == 7 || GAMEMODE == 8)
             DIFFICULTY = 3;
@@ -139,22 +193,25 @@ public class Game {
             DIFFICULTY = 1;
     }
 
+    /**
+     * @return Peça a colocar no turno
+     */
     private Piece pieceToPlace() {
         Piece move;
         if (GAMEMODE == 1)
             move = turnPlayer();
         else if (GAMEMODE == 2 && activeplayer == 1)
             move = turnPlayer();
-        else {
-            if(activeplayer == 1)
-                setFirstPlayerDifficulty();
-            else
-                setSecondPlayerDifficulty();
+        else
             move = turnCPU(DIFFICULTY);
-        }
         return move;
     }
 
+    /**
+     * Coloca a peça no tabuleiro.
+     *
+     * @param p Peça a ser colocada
+     */
     public void setPiece(Piece p) {
         board.setPiece(p);
     }
@@ -167,8 +224,9 @@ public class Game {
      */
     public Piece turnCPU(int difficulty) {
         depth = DEPTH;
+        DIFFICULTY = difficulty;
 
-        if (difficulty != 0) {
+        if (DIFFICULTY != 0) {
             Heur bestMove = miniMax();
             String message = "Melhor jogada para o jogador " + Utility.itop(activeplayer) + " no turno " + turnId + ": (" + (bestMove.row + 1) + "," + Utility.itoc(bestMove.col) + "). ";
             bestMoveMessages.addFirst(message);
@@ -184,15 +242,11 @@ public class Game {
      * @return Peça a colocar neste turno
      */
     private Piece turnRandomCPU() {
-        ArrayList<Piece> free_pieces = board.getFreePieces();
-        int random_index;
-        Piece piece_to_return;
+        ArrayList<Piece> possible_pieces = board.getFreeValidPieces(activeplayer);
 
-        do {
-            random_index = Utility.random(0, free_pieces.size() - 1);
-            piece_to_return = free_pieces.remove(random_index);
-            piece_to_return.setPlayer(activeplayer);
-        } while (!board.checkValidMove(piece_to_return) && free_pieces.size() > 0);
+        int random_index = Utility.random(0, possible_pieces.size() - 1);
+        Piece piece_to_return = possible_pieces.get(random_index);
+        piece_to_return.setPlayer(activeplayer);
 
         return piece_to_return;
     }
@@ -226,60 +280,31 @@ public class Game {
         return playerPiece;
     }
 
+    /**
+     * Função para o turno do Player quando carrega no botão da interface gráfica.
+     *
+     * @param b botão carregado
+     * @return true se carregou num botão válido, caso contrário false
+     */
     public boolean turnAction(SpecialButton b) {
         if (b != null && board.setPiece(new Piece(b.getRow(), b.getCol(), activeplayer))) {
-            int winner = checkWin();
-            if (winner == 1)
-                gameframe.win = 1;
-            if (winner == 0)
-                gameframe.win = 2;
+            gameframe.win = checkWin();
             return true;
         }
         return false;
     }
 
-    public int checkwin() {
-        if (board.winnerBlack()) {
-            return 1;
-        }
-        if (board.winnerWhite()) {
-            return 2;
-        }
-        return 0;
-    }
-
     /**
-     * Inicia o jogo.
+     * Verifica se há vencedor.
      *
-     * @return Vencedor
+     * @return 1 caso as peças pretas tenham ganho, 0 se foram as peças brancas, -1 se ainda não há vencedor
      */
-    public int startGame() {
-        turnId = 0;
-        int winner = -1;
-
-        setFirstPlayerDifficulty();
-
-        while (winner == -1) {
-            turnId++;
-            if (!DISPLAY_OFF)
-                System.out.println("\nTurno " + turnId + ": Peças " + Utility.itoPlayer(activeplayer) + " a jogar");
-
-            turn();
-
-            if (DIFFICULTY != 0 && !DISPLAY_OFF)
-                for (String s : bestMoveMessages) {
-                    System.out.println(s);
-                }
-
-            if (activeplayer == 1 && board.winnerBlack())
-                winner = 1;
-            else if (activeplayer == 0 && board.winnerWhite())
-                winner = 0;
-
-            changePlayer();
-        }
-
-        return winner;
+    public int checkWin() {
+        if (activeplayer == 1 && board.winnerBlack())
+            return 1;
+        else if (activeplayer == 0 && board.winnerWhite())
+            return 0;
+        return -1;
     }
 
     /**
@@ -337,9 +362,23 @@ public class Game {
 
         if (DIFFICULTY > 2) {
             for (Piece p : player_pieces) {
-                if (p.getCol() == position.col++ || p.getRow() == position.col--)
+                if (p.getCol() == (position.col + 1) || p.getCol() == (position.col - 1))
                     value++;
             }
+
+            int[] inimigos_na_coluna = new int[BOARDDIMENSION];
+
+            for (Piece p : enemy_pieces) {
+                inimigos_na_coluna[p.getCol()]++;
+                if (p.getCol() == position.col)
+                    value++;
+            }
+
+            value += inimigos_na_coluna[position.col];
+            if (position.col - 1 > 0)
+                value += inimigos_na_coluna[position.col - 1];
+            if (position.col + 1 < BOARDDIMENSION)
+                value += inimigos_na_coluna[position.col + 1];
         }
 
         return value;
@@ -370,14 +409,27 @@ public class Game {
                     value--;
             }
 
-            value += inimigos_na_coluna[position.row];
+            value -= inimigos_na_coluna[position.row];
         }
 
         if (DIFFICULTY > 2) {
             for (Piece p : player_pieces) {
-                if (p.getRow() == position.row++ || p.getRow() == position.row--)
+                if (p.getRow() == (position.row + 1) || p.getRow() == (position.row - 1))
                     value++;
             }
+            int[] inimigos_na_linha = new int[BOARDDIMENSION];
+
+            for (Piece p : enemy_pieces) {
+                inimigos_na_linha[p.getRow()]++;
+                if (p.getRow() == position.row)
+                    value++;
+            }
+
+            value += inimigos_na_linha[position.row];
+            if (position.row - 1 > 0)
+                value += inimigos_na_linha[position.row - 1];
+            if (position.row + 1 < BOARDDIMENSION)
+                value += inimigos_na_linha[position.row + 1];
         }
 
         return value;
@@ -411,9 +463,9 @@ public class Game {
             calcHeur(valueOfMove);
 
             if (depth > 0) {
-                changePlayer();
+                changePlayerAndDifficulty();
                 Heur enemymove = miniMax(p);
-                changePlayer();
+                changePlayerAndDifficulty();
 
                 position.value -= enemymove.value;
             }

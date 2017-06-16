@@ -1,6 +1,7 @@
 package cli;
 
 import logic.Game;
+import util.Utility;
 
 import java.awt.*;
 import java.io.IOException;
@@ -8,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
-
     private static int GAMEMODE = 0;
     private static Game game;
     private static int DISPLAY;
@@ -17,20 +17,18 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         DISPLAY = setConfigurations();
-        int winner = -1;
         game = new Game(DISPLAY, GAMEMODE);
-
 
         if (DISPLAY != 1) {
             if (GAMEMODE == 4) {
                 analyseProgram();
             } else {
-                winner = game.startGame();
+                int winner = game.startGame();
+                if (winner == 1)
+                    System.out.println("\nBlack Won!");
+                else if (winner == 0)
+                    System.out.println("\nWhite Won!");
             }
-            if (winner == 1)
-                System.out.println("Black Won!");
-            else if (winner == 0)
-                System.out.println("White Won!");
         }
     }
 
@@ -103,7 +101,8 @@ public class Main {
             winnersMessages.add("Tempo de execução: " + elapsedTime + " segundos.");
             System.out.println("Gamemode " + GAMEMODE + " done.");
         }
-        System.out.println("\n\nResultados:");
+        Utility.printDashedLine(11);
+        System.out.println("Resultados:");
         printWinnersMessages();
     }
 
@@ -112,7 +111,7 @@ public class Main {
         int wins_of_B = 0;
         int winner;
 
-        for (int i = 1; i < NUMBER_OF_LOOPS+1; i++) {
+        for (int i = 1; i < NUMBER_OF_LOOPS + 1; i++) {
             game = new Game(DISPLAY, GAMEMODE);
             winner = game.startGame();
             if (winner == 0)
@@ -120,7 +119,7 @@ public class Main {
             else if (winner == 1)
                 wins_of_B++;
 
-            progressbar(i, NUMBER_OF_LOOPS+1);
+            progressbar(i, NUMBER_OF_LOOPS + 1);
         }
         storeWinnersMessages(wins_of_B, wins_of_W);
     }
@@ -166,8 +165,7 @@ public class Main {
     }
 
     private static void printWinnersMessages() {
-        for (String s : winnersMessages) {
+        for (String s : winnersMessages)
             System.out.println(s);
-        }
     }
 }

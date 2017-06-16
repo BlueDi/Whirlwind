@@ -287,8 +287,7 @@ public class Board {
     Boolean setPiece(Piece p) {
         try {
             if (checkValidMove(p)) {
-                // System.out.println("Peca colocada em (" + (p.getRow()+1) +","
-                // + Utility.itoc(p.getCol()) + ")");
+                //System.out.println("Peca colocada em (" + (p.getRow() + 1) + "," + Utility.itoc(p.getCol()) + ")");
                 board[p.getRow()][p.getCol()].setPlayer(p.getPlayer());
                 return true;
             }
@@ -307,8 +306,7 @@ public class Board {
     void removePiece(int row, int col) {
         try {
             board[row][col].resetPlayer();
-            // System.out.println("Peca removida de (" + (row+1) +"," +
-            // Utility.itoc(col) + ")");
+            //System.out.println("Peca removida de (" + (row + 1) + "," + Utility.itoc(col) + ")");
         } catch (IndexOutOfBoundsException e) {
             //System.err.println("Bad coords in removePiece().");
         }
@@ -352,10 +350,10 @@ public class Board {
     /**
      * Devolve todas as peças livres no board.
      *
-     * @return ArrayList<Piece> Fila de todas as peças do player
+     * @return Queue<Piece> Fila de todas as peças do player
      */
-    ArrayList<Piece> getFreePieces() {
-        ArrayList<Piece> free_pieces = new ArrayList<>();
+    private Queue<Piece> getFreePieces() {
+        Queue<Piece> free_pieces = new LinkedList<>();
 
         for (Piece[] col : board)
             for (Piece p : col)
@@ -363,6 +361,29 @@ public class Board {
                     free_pieces.add(p);
 
         return free_pieces;
+    }
+
+    /**
+     * Devolve um Array List com todas as posições em que o jogador pode colocar peças.
+     *
+     * @param player Jogador a obter as posições
+     * @return Array List das posições livres e válidas
+     */
+    ArrayList<Piece> getFreeValidPieces(int player) {
+        Queue<Piece> free_pieces = getFreePieces();
+        ArrayList<Piece> free_valid_pieces = new ArrayList<>();
+
+        while (!free_pieces.isEmpty()) {
+            Piece p = free_pieces.remove();
+            p.setPlayer(player);
+            if (checkHasPlayerNext(p)) {
+                p.resetPlayer();
+                free_valid_pieces.add(p);
+            }
+            p.resetPlayer();
+        }
+
+        return free_valid_pieces;
     }
 
     /**
@@ -378,9 +399,8 @@ public class Board {
         while (!player_pieces.isEmpty()) {
             Piece piece_to_check = player_pieces.remove();
 
-            if (checkHasEmptyNext(piece_to_check)) {
+            if (checkHasEmptyNext(piece_to_check))
                 player_pieces_with_movements.add(piece_to_check);
-            }
         }
 
         return player_pieces_with_movements;

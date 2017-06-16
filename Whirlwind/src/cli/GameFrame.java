@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class GameFrame extends JFrame {
 
     private static final long serialVersionUID = 1L;
-    public int win = 0;
+    public int win = -1;
     private Color PLAYER1_COLOR = Color.BLACK;
     private Color PLAYER2_COLOR = Color.WHITE;
     private JPanel contentPane;
@@ -98,7 +98,7 @@ public class GameFrame extends JFrame {
             CPUvsCPU();
         }
 
-        if (checkEndGame())
+        if (win != -1)
             endGame();
     }
 
@@ -107,18 +107,16 @@ public class GameFrame extends JFrame {
             SpecialButton now = (SpecialButton) e.getSource();
             boolean CPUturn = false;
 
-            if (logic.getActivePlayer() == 1) {
-                if (logic.turnAction(now)) {
-                    CPUturn = true;
+            if (logic.turnAction(now)) {
+                if (logic.getActivePlayer() == 1) {
                     now.setIcon(icon1);
                     now.setBackground(PLAYER1_COLOR);
-                }
-            } else {
-                if (logic.turnAction(now)) {
-                    CPUturn = true;
+                } else {
                     now.setIcon(icon2);
                     now.setBackground(PLAYER2_COLOR);
                 }
+                CPUturn = true;
+                logic.changePlayer();
             }
 
             if (checkEndGame())
@@ -126,6 +124,7 @@ public class GameFrame extends JFrame {
 
             if (logic.getGAMEMODE() == 2 && CPUturn) {
                 turnCPU();
+                logic.changePlayer();
             }
 
             if (checkEndGame())
@@ -134,8 +133,10 @@ public class GameFrame extends JFrame {
     }
 
     private void CPUvsCPU() {
-        while (!checkEndGame()) {
+        while (win == -1) {
             turnCPU();
+            checkEndGame();
+            logic.changePlayer();
         }
     }
 
@@ -144,17 +145,16 @@ public class GameFrame extends JFrame {
         Piece p = logic.turnCPU(3);
         logic.setPiece(p);
         updateButton(p);
-        logic.changePlayer();
         try {
-            Thread.sleep(50);
+            Thread.sleep(100);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
     private boolean checkEndGame() {
-        win = logic.checkwin();
-        return win == 1 || win == 2;
+        win = logic.checkWin();
+        return win == 1 || win == 0;
     }
 
     private void endGame() {

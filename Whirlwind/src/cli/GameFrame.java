@@ -24,7 +24,7 @@ public class GameFrame extends JFrame {
     private ImageIcon icon2 = new ImageIcon("white.gif");
     private ImageIcon icon1win = new ImageIcon("winblack.gif");
     private ImageIcon icon2win = new ImageIcon("winwhite.gif");
-    private ArrayList<specialButton> buttons;
+    private ArrayList<SpecialButton> buttons;
 
 
     /**
@@ -67,7 +67,7 @@ public class GameFrame extends JFrame {
             insertLabel(PLAYER2_COLOR, String.valueOf(row + 1));
             for (int col = 0; col < BOARD_SIZE; col++) {
                 char playerSymbol = b.getBoard()[row][col].getSymbol();
-                specialButton board_position = new specialButton(row, col);
+                SpecialButton board_position = new SpecialButton(row, col);
                 board_position.setMargin(buttonMargin);
 
                 ImageIcon icon;
@@ -98,14 +98,13 @@ public class GameFrame extends JFrame {
             CPUvsCPU();
         }
 
-        win = logic.checkwin();
-        if (win == 1 || win == 2)
+        if (checkEndGame())
             endGame();
     }
 
-    private void PlayervsPlayer(specialButton board_position) {
+    private void PlayervsPlayer(SpecialButton board_position) {
         board_position.addActionListener(e -> {
-            specialButton now = (specialButton) e.getSource();
+            SpecialButton now = (SpecialButton) e.getSource();
             boolean CPUturn = false;
 
             if (logic.getActivePlayer() == 1) {
@@ -122,50 +121,57 @@ public class GameFrame extends JFrame {
                 }
             }
 
-            if (win == 1 || win == 2)
+            if (checkEndGame())
                 endGame();
 
             if (logic.getGAMEMODE() == 2 && CPUturn) {
-                logic.initiatebestMoveMessages();
-
-                Piece p = logic.turnCPU(3);
-                logic.setPiece(p);
-                updateButton(p);
-                System.out.println(p.getRow() + "," + p.getCol());
-
-                logic.checkwin();
-                logic.changePlayer();
+                turnCPU();
             }
+
+            if (checkEndGame())
+                endGame();
         });
     }
 
     private void CPUvsCPU() {
-        while (logic.checkwin() != 1 && logic.checkwin() != 2) {
-            logic.initiatebestMoveMessages();
-            Piece p = logic.turnCPU(1);
-            logic.setPiece(p);
-            updateButton(p);
-            logic.changePlayer();
-            try {
-                Thread.sleep(50);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        while (!checkEndGame()) {
+            turnCPU();
         }
     }
 
-    private void endGame() {
+    private void turnCPU() {
+        logic.initiatebestMoveMessages();
+        Piece p = logic.turnCPU(3);
+        logic.setPiece(p);
+        updateButton(p);
+        logic.changePlayer();
+        try {
+            Thread.sleep(50);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private boolean checkEndGame() {
         win = logic.checkwin();
+        return win == 1 || win == 2;
+    }
+
+    private void endGame() {
         if (win == 1)
             System.out.println("Black Won!");
         else if (win == 0)
             System.out.println("White Won!");
-        for (specialButton button : buttons)
+        turnOFFButtons();
+    }
+
+    private void turnOFFButtons() {
+        for (SpecialButton button : buttons)
             button.setEnabled(false);
     }
 
     private void updateButton(Piece p) {
-        for (specialButton button : buttons) {
+        for (SpecialButton button : buttons) {
             if (button.getRow() == p.getRow() && button.getCol() == p.getCol()) {
                 if (logic.getActivePlayer() == 1) {
                     button.setIcon(icon1);

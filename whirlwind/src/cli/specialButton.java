@@ -3,11 +3,11 @@ package cli;
 import javax.swing.*;
 import java.awt.*;
 
-public class specialButton extends JButton {
+public class SpecialButton extends JButton {
     private int row;
     private int col;
 
-    specialButton(int r, int c) {
+    SpecialButton(int r, int c) {
         row = r;
         col = c;
         this.setBackground(Color.GRAY);

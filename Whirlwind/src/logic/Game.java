@@ -1,7 +1,7 @@
 package logic;
 
 import cli.GameFrame;
-import cli.specialButton;
+import cli.SpecialButton;
 import util.Utility;
 
 import java.util.*;
@@ -244,7 +244,7 @@ public class Game {
         return playerPiece;
     }
 
-    public boolean turnAction(specialButton b) {
+    public boolean turnAction(SpecialButton b) {
         if (b == null) {
             return false;
         } else {

@@ -19,10 +19,10 @@ public class GameFrame extends JFrame {
     private JPanel contentPane;
     private int BOARD_SIZE;
     private Game logic;
-    private ImageIcon icon0 = new ImageIcon("white.gif");
     private ImageIcon icon1 = new ImageIcon("black.gif");
-    private ImageIcon icon2 = new ImageIcon("winwhite.gif");
-    private ImageIcon icon3 = new ImageIcon("winblack.gif");
+    private ImageIcon icon2 = new ImageIcon("white.gif");
+    private ImageIcon icon1win = new ImageIcon("winblack.gif");
+    private ImageIcon icon2win = new ImageIcon("winwhite.gif");
     private ArrayList<specialButton> buttons;
 
 
@@ -70,11 +70,13 @@ public class GameFrame extends JFrame {
                 board_position.setMargin(buttonMargin);
 
                 ImageIcon icon;
-                if (playerSymbol == 'X')
+                if (playerSymbol == 'X') {
                     icon = icon1;
-                else if (playerSymbol == 'O')
-                    icon = icon0;
-                else
+                    board_position.setBackground(PLAYER1_COLOR);
+                } else if (playerSymbol == 'O') {
+                    icon = icon2;
+                    board_position.setBackground(PLAYER2_COLOR);
+                } else
                     icon = null;
                 board_position.setIcon(icon);
 
@@ -84,38 +86,36 @@ public class GameFrame extends JFrame {
                 if (logic.getGAMEMODE() == 2 || logic.getGAMEMODE() == 1) {
                     board_position.addActionListener(e -> {
                         specialButton now = (specialButton) e.getSource();
-                        boolean f=false;
-                        if (now.getIcon() == null) {
-                        	
-                        	  if(logic.getActivePlayer()==1){
-                        		
-                   			   if(logic.turnAction(now)){
-                   				f=true;
-                   			   now.setIcon(icon1);
-                   			   }
-                   		   }
-                   		   else{
-                   			   if(logic.turnAction(now)){
-                   				f=true;
-                   			   now.setIcon(icon0);}
-                   		   }
-                        	 
-                            if (win == 1 || win == 2)
-                                for (specialButton button : buttons)
-                                    button.setEnabled(false);
+                        boolean f = false;
 
-                            if (logic.getGAMEMODE() == 2 && f==true) {
-                                logic.initiatebestMoveMessages();
-                                
-                                Piece p = logic.turnCPU(3);
-                                logic.setPiece(p);
-                                updateButton(p);
-                                System.out.println(p.getRow() + "," + p.getCol());
-                                
-                                logic.checkwin();
-                                logic.changePlayer();
-                                
+                        if (logic.getActivePlayer() == 1) {
+                            if (logic.turnAction(now)) {
+                                f = true;
+                                now.setIcon(icon1);
+                                now.setBackground(PLAYER1_COLOR);
                             }
+                        } else {
+                            if (logic.turnAction(now)) {
+                                f = true;
+                                now.setIcon(icon2);
+                                now.setBackground(PLAYER2_COLOR);
+                            }
+                        }
+
+                        if (win == 1 || win == 2)
+                            for (specialButton button : buttons)
+                                button.setEnabled(false);
+
+                        if (logic.getGAMEMODE() == 2 && f) {
+                            logic.initiatebestMoveMessages();
+
+                            Piece p = logic.turnCPU(3);
+                            logic.setPiece(p);
+                            updateButton(p);
+                            System.out.println(p.getRow() + "," + p.getCol());
+
+                            logic.checkwin();
+                            logic.changePlayer();
                         }
                     });
                 }
@@ -129,7 +129,7 @@ public class GameFrame extends JFrame {
 
         if (logic.getGAMEMODE() == 3) {
             while (logic.checkwin() != 1 && logic.checkwin() != 2) {
-            	
+
                 logic.initiatebestMoveMessages();
                 Piece p = logic.turnCPU(1);
                 logic.setPiece(p);
@@ -151,14 +151,18 @@ public class GameFrame extends JFrame {
     }
 
     private void updateButton(Piece p) {
-        for (specialButton button : buttons){
+        for (specialButton button : buttons) {
             if (button.getRow() == p.getRow() && button.getCol() == p.getCol()) {
-                if (logic.getActivePlayer() == 1)
+                if (logic.getActivePlayer() == 1) {
                     button.setIcon(icon1);
-                else if (logic.getActivePlayer() == 0)
-                    button.setIcon(icon0);
+                    button.setBackground(PLAYER1_COLOR);
+                } else if (logic.getActivePlayer() == 0) {
+                    button.setIcon(icon2);
+                    button.setBackground(PLAYER2_COLOR);
+                }
             }
-    }}
+        }
+    }
 
     private void insertLine(Color color) {
         for (int col = 0; col < BOARD_SIZE + 2; col++)

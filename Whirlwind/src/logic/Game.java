@@ -227,18 +227,13 @@ public class Game {
     }
 
     public boolean turnAction(SpecialButton b) {
-        if (b == null) {
-            return false;
-        } else {
-            if (board.setPiece(new Piece(b.getRow(), b.getCol(), activeplayer))) {
-                changePlayer();
-                if (checkwin() == 1)
-                    gameframe.win = 1;
-                if (checkwin() == 2)
-                    gameframe.win = 2;
-
-                return true;
-            }
+        if (b != null && board.setPiece(new Piece(b.getRow(), b.getCol(), activeplayer))) {
+            int winner = checkWin();
+            if (winner == 1)
+                gameframe.win = 1;
+            if (winner == 0)
+                gameframe.win = 2;
+            return true;
         }
         return false;
     }

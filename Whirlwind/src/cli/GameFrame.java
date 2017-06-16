@@ -64,6 +64,7 @@ public class GameFrame extends JFrame {
         insertLine(PLAYER1_COLOR);
 
         for (int row = 0; row < BOARD_SIZE; row++) {
+            insertLabel(PLAYER2_COLOR, String.valueOf(row + 1));
             for (int col = 0; col < BOARD_SIZE; col++) {
                 char playerSymbol = b.getBoard()[row][col].getSymbol();
                 specialButton board_position = new specialButton(row, col);
@@ -120,6 +121,7 @@ public class GameFrame extends JFrame {
                     });
                 }
             }
+            insertLabel(PLAYER2_COLOR, String.valueOf(row + 1));
         }
 
         insertLine(PLAYER1_COLOR);
